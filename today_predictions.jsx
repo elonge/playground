@@ -5,25 +5,32 @@ import GameResultItem from './game_result_item.jsx';
 import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
 import UsersLeague from './users_league.jsx'
+import OnePrediction from './one_prediction.jsx';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import DropDownMenu from 'material-ui/DropDownMenu';
 
-const supportThreeOptionsWinner = true;
+const supportThreeOptionsWinner = false;
 
 class TodayPredictions extends React.Component {
   constructor(props) {
     try {
       super(props);
       this.renderPrediction = this.renderPrediction.bind(this);
-      this.handleDialogOpen = this.handleDialogOpen.bind(this);
       this.onNextDayClick = this.onNextDayClick.bind(this);
       this.onPrevDayClick = this.onPrevDayClick.bind(this);
       this.isPrevDay = this.isPrevDay.bind(this);
       this.isNextDay = this.isNextDay.bind(this);
       this.onUsersToggle = this.onUsersToggle.bind(this);
+      this.handleMakePrediction = this.handleMakePrediction.bind(this);
+      this.onToggleClick = this.onToggleClick.bind(this);
       this.state = {
         showPointsMode : false,
         viewedDateIndex: 0,
         userPredictions: props.userPredictions,
         dialogOpen: false,
+        dialogPrediction: null,
+        dialogPredictionOptions: [],
         days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
       };
     } catch (e) { alert('Today exception: ' + e.message); }
@@ -70,71 +77,45 @@ class TodayPredictions extends React.Component {
 
   renderPrediction(prediction) {
     return (
-      <GameResultItem
-        {...prediction}
-        onToggleClick={() => this.onToggleClick(prediction)}
-        handleDialogOpen={() => this.handleDialogOpen()}
+      <OnePrediction
+        prediction={prediction}
+        forceEnable={true}
+        onToggleClick={this.onToggleClick}
       />
     );
   }
-
-  handleDialogOpen() {
-    this.setState({dialogOpen: true});
-  };
 
   handleDialogClose() {
     this.setState({dialogOpen: false});
   };
 
-  onToggleClick(prediction) {
+  onToggleClick(prediction, options) {
+    this.setState({dialogPrediction: prediction, dialogOpen: true, dialogPredictionOptions: options});
+  }
+
+  handleMakePrediction(event, index, value) {
     const userPredictions = this.state.userPredictions.slice();
+    const prediction = this.state.dialogPrediction;
     var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
-    if (this.isThreeOptionsWinner(prediction) || this.isMultipleOptions(prediction)) {
-      switch (prediction.value) {
-        case null:
-          userPredictions[pIndx].value = '1';
-          break;
-        case '1':
-          userPredictions[pIndx].value = 'x';
-          break;
-        case 'x':
-          userPredictions[pIndx].value = '2';
-          break;
-        case '2':
-          userPredictions[pIndx].value = '1';
-          break;
-        default:
-          userPredictions[pIndx].value = '1';
-          break;
-      }
-    } else {
-      userPredictions[pIndx].value = (userPredictions[pIndx].value == null ? true : !userPredictions[pIndx].value);
-    }
-    this.setState({userPredictions: userPredictions});
-    this.props.updatePrediction(prediction);
+    userPredictions[pIndx].value = this.state.dialogPredictionOptions[index];
+    this.setState({userPredictions: userPredictions, dialogOpen:false});
+    this.props.updatePrediction(this.state.prediction);
   }
 
-  // TODO (EGEG) - should move to some util class
-  isThreeOptionsWinner(prediction) {
-    if (!supportThreeOptionsWinner) {
-      return false;
-    }
-    if (prediction.result_type == 'winner' && prediction.sport_type.toUpperCase() == 'SOCCER') {
-      return true;
-    }
-    return false;
+  renderPredictionsMenu() {
+    let menuItems = this.state.dialogPredictionOptions.map((option) =>
+      <MenuItem primaryText = {option} />
+    );
+    return (
+      <DropDownMenu
+        onChange={this.handleMakePrediction}
+        openImmediately={true}
+        value={0}
+      >
+      {menuItems}
+      </DropDownMenu>
+    );
   }
-  isMultipleOptions(prediction) {
-    if (!supportThreeOptionsWinner) {
-      return false;
-    }
-    if (prediction.result_type == 'event' && prediction.type_extra.toUpperCase() == 'NUM_GOALS') {
-      return true;
-    }
-    return false;
-  }
-
-
 
   render() {
     try {
@@ -160,16 +141,18 @@ class TodayPredictions extends React.Component {
         );
       } else {
         let items;
+        let currentPredictionSelectField;
         if (showPointsMode) {
           items = (
             <UsersLeague
               usersPoints={this.props.usersPoints}
             />
-            );
+          );
         } else {
           items = dayPredictions.map((prediction) =>
             this.renderPrediction(prediction)
           );
+          currentPredictionSelectField = this.renderPredictionsMenu();
         }
         return (
           <div>
@@ -180,17 +163,18 @@ class TodayPredictions extends React.Component {
               isPrevDay = {this.isPrevDay}
               isNextDay = {this.isNextDay}
               onUsersToggle = {this.onUsersToggle}
+              showDaysController = {!showPointsMode}
             />
             <List id="a">
             {items}
             </List>
             <Dialog
-              title="Arsenal vs Burnley"
+              title="Make your Prediction:"
               modal={false}
               open={dialogOpen}
               onRequestClose={() => this.handleDialogClose()}
             >
-            60% think Arsneal will win
+            {currentPredictionSelectField}
             </Dialog>
           </div>
         );

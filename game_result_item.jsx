@@ -14,7 +14,7 @@ import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 
 import AutoComplete from 'material-ui/AutoComplete';
 
-const supportThreeOptionsWinner = true;
+const supportThreeOptionsWinner = false;
 
 /*
  * A single list game, including controls

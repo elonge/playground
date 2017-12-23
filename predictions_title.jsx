@@ -55,7 +55,14 @@ class PredictionsTitle extends React.Component {
   render() {
     try {
       let dateTitle = '5 Q\'s about ' + this.renderPrettyDate() + ' games';
-      return (
+      let togglePoints = (
+        <IconButton>
+          <SocialPeople
+            onClick ={() => this.props.onUsersToggle()}
+          />
+        </IconButton>
+      );
+      let daysController = (
         <div>
           <IconButton>
             <KeyboardArrowLeft
@@ -72,11 +79,12 @@ class PredictionsTitle extends React.Component {
               color={this.props.isNextDay() ? blue500 : indigo50}
             />
           </IconButton>
-          <IconButton>
-            <SocialPeople
-              onClick ={() => this.props.onUsersToggle()}
-            />
-          </IconButton>
+          {togglePoints}
+        </div>
+      );
+      return (
+        <div>
+          {daysController}
         </div>
       );
     } catch (e) { alert('PredictionsTitle: ' + e.message); }
