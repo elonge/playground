@@ -105,9 +105,9 @@ const userPredictions = [
     away_team: 'Valencia',
     result_type: 'event',
     predicted_score: '2-1',
-    type_extra: 'penalty_home',
+    type_extra: 'num_goals',
     start_time: '2017-12-15 17:00:00',
-    value: true,
+    value: null,
     open: true,
     status: 'before',
     close_on_start_time: false,
@@ -128,7 +128,7 @@ class App extends Component {
   }
 
   render() {
-    let hidePredictions = true;
+    let hidePredictions = false;
     let predictions = (hidePredictions ? '' :
       <TodayPredictions
         userPredictions={userPredictions}

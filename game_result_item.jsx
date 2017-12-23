@@ -12,7 +12,9 @@ import {red500, green500, blue500, indigo50} from 'material-ui/styles/colors';
 import ExposureZero from 'material-ui-icons/ExposureZero';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 
-const supportThreeOptionsWinner = false;
+import AutoComplete from 'material-ui/AutoComplete';
+
+const supportThreeOptionsWinner = true;
 
 /*
  * A single list game, including controls
@@ -74,9 +76,33 @@ class GameResultItem extends React.Component {
     }
   }
 
+  renderPrimaryMultipleOptions() {
+    switch (this.props.value) {
+      case null:
+        return 'How many goal in total?';
+        break;
+      case '1':
+        return "Game will have up to 2 goals";
+        break;
+      case 'x':
+        return "Game will have 3-4 goals";
+        break;
+      case '2':
+        return "Game will have 5 goals or more";
+        break;
+      default:
+        return 'ERROR ('+this.props.value+')';
+        break;
+    }
+  }
+
+
   renderPrimarySoccer(homeTeam, awayTeam, resultType, typeExtra, predictedScore) {
     if (this.isThreeOptionsWinner()) {
       return this.renderPrimaryThreeOptionsWinner();
+    }
+    if (this.isMultipleOptions()) {
+      return this.renderPrimaryMultipleOptions();
     }
     switch (resultType) {
       case 'winner':
@@ -126,6 +152,24 @@ class GameResultItem extends React.Component {
     return home_team + ' vs ' + away_team + ' (' + prettyTime + ')';
   }
 
+  renderMultipleOptionsAvatar() {
+    let value = this.props.value;
+    if (value == null) {
+      return (
+          <Avatar
+            icon={<CheckBoxOutlineBlank/>}
+            backgroundColor={indigo50}
+          />
+      );
+    }
+    return (
+        <Avatar
+          icon={<CheckBox/>}
+          backgroundColor={green500}
+        />
+      );
+  }
+
   renderSoccerWinnerAvatar() {
     let value = this.props.value;
     if (value == null) {
@@ -168,10 +212,22 @@ class GameResultItem extends React.Component {
     }
     return false;
   }
+  isMultipleOptions() {
+    if (!supportThreeOptionsWinner) {
+      return false;
+    }
+    if (this.props.result_type == 'event' && this.props.type_extra.toUpperCase() == 'NUM_GOALS') {
+      return true;
+    }
+    return false;
+  }
 
   renderAvatar() {
     if (this.isThreeOptionsWinner()) {
       return this.renderSoccerWinnerAvatar();
+    }
+    if (this.isMultipleOptions()) {
+      return this.renderMultipleOptionsAvatar();
     }
     let value = this.props.value;
     if (value == null) {

@@ -6,7 +6,7 @@ import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
 import UsersLeague from './users_league.jsx'
 
-const supportThreeOptionsWinner = false;
+const supportThreeOptionsWinner = true;
 
 class TodayPredictions extends React.Component {
   constructor(props) {
@@ -89,7 +89,7 @@ class TodayPredictions extends React.Component {
   onToggleClick(prediction) {
     const userPredictions = this.state.userPredictions.slice();
     var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
-    if (this.isThreeOptionsWinner(prediction)) {
+    if (this.isThreeOptionsWinner(prediction) || this.isMultipleOptions(prediction)) {
       switch (prediction.value) {
         case null:
           userPredictions[pIndx].value = '1';
@@ -124,6 +124,16 @@ class TodayPredictions extends React.Component {
     }
     return false;
   }
+  isMultipleOptions(prediction) {
+    if (!supportThreeOptionsWinner) {
+      return false;
+    }
+    if (prediction.result_type == 'event' && prediction.type_extra.toUpperCase() == 'NUM_GOALS') {
+      return true;
+    }
+    return false;
+  }
+
 
 
   render() {
