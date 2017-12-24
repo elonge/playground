@@ -25,47 +25,8 @@ class OnePrediction extends React.Component {
     this.onPredictionClick = this.onPredictionClick.bind(this);
   }
 
-  renderPrimaryBasketball(homeTeam, awayTeam, resultType, typeExtra, predictedScore) {
-    switch (resultType) {
-      case 'winner':
-        if (predictedScore == "1") {
-          return homeTeam + ' will win';
-        } else if (predictedScore == "2") {
-          return awayTeam + ' will win';
-        } else {
-          alert("unknown winner? " + predictedScore);
-        }
-        return 'ERROR!';
-      case 'winner_range':
-
-        let range = parseInt(typeExtra);
-        let orMore = (range == 0 ? '' : (range > 0 ? 'or more' : 'or less'));
-        range = Math.abs(range);
-        if (predictedScore == "1") {
-          return homeTeam + ' will win by ' + range + ' points ' + orMore;
-        } else if (predictedScore == "2") {
-          return awayTeam + ' will win by ' + range + ' points ' + orMore;
-        } else {
-          alert("unknown winner? " + predictedScore);
-        }
-        return ("ERROR");
-      case 'to_score':
-        return predictedScore + ' top scorer';
-      case 'player_double_digit':
-        return predictedScore + ' will score double digits';
-    }
-    return ("Error");
-  }
-
   renderPrimaryText() {
-    switch (this.props.prediction.sport_type.toUpperCase()) {
-      case 'SOCCER':
-        return RenderUtils.primaryText(this.props.prediction);
-//        return this.renderPrimarySoccer(this.props.home_team, this.props.away_team, this.props.result_type, this.props.type_extra, this.props.predicted_score);
-      case 'BASKETBALL':
-        return ("Error");
-    }
-    return ("Error");
+    return RenderUtils.primaryText(this.props.prediction);
   }
 
   renderSecondaryText() {

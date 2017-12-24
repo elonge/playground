@@ -5,8 +5,10 @@ import CheckBox from 'material-ui-icons/CheckBox';
 import CheckBoxOutlineBlank from 'material-ui-icons/CheckBoxOutlineBlank';
 import Avatar from 'material-ui/Avatar';
 import Soccer from './soccer';
+import Basketball from './basketball'
+import Football from './football';
 
-var supportedResultTypes = Soccer.supportedResultTypes;
+var supportedResultTypes = Soccer.supportedResultTypes.concat(Basketball.supportedResultTypes).concat(Football.supportedResultTypes);
 
 const replaceVars = (prediction, typeRender) => {
   typeRender.options = typeRender.optionsDefine.map((option) =>
@@ -30,8 +32,9 @@ const replaceVars = (prediction, typeRender) => {
     return typeRender;
 }
 
+// Also compare sport
 const predictionOptions = (prediction) => {
-  var tIndx = supportedResultTypes.findIndex(i => (i.key === prediction.result_type));
+  var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.result_type);
     return [];
@@ -40,7 +43,7 @@ const predictionOptions = (prediction) => {
 }
 
 const primaryText = (prediction) => {
-  var tIndx = supportedResultTypes.findIndex(i => (i.key === prediction.result_type));
+  var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.result_type);
     return 'ERROR ('+prediction.result_type+')';
@@ -65,6 +68,14 @@ const leftAvatar = (prediction) => {
           backgroundColor={indigo50}
         />
     );
+  } else if (prediction.points_updated) {
+    return (
+        <Avatar
+          backgroundColor={prediction.points_won == 0 ? red500 : green500}
+        >
+        {prediction.points_won}
+        </Avatar>
+    );
   } else {
     return (
         <Avatar
@@ -84,13 +95,17 @@ const rightAvatar = (prediction) => {
         />
     );
   }  else {
-    var tIndx = supportedResultTypes.findIndex(i => (i.key === prediction.result_type));
+    var tIndx = getResultTypeIndex(prediction);
     if (tIndx < 0) {
       console.log('cannot find renderer for resultType=' + prediction.result_type);
       return 'ERROR ('+prediction.result_type+')';
     }
     return replaceVars(prediction, supportedResultTypes[tIndx]).rightAvatar(prediction);
   }
+}
+
+const getResultTypeIndex = (prediction) => {
+  return supportedResultTypes.findIndex(i => (i.key === prediction.result_type && i.sport.toUpperCase() == prediction.sport_type.toUpperCase()));
 }
 
 export default {
