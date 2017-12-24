@@ -9,6 +9,14 @@ import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 import SocialPeople from 'material-ui/svg-icons/social/people';
 
+import RaisedButton from 'material-ui/RaisedButton';
+import {fullWhite} from 'material-ui/styles/colors';
+import ActionAndroid from 'material-ui/svg-icons/action/android';
+import FontIcon from 'material-ui/FontIcon';
+
+const style = {
+  margin: 12,
+};
 
 const leftIconStyle = {
   marginTop: 0,
@@ -52,9 +60,34 @@ class PredictionsTitle extends React.Component {
     return new Date(this.props.viewedDate).toLocaleDateString();
   }
 
+
   render() {
+    return (
+      <div>
+        <Subheader style={h1Style}>{this.renderPrettyDate()}</Subheader>
+        <RaisedButton
+          icon={<SocialPeople />}
+          style={style}
+        />
+        <RaisedButton
+          backgroundColor="#a4c639"
+          icon={<ActionAndroid color={fullWhite} />}
+          style={style}
+        />
+        <RaisedButton
+          href="https://github.com/callemall/material-ui"
+          target="_blank"
+          secondary={true}
+          icon={<FontIcon className="muidocs-icon-custom-github" />}
+          style={style}
+        />
+      </div>
+    );
+  }
+
+  render2() {
     try {
-      let dateTitle = '5 Q\'s about ' + this.renderPrettyDate() + ' games';
+      let dateTitle = '' + this.renderPrettyDate() + ' games';
       let togglePoints = (
         <IconButton>
           <SocialPeople

@@ -10,6 +10,7 @@ import Subheader from 'material-ui/Subheader';
 import axios from 'axios';
 import GameResultItem from './game_result_item';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import TodayPredictions from './today_predictions.jsx'
 
 const newPredictionPushText = "Check out 5 new questions about today\'s games";
 const newScorePushText = "Scores were updated. Check your position!";
@@ -114,17 +115,26 @@ class SuperUserEditor extends React.Component {
     });
   }
 
+  onToggleClick(prediction, options) {
+    this.setState({dialogPrediction: prediction, dialogOpen: true, dialogPredictionOptions: options});
+  }
+
+  handleMakePrediction(event, index, value) {
+    const userPredictions = this.state.userPredictions.slice();
+    const prediction = this.state.dialogPrediction;
+    var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
+    userPredictions[pIndx].value = this.state.dialogPredictionOptions[index];
+    this.setState({userPredictions: userPredictions, dialogOpen:false});
+    this.onUpdateResult(userPredictions[pIndx]);
+  }
+
+
   onUpdateResult(prediction) {
     var self=this;
-    prediction.value = (prediction.value == true ? false : true);
     let url = 'https://infinite-caverns-93636.herokuapp.com/elon/u/'+prediction.game_id+'/'+prediction.id+'/'+prediction.value;
     axios.get(url)
     .then(function (response) {
       console.log(response);
-      const predictions = self.state.allPredictions.slice();
-      var pIndx = predictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
-      predictions[pIndx].value = prediction.value;
-      self.setState({allPredictions: predictions});
     })
     .catch(function (error) {
       console.log(error);
@@ -230,6 +240,9 @@ class SuperUserEditor extends React.Component {
           <MenuItem value='event' primaryText="Event" />
           <MenuItem value='winner_range' primaryText="Winner by range" />
           <MenuItem value='player_double_digit' primaryText="Player double digits" />
+          <MenuItem value='num_goals' primaryText="Number of goals" />
+          <MenuItem value='first_score' primaryText="First to score" />
+
         </SelectField><br />
         <TextField
           hintText="Extra info (first,penalty_home,penalty_away)"
@@ -337,17 +350,15 @@ class SuperUserEditor extends React.Component {
 
   renderUpdatePredictions() {
     //this.state.allPredictions.map(prediction => prediction.value = null);
-    let allPredictionsMenuItems = "";
-    allPredictionsMenuItems = this.state.allPredictions.filter(p => p.prediction_updated==false).map((prediction, index) =>
-      <GameResultItem
-        {...prediction}
-        onToggleClick={() => this.onUpdateResult(prediction)}
-        forceEnable={true}
-      />
-    );
+    let myPredictions = this.state.allPredictions.filter(p => p.prediction_updated==false);
     return (
       <div>
-        {allPredictionsMenuItems}
+        <TodayPredictions
+          userPredictions={myPredictions}
+          updatePrediction={this.onUpdateResult}
+          forceEnable={true}
+          usersPoints={[]}
+          />
       </div>
     );
   }

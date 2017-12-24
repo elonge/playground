@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 
-const style = {margin: 5, textAlign: 'center'};
+const style = {'font-size': '12px', textAlign: 'center'};
 
 var winner = {
   sport: 'Football',
@@ -27,7 +27,8 @@ var winnerRange = {
   primaryDefine: '_VALUE',
   rightAvatar: function(prediction) {
     let shortValue;
-    let shortTeam = prediction.value.substring(0, 2);
+    let shortTeam = (prediction.value.startsWith(prediction.home_team) ? prediction.home_team : prediction.away_team);
+//    let shortTeam = prediction.value.substring(0, 2);
     shortValue = (prediction.value.indexOf('more') < 0 ? shortTeam + ' 7-' : shortTeam + ' 7+');
     return (
         <Avatar

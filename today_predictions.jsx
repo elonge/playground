@@ -79,7 +79,7 @@ class TodayPredictions extends React.Component {
     return (
       <OnePrediction
         prediction={prediction}
-        forceEnable={true}
+        forceEnable={this.props.forceEnable}
         onToggleClick={this.onToggleClick}
       />
     );
@@ -99,7 +99,7 @@ class TodayPredictions extends React.Component {
     var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
     userPredictions[pIndx].value = this.state.dialogPredictionOptions[index];
     this.setState({userPredictions: userPredictions, dialogOpen:false});
-    this.props.updatePrediction(this.state.prediction);
+    this.props.updatePrediction(userPredictions[pIndx]);
   }
 
   renderPredictionsMenu() {
@@ -183,6 +183,15 @@ class TodayPredictions extends React.Component {
       alert('today_predictions exception ' + e.message);
     }
   }
+
+  OLD_onToggleClick(prediction) {
+    const userPredictions = this.state.userPredictions.slice();
+    var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
+    userPredictions[pIndx].value = (userPredictions[pIndx].value == null ? true : !userPredictions[pIndx].value);
+    this.setState({userPredictions: userPredictions});
+    this.props.updatePrediction(prediction);
+  }
+
 };
 
 TodayPredictions.PropTypes = {

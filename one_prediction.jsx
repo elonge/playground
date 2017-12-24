@@ -63,37 +63,21 @@ class OnePrediction extends React.Component {
     return false;
   }
 
-
-  renderRightIcon() {
-    if (this.props.points_updated) {
-      if (this.props.points_won == 1) {
-        return (
-          <ExposurePlus1 color={green500}/>
-        );
-      } else if (this.props.points_won == 0) {
-        return (
-          <ExposureZero color={red500} />
-        );
-      }
-    }
-    return  ("")
-  }
-
   render() {
     try {
       let primaryText = this.renderPrimaryText();
       let secondaryText = this.renderSecondaryText();
       let lineColor = (this.isPredictionDisabled() ? indigo50 : 'white');
       return (
-      <ListItem
-        disabled={this.isPredictionDisabled()}
-        primaryText={primaryText}
-        secondaryText={secondaryText}
-        leftAvatar={this.renderLeftAvatar()}
-        onClick={() => this.onPredictionClick()}
-        rightAvatar= {this.renderRightAvatar()}
-        style={{textAlign:'left',backgroundColor: lineColor}}
-      />
+        <ListItem
+          disabled={this.isPredictionDisabled()}
+          primaryText={primaryText}
+          secondaryText={secondaryText}
+          leftAvatar={this.renderLeftAvatar()}
+          onClick={() => this.onPredictionClick()}
+          rightAvatar= {this.renderRightAvatar()}
+          style={{textAlign:'left',backgroundColor: lineColor}}
+        />
       );
     } catch (e) { alert('One Prediction: ' + e.message); }
   }

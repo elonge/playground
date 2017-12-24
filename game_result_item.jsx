@@ -2,9 +2,6 @@ import React from 'react';
 import {List,ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import CheckBox from 'material-ui-icons/CheckBox';
-import HighlightOff from 'material-ui-icons/HighlightOff';
-import LooksOne from 'material-ui-icons/LooksOne';
-import LooksTwo from 'material-ui-icons/LooksTwo';
 import CheckBoxOutlineBlank from 'material-ui-icons/CheckBoxOutlineBlank';
 import Info from 'material-ui-icons/Info';
 import Badge from 'material-ui/Badge';
@@ -13,8 +10,6 @@ import ExposureZero from 'material-ui-icons/ExposureZero';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 
 import AutoComplete from 'material-ui/AutoComplete';
-
-const supportThreeOptionsWinner = false;
 
 /*
  * A single list game, including controls
@@ -56,54 +51,7 @@ class GameResultItem extends React.Component {
     return ("Error");
   }
 
-  renderPrimaryThreeOptionsWinner() {
-    switch (this.props.value) {
-      case null:
-        return 'Pick your winner';
-        break;
-      case '1':
-        return this.props.home_team + ' will win';
-        break;
-      case 'x':
-        return  'Game will end with a draw';
-        break;
-      case '2':
-        return this.props.away_team + ' will win';
-        break;
-      default:
-        return 'ERROR ('+this.props.value+')';
-        break;
-    }
-  }
-
-  renderPrimaryMultipleOptions() {
-    switch (this.props.value) {
-      case null:
-        return 'How many goal in total?';
-        break;
-      case '1':
-        return "Game will have up to 2 goals";
-        break;
-      case 'x':
-        return "Game will have 3-4 goals";
-        break;
-      case '2':
-        return "Game will have 5 goals or more";
-        break;
-      default:
-        return 'ERROR ('+this.props.value+')';
-        break;
-    }
-  }
-
-
   renderPrimarySoccer(homeTeam, awayTeam, resultType, typeExtra, predictedScore) {
-    if (this.isThreeOptionsWinner()) {
-      return this.renderPrimaryThreeOptionsWinner();
-    }
-    if (this.isMultipleOptions()) {
-      return this.renderPrimaryMultipleOptions();
-    }
     switch (resultType) {
       case 'winner':
         if (predictedScore == "1") {
@@ -152,83 +100,7 @@ class GameResultItem extends React.Component {
     return home_team + ' vs ' + away_team + ' (' + prettyTime + ')';
   }
 
-  renderMultipleOptionsAvatar() {
-    let value = this.props.value;
-    if (value == null) {
-      return (
-          <Avatar
-            icon={<CheckBoxOutlineBlank/>}
-            backgroundColor={indigo50}
-          />
-      );
-    }
-    return (
-        <Avatar
-          icon={<CheckBox/>}
-          backgroundColor={green500}
-        />
-      );
-  }
-
-  renderSoccerWinnerAvatar() {
-    let value = this.props.value;
-    if (value == null) {
-      return (
-          <Avatar
-            icon={<CheckBoxOutlineBlank/>}
-            backgroundColor={indigo50}
-          />
-      );
-    } else if (value == '1') {
-      return (
-          <Avatar
-            icon={<LooksOne/>}
-            backgroundColor={green500}
-          />
-        );
-    } else if (value == '2') {
-      return (
-          <Avatar
-            icon={<LooksTwo/>}
-            backgroundColor={red500}
-          />
-        );
-    } else {
-      return (
-          <Avatar
-            icon={<HighlightOff/>}
-            backgroundColor={blue500}
-          />
-      );
-    }
-  }
-
-  isThreeOptionsWinner() {
-    if (!supportThreeOptionsWinner) {
-      return false;
-    }
-    if (this.props.result_type == 'winner' && this.props.sport_type.toUpperCase() == 'SOCCER') {
-      return true;
-    }
-    return false;
-  }
-  isMultipleOptions() {
-    if (!supportThreeOptionsWinner) {
-      return false;
-    }
-    if (this.props.result_type == 'event' && this.props.type_extra.toUpperCase() == 'NUM_GOALS') {
-      return true;
-    }
-    return false;
-  }
-
   renderAvatar() {
-    if (this.isThreeOptionsWinner()) {
-      return this.renderSoccerWinnerAvatar();
-    }
-    if (this.isMultipleOptions()) {
-      return this.renderMultipleOptionsAvatar();
-    }
     let value = this.props.value;
     if (value == null) {
       return (

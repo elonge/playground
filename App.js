@@ -5,25 +5,34 @@ import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SuperUserEditor from './super_user';
 import TodayPredictions from './today_predictions.jsx'
+import Viewers from './viewers.jsx';
+import {Panel, Form} from 'react-weui';
+
 
 const usersPoints = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
     totalPoints: 15,
     lastPoints: 3,
-    name: 'Elon Gecht'
+    name: 'Elon Gecht',
+    online: true,
+    fbId: 100
   },
   {
     profilePic: 'https://i.ytimg.com/vi/Iu8pSihUJvM/hqdefault.jpg',
     totalPoints: 8,
     lastPoints: 3,
-    name: 'Arik Benado'
+    name: 'Arik Benado',
+    online: true,
+    fbId: 200
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
     totalPoints: 2,
     lastPoints: 1,
-    name: 'David Moyes'
+    name: 'David Moyes',
+    online: false,
+    fbId: 300
   },
 
 ]
@@ -200,7 +209,7 @@ class App extends Component {
   }
 
   render() {
-    let hidePredictions = false;
+    let hidePredictions = true;
     let predictions = (hidePredictions ? '' :
       <TodayPredictions
         userPredictions={userPredictions}
@@ -212,13 +221,20 @@ class App extends Component {
     return (
       <div className="App">
         <MuiThemeProvider>
-          {predictions}
-          {superUser}
-        </MuiThemeProvider>
+        <section id='list'>
+          <Viewers
+            users={usersPoints}
+            viewerId={100}
+          />
 
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          <Panel>
+            <section id='items'>
+              {predictions}
+              {superUser}
+            </section>
+          </Panel>
+          </section>
+        </MuiThemeProvider>
       </div>
     );
   }
