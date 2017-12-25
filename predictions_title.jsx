@@ -14,11 +14,11 @@ const style = {
 };
 
 const leftIconStyle = {
-  marginTop: 0,
+  'margin-left': 16,
 };
 
 const rightIconStyle = {
-  marginTop: 0,
+  'margin-right': 16,
   float: 'right'
 };
 
@@ -55,12 +55,12 @@ class PredictionsTitle extends React.Component {
   render() {
     return (
       <div>
-        <FloatingActionButton disabled={!this.props.isPrevDay()} style={leftIconStyle}>
+        <FloatingActionButton disabled={!this.props.isPrevDay()} style={leftIconStyle} mini={true}>
           <KeyboardArrowLeft
             onClick={() => this.props.onPrevDayClick()}
           />
         </FloatingActionButton>
-        <FloatingActionButton style={rightIconStyle} disabled={!this.props.isNextDay()}>
+        <FloatingActionButton style={rightIconStyle} disabled={!this.props.isNextDay()} mini={true}>
           <KeyboardArrowRight
             onClick={() => this.props.onNextDayClick()}
           />

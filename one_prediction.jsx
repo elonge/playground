@@ -67,7 +67,7 @@ class OnePrediction extends React.Component {
     try {
       let primaryText = this.renderPrimaryText();
       let secondaryText = this.renderSecondaryText();
-      let lineColor = (this.isPredictionDisabled() ? indigo50 : 'white');
+      let lineColor = (this.isPredictionDisabled() ? indigo50 : '#FAFAFA');
       return (
         <ListItem
           disabled={this.isPredictionDisabled()}
