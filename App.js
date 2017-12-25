@@ -7,6 +7,7 @@ import SuperUserEditor from './super_user';
 import TodayPredictions from './today_predictions.jsx'
 import Viewers from './viewers.jsx';
 import {Panel, Form} from 'react-weui';
+import Invite from './invite.jsx';
 
 
 const usersPoints = [
@@ -203,21 +204,39 @@ const userPredictions = [
 
 
 class App extends Component {
+  constructor(props) {
+    try {
+      super(props);
+      this.onUsersToggle = this.onUsersToggle.bind(this);
+      this.state = {
+        showPointsMode : false,
+      };
+    } catch (e) { alert('App exception: ' + e.message); }
+  }
 
   updatePrediction(prediction) {
     // Do nothing
   }
 
+  onUsersToggle() {
+    let current = this.state.showPointsMode;
+    this.setState({showPointsMode: !current});
+  }
+
   render() {
-    let hidePredictions = true;
+    let hidePredictions = false;
     let predictions = (hidePredictions ? '' :
       <TodayPredictions
         userPredictions={userPredictions}
         usersPoints={usersPoints}
         updatePrediction={this.updatePrediction}
+        showPointsMode={this.state.showPointsMode}
       />
     )
     let superUser = (hidePredictions ? <SuperUserEditor/> : '');
+    let buttonText = 'Compete with your friends!';
+    let   sharingMode = 'current_thread';
+
     return (
       <div className="App">
         <MuiThemeProvider>
@@ -225,6 +244,7 @@ class App extends Component {
           <Viewers
             users={usersPoints}
             viewerId={100}
+            onUsersToggle={this.onUsersToggle}
           />
 
           <Panel>
@@ -233,6 +253,12 @@ class App extends Component {
               {superUser}
             </section>
           </Panel>
+          <Invite
+            title="Compete with friends"
+            apiUri="sds"
+            sharingMode={sharingMode}
+            buttonText={buttonText}
+          />
           </section>
         </MuiThemeProvider>
       </div>

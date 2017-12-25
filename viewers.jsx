@@ -9,9 +9,16 @@
 import React, {createElement} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Footer, FooterText} from 'react-weui';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import SocialPeople from 'material-ui/svg-icons/social/people';
+
+const socialStyle = {
+  'margin-left' : 50,
+};
+
 
 // Viewers Component — Who has joined the list, and who is viewing it.
-const Viewers = ({viewerId, users}) => {
+const Viewers = ({viewerId, users, onUsersToggle}) => {
   if (users.length <= 1) { return null; }
 
   const {activeCount, viewers} = users.reduce(
@@ -45,6 +52,11 @@ const Viewers = ({viewerId, users}) => {
         transitionLeaveTimeout={300}
       >
         {viewers}
+        <FloatingActionButton className='viewer.active' style={socialStyle} secondary={false}>
+          <SocialPeople
+            onClick ={onUsersToggle}
+          />
+        </FloatingActionButton>
       </ReactCSSTransitionGroup>
 
       <Footer id='viewer-count'>

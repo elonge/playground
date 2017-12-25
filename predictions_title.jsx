@@ -3,16 +3,11 @@ import {List,ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
-import Info from 'material-ui-icons/Info';
 import {red500, green500, blue500, indigo50} from 'material-ui/styles/colors';
-import Subheader from 'material-ui/Subheader';
-import IconButton from 'material-ui/IconButton';
-import SocialPeople from 'material-ui/svg-icons/social/people';
 
 import RaisedButton from 'material-ui/RaisedButton';
-import {fullWhite} from 'material-ui/styles/colors';
-import ActionAndroid from 'material-ui/svg-icons/action/android';
-import FontIcon from 'material-ui/FontIcon';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+
 
 const style = {
   margin: 12,
@@ -20,16 +15,11 @@ const style = {
 
 const leftIconStyle = {
   marginTop: 0,
-  width: '40px',
-  height: '40px',
-  float: 'left',
 };
 
 const rightIconStyle = {
   marginTop: 0,
-  width: '40px',
-  height: '40px',
-  float: 'right',
+  float: 'right'
 };
 
 
@@ -48,6 +38,7 @@ class PredictionsTitle extends React.Component {
     super(props);
   }
 
+  // FFU
   renderPrettyDate() {
     var today = new Date();
     if (today.toLocaleDateString() == new Date(this.props.viewedDate).toLocaleDateString()) {
@@ -64,63 +55,18 @@ class PredictionsTitle extends React.Component {
   render() {
     return (
       <div>
-        <Subheader style={h1Style}>{this.renderPrettyDate()}</Subheader>
-        <RaisedButton
-          icon={<SocialPeople />}
-          style={style}
-        />
-        <RaisedButton
-          backgroundColor="#a4c639"
-          icon={<ActionAndroid color={fullWhite} />}
-          style={style}
-        />
-        <RaisedButton
-          href="https://github.com/callemall/material-ui"
-          target="_blank"
-          secondary={true}
-          icon={<FontIcon className="muidocs-icon-custom-github" />}
-          style={style}
-        />
+        <FloatingActionButton disabled={!this.props.isPrevDay()} style={leftIconStyle}>
+          <KeyboardArrowLeft
+            onClick={() => this.props.onPrevDayClick()}
+          />
+        </FloatingActionButton>
+        <FloatingActionButton style={rightIconStyle} disabled={!this.props.isNextDay()}>
+          <KeyboardArrowRight
+            onClick={() => this.props.onNextDayClick()}
+          />
+        </FloatingActionButton>
       </div>
     );
-  }
-
-  render2() {
-    try {
-      let dateTitle = '' + this.renderPrettyDate() + ' games';
-      let togglePoints = (
-        <IconButton>
-          <SocialPeople
-            onClick ={() => this.props.onUsersToggle()}
-          />
-        </IconButton>
-      );
-      let daysController = (
-        <div>
-          <IconButton>
-            <KeyboardArrowLeft
-              onClick={() => this.props.onPrevDayClick()}
-              style={leftIconStyle}
-              color={this.props.isPrevDay() ? blue500 : indigo50}
-            />
-          </IconButton>
-          <Subheader style={h1Style}>{dateTitle}</Subheader>
-          <IconButton>
-            <KeyboardArrowRight
-              onClick={() => this.props.onNextDayClick()}
-              style={rightIconStyle}
-              color={this.props.isNextDay() ? blue500 : indigo50}
-            />
-          </IconButton>
-          {togglePoints}
-        </div>
-      );
-      return (
-        <div>
-          {daysController}
-        </div>
-      );
-    } catch (e) { alert('PredictionsTitle: ' + e.message); }
   }
 };
 

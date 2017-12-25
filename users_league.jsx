@@ -25,10 +25,6 @@ class UsersLeague extends React.Component {
 
   render() {
     try {
-      const rankColumnStyle = { width: 12 };
-      const nameColumnStyle = { 'font-weight': 'bold', width: 'auto' };
-      const totalColumnStyle = { 'text-align' : 'right', width: 30 };
-
       return (
         <div>
           <Table
@@ -44,13 +40,10 @@ class UsersLeague extends React.Component {
             >
               <TableRow>
                 <TableHeaderColumn
-                  style={rankColumnStyle}
                 >Rank</TableHeaderColumn>
                 <TableHeaderColumn
-                  style={nameColumnStyle}
                 >Name</TableHeaderColumn>
                 <TableHeaderColumn
-                  style={totalColumnStyle}
                 >Total</TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -62,13 +55,10 @@ class UsersLeague extends React.Component {
               {this.state.usersPoints.map( (row, index) => (
                 <TableRow key={index}>
                   <TableRowColumn
-                    style={rankColumnStyle}
                   >{index+1}</TableRowColumn>
                   <TableRowColumn
-                    style={nameColumnStyle}
                   >{row.name}</TableRowColumn>
                   <TableRowColumn
-                    style={totalColumnStyle}
                   >{row.totalPoints}</TableRowColumn>
                 </TableRow>
                 ))}

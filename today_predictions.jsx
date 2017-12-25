@@ -21,11 +21,9 @@ class TodayPredictions extends React.Component {
       this.onPrevDayClick = this.onPrevDayClick.bind(this);
       this.isPrevDay = this.isPrevDay.bind(this);
       this.isNextDay = this.isNextDay.bind(this);
-      this.onUsersToggle = this.onUsersToggle.bind(this);
       this.handleMakePrediction = this.handleMakePrediction.bind(this);
       this.onToggleClick = this.onToggleClick.bind(this);
       this.state = {
-        showPointsMode : false,
         viewedDateIndex: 0,
         userPredictions: props.userPredictions,
         dialogOpen: false,
@@ -56,11 +54,6 @@ class TodayPredictions extends React.Component {
 
   isPrevDay() {
     return (this.state.viewedDateIndex < this.state.days.length - 1);
-  }
-
-  onUsersToggle() {
-    let current = this.state.showPointsMode;
-    this.setState({showPointsMode: !current});
   }
 
   formatDateAsDB(date) {
@@ -120,7 +113,6 @@ class TodayPredictions extends React.Component {
   render() {
     try {
       const {
-        showPointsMode,
         viewedDateIndex,
         userPredictions,
         dialogOpen,
@@ -142,7 +134,7 @@ class TodayPredictions extends React.Component {
       } else {
         let items;
         let currentPredictionSelectField;
-        if (showPointsMode) {
+        if (this.props.showPointsMode) {
           items = (
             <UsersLeague
               usersPoints={this.props.usersPoints}
@@ -162,8 +154,6 @@ class TodayPredictions extends React.Component {
               onPrevDayClick = {this.onPrevDayClick}
               isPrevDay = {this.isPrevDay}
               isNextDay = {this.isNextDay}
-              onUsersToggle = {this.onUsersToggle}
-              showDaysController = {!showPointsMode}
             />
             <List id="a">
             {items}
