@@ -54,7 +54,7 @@ class PredictionsTitle extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: '#FAFAFA'}} >
         <FloatingActionButton disabled={!this.props.isPrevDay()} style={leftIconStyle} mini={true}>
           <KeyboardArrowLeft
             onClick={() => this.props.onPrevDayClick()}

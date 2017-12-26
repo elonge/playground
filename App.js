@@ -9,12 +9,13 @@ import Viewers from './viewers.jsx';
 import {Panel, Form} from 'react-weui';
 import Invite from './invite.jsx';
 
+const hidePredictions = false;
 
 const usersPoints = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
     totalPoints: 15,
-    lastPoints: 3,
+    points1d: 3,
     name: 'Elon Gecht',
     online: true,
     fbId: 100
@@ -22,7 +23,7 @@ const usersPoints = [
   {
     profilePic: 'https://i.ytimg.com/vi/Iu8pSihUJvM/hqdefault.jpg',
     totalPoints: 8,
-    lastPoints: 3,
+    points1d: 3,
     name: 'Arik Benado',
     online: true,
     fbId: 200
@@ -30,7 +31,7 @@ const usersPoints = [
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
     totalPoints: 2,
-    lastPoints: 1,
+    points1d: 1,
     name: 'David Moyes',
     online: false,
     fbId: 300
@@ -66,7 +67,7 @@ const userPredictions = [
     value: 'X',
     open: true,
     status: 'before',
-    close_on_start_time: false,
+    close_on_start_time: true,
     prediction_date: '2017-12-18',
     points_won: 0,
     points_updated: true,
@@ -224,7 +225,6 @@ class App extends Component {
   }
 
   render() {
-    let hidePredictions = false;
     let predictions = (hidePredictions ? '' :
       <TodayPredictions
         userPredictions={userPredictions}

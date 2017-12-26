@@ -4,7 +4,6 @@ import Dialog from 'material-ui/Dialog';
 import GameResultItem from './game_result_item.jsx';
 import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
-import UsersLeague from './users_league.jsx'
 import OnePrediction from './one_prediction.jsx';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
@@ -72,7 +71,7 @@ class TodayPredictions extends React.Component {
     return (
       <OnePrediction
         prediction={prediction}
-        forceEnable={this.props.forceEnable}
+        forceEnable={false}
         onToggleClick={this.onToggleClick}
       />
     );
@@ -132,20 +131,11 @@ class TodayPredictions extends React.Component {
           <LoadingScreen key='load' />
         );
       } else {
-        let items;
         let currentPredictionSelectField;
-        if (this.props.showPointsMode) {
-          items = (
-            <UsersLeague
-              usersPoints={this.props.usersPoints}
-            />
-          );
-        } else {
-          items = dayPredictions.map((prediction) =>
-            this.renderPrediction(prediction)
-          );
-          currentPredictionSelectField = this.renderPredictionsMenu();
-        }
+        let items = dayPredictions.map((prediction) =>
+          this.renderPrediction(prediction)
+        );
+        currentPredictionSelectField = this.renderPredictionsMenu();
         return (
           <div>
             <PredictionsTitle
@@ -155,7 +145,7 @@ class TodayPredictions extends React.Component {
               isPrevDay = {this.isPrevDay}
               isNextDay = {this.isNextDay}
             />
-            <List id="a">
+            <List id="a" style={{backgroundColor: '#FAFAFA'}}>
             {items}
             </List>
             <Dialog
@@ -173,15 +163,6 @@ class TodayPredictions extends React.Component {
       alert('today_predictions exception ' + e.message);
     }
   }
-
-  OLD_onToggleClick(prediction) {
-    const userPredictions = this.state.userPredictions.slice();
-    var pIndx = userPredictions.findIndex(i => (i.game_id === prediction.game_id && i.id === prediction.id));
-    userPredictions[pIndx].value = (userPredictions[pIndx].value == null ? true : !userPredictions[pIndx].value);
-    this.setState({userPredictions: userPredictions});
-    this.props.updatePrediction(prediction);
-  }
-
 };
 
 TodayPredictions.PropTypes = {

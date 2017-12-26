@@ -44,6 +44,8 @@ class UsersLeague extends React.Component {
                 <TableHeaderColumn
                 >Name</TableHeaderColumn>
                 <TableHeaderColumn
+                >Last Day</TableHeaderColumn>
+                <TableHeaderColumn
                 >Total</TableHeaderColumn>
               </TableRow>
             </TableHeader>
@@ -58,6 +60,8 @@ class UsersLeague extends React.Component {
                   >{index+1}</TableRowColumn>
                   <TableRowColumn
                   >{row.name}</TableRowColumn>
+                  <TableRowColumn
+                  >{row.points1d}</TableRowColumn>
                   <TableRowColumn
                   >{row.totalPoints}</TableRowColumn>
                 </TableRow>
