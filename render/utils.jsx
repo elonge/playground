@@ -42,25 +42,25 @@ const predictionOptions = (prediction) => {
   return replaceVars(prediction, supportedResultTypes[tIndx]).options;
 }
 
-const primaryText = (prediction) => {
+const primaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.result_type);
     return 'ERROR ('+prediction.result_type+')';
   }
-  if (prediction.value == null) {
+  if (prediction.value == null || hideUserPrediction) {
     return replaceVars(prediction, supportedResultTypes[tIndx]).nullPrimary;
   }
   return replaceVars(prediction, supportedResultTypes[tIndx]).primary;
 }
 
-const secondaryText = (prediction) => {
+const secondaryText = (prediction, hideUserPrediction) => {
   let prettyTime = new Date(prediction.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
   return prediction.home_team + ' vs ' + prediction.away_team + ' (' + prettyTime + ')';
 }
 
-const leftAvatar = (prediction) => {
+const leftAvatar = (prediction, hideUserPrediction) => {
   if (prediction.value == null) {
     return (
         <Avatar
@@ -86,8 +86,8 @@ const leftAvatar = (prediction) => {
     }
 }
 
-const rightAvatar = (prediction) => {
-  if (prediction.value == null) {
+const rightAvatar = (prediction, hideUserPrediction) => {
+  if (prediction.value == null || hideUserPrediction) {
     return (
         <Avatar
           icon={<ActionInfo/>}

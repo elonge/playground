@@ -358,6 +358,7 @@ class SuperUserEditor extends React.Component {
           updatePrediction={this.onUpdateResult}
           forceEnable={true}
           usersPoints={[]}
+          otherUserMode={false}
           />
       </div>
     );

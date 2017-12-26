@@ -26,19 +26,26 @@ class OnePrediction extends React.Component {
   }
 
   renderPrimaryText() {
-    return RenderUtils.primaryText(this.props.prediction);
+    return RenderUtils.primaryText(this.props.prediction, this.isHidePrediction());
   }
 
   renderSecondaryText() {
-    return RenderUtils.secondaryText(this.props.prediction);
+    return RenderUtils.secondaryText(this.props.prediction, this.isHidePrediction());
   }
 
   renderLeftAvatar() {
-    return RenderUtils.leftAvatar(this.props.prediction);
+    return RenderUtils.leftAvatar(this.props.prediction, this.isHidePrediction());
   }
 
   renderRightAvatar() {
-    return RenderUtils.rightAvatar(this.props.prediction);
+    return RenderUtils.rightAvatar(this.props.prediction, this.isHidePrediction());
+  }
+
+  isHidePrediction() {
+    if (this.props.otherUserMode && (!this.isPredictionDisabled())) {
+      return true;
+    }
+    return false;
   }
 
   isPredictionDisabled() {
@@ -70,7 +77,7 @@ class OnePrediction extends React.Component {
       let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
       return (
         <ListItem
-          disabled={this.isPredictionDisabled()}
+          disabled={this.isPredictionDisabled() || this.props.otherUserMode}
           primaryText={primaryText}
           secondaryText={secondaryText}
           leftAvatar={this.renderLeftAvatar()}

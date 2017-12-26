@@ -71,8 +71,9 @@ class TodayPredictions extends React.Component {
     return (
       <OnePrediction
         prediction={prediction}
-        forceEnable={false}
+        forceEnable={this.props.forceEnable}
         onToggleClick={this.onToggleClick}
+        otherUserMode={this.props.otherUserMode}
       />
     );
   }

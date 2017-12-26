@@ -8,6 +8,7 @@ import TodayPredictions from './today_predictions.jsx'
 import Viewers from './viewers.jsx';
 import {Panel, Form} from 'react-weui';
 import Invite from './invite.jsx';
+import UsersLeague from './users_league.jsx'
 
 const hidePredictions = false;
 
@@ -40,6 +41,7 @@ const usersPoints = [
 ]
 const userPredictions = [
   {
+    user_id: 200,
     home_team: 'Lakers',
     away_team: 'Warriors',
     result_type: 'winner_range',
@@ -58,6 +60,7 @@ const userPredictions = [
     id:1
   },
   {
+    user_id: 200,
     home_team: 'Arsenal',
     away_team: 'Burnley',
     result_type: 'winner',
@@ -76,6 +79,7 @@ const userPredictions = [
     id:1
   },
   {
+    user_id: 200,
     home_team: 'Titans',
     away_team: 'Rams',
     result_type: 'winner_range',
@@ -94,6 +98,7 @@ const userPredictions = [
     id:1
   },
   {
+    user_id: 200,
     home_team: 'Brighton',
     away_team: 'Watford',
     result_type: 'exact_score',
@@ -112,6 +117,7 @@ const userPredictions = [
     id:2
   },
   {
+    user_id: 200,
     home_team: 'Everton',
     away_team: 'Swansea',
     result_type: 'num_goals',
@@ -130,6 +136,7 @@ const userPredictions = [
     id:2
   },
   {
+    user_id: 200,
     home_team: 'Newcastle',
     away_team: 'West Brom',
     result_type: 'winner',
@@ -148,6 +155,7 @@ const userPredictions = [
     id:88
   },
   {
+    user_id: 200,
     home_team: 'Watford',
     away_team: 'West Brom',
     result_type: 'to_score',
@@ -166,17 +174,18 @@ const userPredictions = [
     id:2
   },
   {
+    user_id: 200,
     home_team: 'Valencia',
     away_team: 'Real Madrid',
     result_type: 'first_score',
     predicted_score: 'x',
     type_extra: '',
-    start_time: '2017-12-18 17:00:00',
-    value: null,
+    start_time: '2017-12-26 20:00:00',
+    value: 'Valencia',
     open: true,
     status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-18',
+    close_on_start_time: true,
+    prediction_date: '2017-12-26',
     points_updated: false,
     points_won: 0,
     game_id: 4,
@@ -184,6 +193,7 @@ const userPredictions = [
     id:3
   },
   {
+    user_id: 200,
     home_team: 'Barcelona',
     away_team: 'Valencia',
     result_type: 'event',
@@ -225,14 +235,26 @@ class App extends Component {
   }
 
   render() {
-    let predictions = (hidePredictions ? '' :
-      <TodayPredictions
-        userPredictions={userPredictions}
-        usersPoints={usersPoints}
-        updatePrediction={this.updatePrediction}
-        showPointsMode={this.state.showPointsMode}
-      />
-    )
+    let mainPart = '';
+    if (!hidePredictions) {
+      if (this.state.showPointsMode) {
+        mainPart = (
+          <UsersLeague
+          usersPoints={usersPoints}
+          userPredictions={userPredictions}
+          />
+        );
+      } else {
+        mainPart = (
+          <TodayPredictions
+            userPredictions={userPredictions}
+            updatePrediction={this.updatePrediction}
+            forceEnable={true}
+            otherUserMode={false}
+          />
+        );
+      }
+    }
     let superUser = (hidePredictions ? <SuperUserEditor/> : '');
     let buttonText = 'Compete with your friends!';
     let   sharingMode = 'current_thread';
@@ -249,7 +271,7 @@ class App extends Component {
 
           <Panel>
             <section id='items'>
-              {predictions}
+              {mainPart}
               {superUser}
             </section>
           </Panel>
