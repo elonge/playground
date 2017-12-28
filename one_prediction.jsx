@@ -42,7 +42,7 @@ class OnePrediction extends React.Component {
   }
 
   isHidePrediction() {
-    if (this.props.otherUserMode && (!this.isPredictionDisabled())) {
+    if (this.props.otherUserMode && this.props.prediction.open && new Date() <= new Date(this.props.prediction.start_time)) {
       return true;
     }
     return false;

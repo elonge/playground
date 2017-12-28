@@ -39,18 +39,6 @@ class PredictionsTitle extends React.Component {
   }
 
   // FFU
-  renderPrettyDate() {
-    var today = new Date();
-    if (today.toLocaleDateString() == new Date(this.props.viewedDate).toLocaleDateString()) {
-      return "today's";
-    }
-    var yesterday = new Date(today.setDate(today.getDate() - 1));
-    if (yesterday.toLocaleDateString() == new Date(this.props.viewedDate).toLocaleDateString()) {
-      return "yesterday's";
-    }
-    return new Date(this.props.viewedDate).toLocaleDateString();
-  }
-
 
   render() {
     return (
@@ -60,6 +48,7 @@ class PredictionsTitle extends React.Component {
             onClick={() => this.props.onPrevDayClick()}
           />
         </FloatingActionButton>
+        <label style={{fontSize:16, fontFamily:'Roboto', paddingLeft:14}}>{this.props.title}</label>
         <FloatingActionButton style={rightIconStyle} disabled={!this.props.isNextDay()} mini={true}>
           <KeyboardArrowRight
             onClick={() => this.props.onNextDayClick()}

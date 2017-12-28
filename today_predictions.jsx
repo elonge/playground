@@ -24,6 +24,7 @@ class TodayPredictions extends React.Component {
       this.onToggleClick = this.onToggleClick.bind(this);
       this.state = {
         viewedDateIndex: 0,
+        otherUserMode: props.otherUserMode,
         userPredictions: props.userPredictions,
         dialogOpen: false,
         dialogPrediction: null,
@@ -31,6 +32,14 @@ class TodayPredictions extends React.Component {
         days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
       };
     } catch (e) { alert('Today exception: ' + e.message); }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState( {
+      otherUserMode: nextProps.otherUserMode,
+      userPredictions: nextProps.userPredictions,
+      days: nextProps.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+    });
   }
 
   onNextDayClick() {
@@ -73,7 +82,7 @@ class TodayPredictions extends React.Component {
         prediction={prediction}
         forceEnable={this.props.forceEnable}
         onToggleClick={this.onToggleClick}
-        otherUserMode={this.props.otherUserMode}
+        otherUserMode={false}
       />
     );
   }
@@ -122,16 +131,22 @@ class TodayPredictions extends React.Component {
       let viewedDateStr = this.formatDateAsDB(days[viewedDateIndex]);
       if (userPredictions == null) {
         return (
-          <LoadingScreen key='load' />
+          <label>Debug1</label>
+//          <LoadingScreen key='load' />
         );
       }
       let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
 
       if (dayPredictions.length == 0)  {
         return (
-          <LoadingScreen key='load' />
+          <label>Debug2</label>
         );
       } else {
+        let title = 'Your predictions';
+        if (this.state.otherUserMode != null) {
+          title = this.state.otherUserMode.name + "'s predictions";
+        }
+        title = title + " for " + viewedDateStr;
         let currentPredictionSelectField;
         let items = dayPredictions.map((prediction) =>
           this.renderPrediction(prediction)
@@ -145,6 +160,7 @@ class TodayPredictions extends React.Component {
               onPrevDayClick = {this.onPrevDayClick}
               isPrevDay = {this.isPrevDay}
               isNextDay = {this.isNextDay}
+              title = {title}
             />
             <List id="a" style={{backgroundColor: '#FAFAFA'}}>
             {items}

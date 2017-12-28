@@ -11,6 +11,7 @@ import axios from 'axios';
 import GameResultItem from './game_result_item';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import TodayPredictions from './today_predictions.jsx'
+import RenderUtils from './render/utils';
 
 const newPredictionPushText = "Check out 5 new questions about today\'s games";
 const newScorePushText = "Scores were updated. Check your position!";
@@ -66,8 +67,10 @@ class SuperUserEditor extends React.Component {
   handleAwayTeamChange = (event, value) => this.setState({awayTeam: value});;
   handleChangeGameId = (event, value) => this.setState({gameInPrediction: value});
   handleChangeTime = (event, date) => {
-    var startDate = this.state.startDate;
-    startDate.setTime(date.getTime());
+    var startDate = new Date(this.state.startDate);
+    startDate.setHours(date.getHours());
+    startDate.setMinutes(date.getMinutes());
+    startDate.setSeconds(date.getSeconds());
     this.setState({startDate: startDate});
   }
 
@@ -335,17 +338,14 @@ class SuperUserEditor extends React.Component {
   }
 
   renderPredictionPrimaryText(index) {
-    let home_team = (index >= 0 ? this.state.allGames[index].home_team : '');
-    let away_team = (index >= 0 ? this.state.allGames[index].away_team : '');
-    let sport_type = (index >= 0 ? this.state.allGames[index].sport_type : '');
-    let predicted_score = this.state.predictedScore;
-    switch (sport_type.toUpperCase()) {
-      case 'SOCCER':
-        return this.renderPrimarySoccer(home_team, away_team, this.state.resultType, this.state.typeExtra, predicted_score);
-      case 'BASKETBALL':
-        return this.renderPrimaryBasketball(home_team, away_team, this.state.resultType, this.state.typeExtra, predicted_score);
-    }
-    return ("Error");
+    let tempPrediction = new Object();
+    tempPrediction.home_team = (index >= 0 ? this.state.allGames[index].home_team : '');
+    tempPrediction.away_team = (index >= 0 ? this.state.allGames[index].away_team : '');
+    tempPrediction.sport_type = (index >= 0 ? this.state.allGames[index].sport_type : '');
+    tempPrediction.predicted_score = this.state.predictedScore;
+    tempPrediction.result_type = this.state.resultType;
+    tempPrediction.value = null;
+    return RenderUtils.primaryText(tempPrediction, false);
   }
 
   renderUpdatePredictions() {
@@ -388,8 +388,8 @@ class SuperUserEditor extends React.Component {
         >
           <MenuItem value='Soccer' primaryText="Soccer" />
           <MenuItem value='Basketball' primaryText="Basketball" />
-          <MenuItem value='NFL' primaryText="NFL" />
-          <MenuItem value='MLB' primaryText="MLB" />
+          <MenuItem value='Football' primaryText="Football" />
+          <MenuItem value='Baseball' primaryText="Baseball" />
         </SelectField>
         <DatePicker hintText="Game Start Date"
           defaultDate={this.state.startDate}

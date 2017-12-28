@@ -1,6 +1,7 @@
 import React from 'react';
 import {red500, green500, blue500, indigo50} from 'material-ui/styles/colors';
 import ActionInfo from 'material-ui/svg-icons/action/info';
+import ActionLock from 'material-ui/svg-icons/action/lock';
 import CheckBox from 'material-ui-icons/CheckBox';
 import CheckBoxOutlineBlank from 'material-ui-icons/CheckBoxOutlineBlank';
 import Avatar from 'material-ui/Avatar';
@@ -46,7 +47,7 @@ const primaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.result_type);
-    return 'ERROR ('+prediction.result_type+')';
+    return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type;
   }
   if (prediction.value == null || hideUserPrediction) {
     return replaceVars(prediction, supportedResultTypes[tIndx]).nullPrimary;
@@ -87,18 +88,26 @@ const leftAvatar = (prediction, hideUserPrediction) => {
 }
 
 const rightAvatar = (prediction, hideUserPrediction) => {
-  if (prediction.value == null || hideUserPrediction) {
+  hideUserPrediction = true;
+  if (prediction.value == null) {
     return (
         <Avatar
           icon={<ActionInfo/>}
           backgroundColor={indigo50}
         />
     );
-  }  else {
+  } else if (hideUserPrediction) {
+    return (
+        <Avatar
+          icon={<ActionLock/>}
+          backgroundColor={green500}
+        />
+    );
+  } else {
     var tIndx = getResultTypeIndex(prediction);
     if (tIndx < 0) {
       console.log('cannot find renderer for resultType=' + prediction.result_type);
-      return 'ERROR ('+prediction.result_type+')';
+      return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type;
     }
     return replaceVars(prediction, supportedResultTypes[tIndx]).rightAvatar(prediction);
   }

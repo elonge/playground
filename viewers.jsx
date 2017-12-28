@@ -18,7 +18,7 @@ const socialStyle = {
 
 
 // Viewers Component — Who has joined the list, and who is viewing it.
-const Viewers = ({viewerId, users, onUsersToggle}) => {
+const Viewers = ({viewerId, users, onUsersToggle, onUserClick, viewedUserId}) => {
   if (users.length <= 1) { return null; }
 
   const {activeCount, viewers} = users.reduce(
@@ -29,10 +29,10 @@ const Viewers = ({viewerId, users, onUsersToggle}) => {
 
     // Attributes
       const {fbId, online, profilePic} = user;
-      const className = `viewer ${online ? 'active' : ''}`;
+      const className = `viewer ${viewedUserId==fbId ? 'active' : ''}`;
 
     // Construct viewer
-      const viewer = <img key={fbId} src={profilePic} className={className} />;
+        const viewer = <img key={fbId} src={profilePic} className={className} onClick={() => onUserClick(user)}/>;
 
     // Accumulate
       return {

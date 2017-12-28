@@ -10,7 +10,7 @@ import {Panel, Form} from 'react-weui';
 import Invite from './invite.jsx';
 import UsersLeague from './users_league.jsx'
 
-const hidePredictions = false;
+const hidePredictions = true;
 
 const usersPoints = [
   {
@@ -67,7 +67,7 @@ const userPredictions = [
     predicted_score: '1',
     type_extra: '',
     start_time: '2017-12-18 17:00:00',
-    value: 'X',
+    value: 'Arsenal',
     open: true,
     status: 'before',
     close_on_start_time: true,
@@ -219,6 +219,7 @@ class App extends Component {
     try {
       super(props);
       this.onUsersToggle = this.onUsersToggle.bind(this);
+      this.onUserClick = this.onUserClick.bind(this);
       this.state = {
         showPointsMode : false,
       };
@@ -232,6 +233,14 @@ class App extends Component {
   onUsersToggle() {
     let current = this.state.showPointsMode;
     this.setState({showPointsMode: !current});
+  }
+
+  onUserClick(user) {
+    if (user.fbId == this.props.viewerId) {
+      this.setState({otherUserPredictionsMode:null, showPointsMode: false});
+    } else {
+      this.setState({otherUserPredictionsMode:user, showPointsMode: false});
+    }
   }
 
   render() {
@@ -250,7 +259,7 @@ class App extends Component {
             userPredictions={userPredictions}
             updatePrediction={this.updatePrediction}
             forceEnable={true}
-            otherUserMode={false}
+            otherUserMode={null}
           />
         );
       }
@@ -267,6 +276,8 @@ class App extends Component {
             users={usersPoints}
             viewerId={100}
             onUsersToggle={this.onUsersToggle}
+            onUserClick={this.onUserClick}
+            viewedUserId={(this.state.otherUserPredictionsMode==null ? 100 : this.state.otherUserPredictionsMode.fbId)}
           />
 
           <Panel>
