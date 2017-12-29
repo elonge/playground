@@ -35,7 +35,8 @@ body,
 }
 
 #list {
-  margin-bottom: 4rem;
+  margin-top: 4rem;
+  z-index: 100
 }
 
 .page-enter ,

@@ -54,7 +54,7 @@ const Invite = ({
   );
 };
 
-Invite.PropTypes = {
+Invite.propTypes = {
 };
 
 export default Invite;

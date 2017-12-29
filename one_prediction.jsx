@@ -88,12 +88,11 @@ class OnePrediction extends React.Component {
       );
     } catch (e) { alert('One Prediction: ' + e.message); }
   }
+
   onPredictionClick() {
-    this.props.onToggleClick(this.props.prediction, RenderUtils.predictionOptions(this.props.prediction));
+    this.props.onPredictionClick(this.props.prediction, RenderUtils.predictionOptions(this.props.prediction));
   }
 };
-
-
 
 OnePrediction.PropTypes = {
 };

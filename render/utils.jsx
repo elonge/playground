@@ -24,6 +24,14 @@ const replaceVars = (prediction, typeRender) => {
       .replace('_VALUE', prediction.value)
       .replace('_PREDICT', prediction.predicted_score);
 
+    if (typeof typeRender.secondaryDefine != 'undefined') {
+      typeRender.secondary = typeRender.secondaryDefine
+        .replace('_HOME', prediction.home_team)
+        .replace('_AWAY', prediction.away_team)
+        .replace('_VALUE', prediction.value)
+        .replace('_STARTTIME', new Date(prediction.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}))
+        .replace('_PREDICT', prediction.predicted_score);
+    }
     typeRender.nullPrimary = typeRender.nullPrimaryDefine
       .replace('_HOME', prediction.home_team)
       .replace('_AWAY', prediction.away_team)
@@ -46,7 +54,7 @@ const predictionOptions = (prediction) => {
 const primaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
-    console.log('cannot find renderer for resultType=' + prediction.result_type);
+    console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
     return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type;
   }
   if (prediction.value == null || hideUserPrediction) {
@@ -56,8 +64,15 @@ const primaryText = (prediction, hideUserPrediction) => {
 }
 
 const secondaryText = (prediction, hideUserPrediction) => {
-  let prettyTime = new Date(prediction.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  var tIndx = getResultTypeIndex(prediction);
+  if (tIndx < 0) {
+    console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
+  }
+  if (typeof supportedResultTypes[tIndx].secondaryDefine != 'undefined') {
+    return replaceVars(prediction, supportedResultTypes[tIndx]).secondary;
+  }
 
+  let prettyTime = new Date(prediction.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   return prediction.home_team + ' vs ' + prediction.away_team + ' (' + prettyTime + ')';
 }
 
@@ -88,7 +103,6 @@ const leftAvatar = (prediction, hideUserPrediction) => {
 }
 
 const rightAvatar = (prediction, hideUserPrediction) => {
-  hideUserPrediction = true;
   if (prediction.value == null) {
     return (
         <Avatar
@@ -123,4 +137,5 @@ export default {
   rightAvatar,
   leftAvatar,
   predictionOptions,
+  supportedResultTypes
 }

@@ -38,8 +38,6 @@ class PredictionsTitle extends React.Component {
     super(props);
   }
 
-  // FFU
-
   render() {
     return (
       <div style={{backgroundColor: '#FAFAFA'}} >

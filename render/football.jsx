@@ -9,6 +9,7 @@ var winner = {
   optionsDefine: ['_HOME', '_AWAY'],
   nullPrimaryDefine: 'Pick your winner',
   primaryDefine: 'Your winner: _VALUE',
+  secondaryDefine: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : '2');
     return (
@@ -28,7 +29,6 @@ var winnerRange = {
   rightAvatar: function(prediction) {
     let shortValue;
     let shortTeam = (prediction.value.startsWith(prediction.home_team) ? prediction.home_team : prediction.away_team);
-//    let shortTeam = prediction.value.substring(0, 2);
     shortValue = (prediction.value.indexOf('more') < 0 ? shortTeam + ' 7-' : shortTeam + ' 7+');
     return (
         <Avatar

@@ -11,28 +11,31 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {Footer, FooterText} from 'react-weui';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import SocialPeople from 'material-ui/svg-icons/social/people';
+import FormatListNumbered from 'material-ui/svg-icons/editor/format-list-numbered';
 
 const socialStyle = {
-  'margin-left' : 50,
+  'margin-right' : 50,
 };
 
 
 // Viewers Component — Who has joined the list, and who is viewing it.
-const Viewers = ({viewerId, users, onUsersToggle, onUserClick, viewedUserId}) => {
+const Viewers = ({viewerId, users, onUserClick, viewedUserId}) => {
   if (users.length <= 1) { return null; }
 
   const {activeCount, viewers} = users.reduce(
     ({activeCount, viewers}, user) => {
+      /**
       if (user.fbId === viewerId) {
         return {activeCount, viewers};
       }
+      **/
 
     // Attributes
       const {fbId, online, profilePic} = user;
       const className = `viewer ${viewedUserId==fbId ? 'active' : ''}`;
 
     // Construct viewer
-        const viewer = <img key={fbId} src={profilePic} className={className} onClick={() => onUserClick(user)}/>;
+      const viewer = <img key={fbId} src={profilePic} className={className} onClick={() => onUserClick(user)}/>;
 
     // Accumulate
       return {
@@ -52,11 +55,6 @@ const Viewers = ({viewerId, users, onUsersToggle, onUserClick, viewedUserId}) =>
         transitionLeaveTimeout={300}
       >
         {viewers}
-        <FloatingActionButton className='viewer.active' style={socialStyle} secondary={false}>
-          <SocialPeople
-            onClick ={onUsersToggle}
-          />
-        </FloatingActionButton>
       </ReactCSSTransitionGroup>
 
       <Footer id='viewer-count'>

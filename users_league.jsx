@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-
+import Subheader from 'material-ui/Subheader';
+import MenuItem from 'material-ui/MenuItem'
+import SelectField from 'material-ui/SelectField';
+import PredictionsTitle from './predictions_title.jsx';
 import TodayPredictions from './today_predictions.jsx';
 
 const styles = {
@@ -25,11 +28,21 @@ const customContentStyle = {
 class UsersLeague extends React.Component {
   constructor(props) {
     try {
-    super(props);
-    this.state = {
-      usersPoints: props.usersPoints,
-    };
+      super(props);
+      this.state = {
+        usersPoints: props.usersPoints,
+      };
+      this.isPrevDay = this.isPrevDay.bind(this);
+      this.isNextDay = this.isNextDay.bind(this);
     } catch (e) { alert('UsersLeague: ' + e.message); }
+  }
+
+  isNextDay() {
+    return false;
+  }
+
+  isPrevDay() {
+    return false;
   }
 
   render() {
@@ -77,8 +90,34 @@ class UsersLeague extends React.Component {
           </TableBody>
         </Table>
       );
+      let title = "22/12/2017 table";
+      let titleElement = (
+        <PredictionsTitle
+          onNextDayClick = {this.onNextDayClick}
+          onPrevDayClick = {this.onPrevDayClick}
+          isPrevDay = {this.isPrevDay}
+          isNextDay = {this.isNextDay}
+          title = {title}
+        />
+      );
+      titleElement = (
+        <Subheader style={{fontSize:16}}>{title}</Subheader>
+      );
+      let leagueSelection = (
+        <SelectField
+          value="All Users"
+        >
+        <MenuItem value="All Users" key={0} primaryText="All Users"/>
+        <MenuItem value="25 Floor" key={1} primaryText="25 Floor"/>
+        <MenuItem value="United fans" key={2} primaryText="United fans"/>
+        </SelectField>
+      );
       return (
         <div>
+        <span style={{flexDirection: 'row', display:'flex'}}>
+          {titleElement}
+          {leagueSelection}
+        </span>
           {tableElement}
         </div>
       );

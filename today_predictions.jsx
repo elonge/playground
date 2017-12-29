@@ -8,60 +8,35 @@ import OnePrediction from './one_prediction.jsx';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import Subheader from 'material-ui/Subheader';
 
 const supportThreeOptionsWinner = false;
 
 class TodayPredictions extends React.Component {
   constructor(props) {
-    try {
-      super(props);
-      this.renderPrediction = this.renderPrediction.bind(this);
-      this.onNextDayClick = this.onNextDayClick.bind(this);
-      this.onPrevDayClick = this.onPrevDayClick.bind(this);
-      this.isPrevDay = this.isPrevDay.bind(this);
-      this.isNextDay = this.isNextDay.bind(this);
-      this.handleMakePrediction = this.handleMakePrediction.bind(this);
-      this.onToggleClick = this.onToggleClick.bind(this);
-      this.state = {
-        viewedDateIndex: 0,
-        otherUserMode: props.otherUserMode,
-        userPredictions: props.userPredictions,
-        dialogOpen: false,
-        dialogPrediction: null,
-        dialogPredictionOptions: [],
-        days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
-      };
-    } catch (e) { alert('Today exception: ' + e.message); }
+    super(props);
+    this.renderPrediction = this.renderPrediction.bind(this);
+    this.handleMakePrediction = this.handleMakePrediction.bind(this);
+    this.onPredictionClick = this.onPredictionClick.bind(this);
+    this.state = {
+      viewedDateIndex: props.viewedDateIndex,
+      otherUserMode: props.otherUserMode,
+      userPredictions: props.userPredictions,
+      dialogOpen: false,
+      dialogPrediction: null,
+      dialogPredictionOptions: [],
+      days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+    };
   }
 
+  // Called when switching to new viewed user
   componentWillReceiveProps(nextProps) {
     this.setState( {
+      viewedDateIndex: nextProps.viewedDateIndex,
       otherUserMode: nextProps.otherUserMode,
       userPredictions: nextProps.userPredictions,
       days: nextProps.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
     });
-  }
-
-  onNextDayClick() {
-    let viewedDateIndex = this.state.viewedDateIndex;
-    if (viewedDateIndex > 0) {
-      this.setState({viewedDateIndex: viewedDateIndex - 1});
-    }
-  }
-
-  onPrevDayClick() {
-    let viewedDateIndex = this.state.viewedDateIndex;
-    if (viewedDateIndex < this.state.days.length - 1) {
-      this.setState({viewedDateIndex: viewedDateIndex + 1});
-    }
-  }
-
-  isNextDay() {
-    return (this.state.viewedDateIndex > 0);
-  }
-
-  isPrevDay() {
-    return (this.state.viewedDateIndex < this.state.days.length - 1);
   }
 
   formatDateAsDB(date) {
@@ -81,8 +56,8 @@ class TodayPredictions extends React.Component {
       <OnePrediction
         prediction={prediction}
         forceEnable={this.props.forceEnable}
-        onToggleClick={this.onToggleClick}
-        otherUserMode={false}
+        onPredictionClick={this.onPredictionClick}
+        otherUserMode={(this.state.otherUserMode != null)}
       />
     );
   }
@@ -91,7 +66,7 @@ class TodayPredictions extends React.Component {
     this.setState({dialogOpen: false});
   };
 
-  onToggleClick(prediction, options) {
+  onPredictionClick(prediction, options) {
     this.setState({dialogPrediction: prediction, dialogOpen: true, dialogPredictionOptions: options});
   }
 
@@ -118,6 +93,20 @@ class TodayPredictions extends React.Component {
       </DropDownMenu>
     );
   }
+
+  renderPrettyDate(d1) {
+    var strDate = new Date(d1).toLocaleDateString();
+    var today = new Date();
+    if (today.toLocaleDateString() == strDate) {
+      return "today";
+    }
+    var yesterday = new Date(today.setDate(today.getDate() - 1));
+    if (yesterday.toLocaleDateString() == strDate) {
+      return "yesterday";
+    }
+    return strDate;
+  }
+
 
   render() {
     try {
@@ -146,22 +135,17 @@ class TodayPredictions extends React.Component {
         if (this.state.otherUserMode != null) {
           title = this.state.otherUserMode.name + "'s predictions";
         }
-        title = title + " for " + viewedDateStr;
+        title = title + " for " + this.renderPrettyDate(days[viewedDateIndex]);
+
         let currentPredictionSelectField;
         let items = dayPredictions.map((prediction) =>
           this.renderPrediction(prediction)
         );
+
         currentPredictionSelectField = this.renderPredictionsMenu();
         return (
           <div>
-            <PredictionsTitle
-              viewedDate = {days[viewedDateIndex]}
-              onNextDayClick = {this.onNextDayClick}
-              onPrevDayClick = {this.onPrevDayClick}
-              isPrevDay = {this.isPrevDay}
-              isNextDay = {this.isNextDay}
-              title = {title}
-            />
+            <Subheader>{title}</Subheader>
             <List id="a" style={{backgroundColor: '#FAFAFA'}}>
             {items}
             </List>
@@ -182,7 +166,7 @@ class TodayPredictions extends React.Component {
   }
 };
 
-TodayPredictions.PropTypes = {
+TodayPredictions.propTypes = {
 };
 
 export default TodayPredictions;

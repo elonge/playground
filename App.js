@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 //import './App.css';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SuperUserEditor from './super_user';
@@ -8,290 +10,187 @@ import TodayPredictions from './today_predictions.jsx'
 import Viewers from './viewers.jsx';
 import {Panel, Form} from 'react-weui';
 import Invite from './invite.jsx';
-import UsersLeague from './users_league.jsx'
+import UsersLeague from './users_league.jsx';
+import MainAppBar from './main_app_bar.jsx';
 
-const hidePredictions = true;
+import FakeData from './fake_data.js';
 
-const usersPoints = [
-  {
-    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
-    totalPoints: 15,
-    points1d: 3,
-    name: 'Elon Gecht',
-    online: true,
-    fbId: 100
-  },
-  {
-    profilePic: 'https://i.ytimg.com/vi/Iu8pSihUJvM/hqdefault.jpg',
-    totalPoints: 8,
-    points1d: 3,
-    name: 'Arik Benado',
-    online: true,
-    fbId: 200
-  },
-  {
-    profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
-    totalPoints: 2,
-    points1d: 1,
-    name: 'David Moyes',
-    online: false,
-    fbId: 300
-  },
-
-]
-const userPredictions = [
-  {
-    user_id: 200,
-    home_team: 'Lakers',
-    away_team: 'Warriors',
-    result_type: 'winner_range',
-    predicted_score: '1',
-    type_extra: '',
-    start_time: '2017-12-22 17:00:00',
-    value: 'Lakers by 10 points or more',
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-18',
-    points_won: 1,
-    points_updated: true,
-    game_id: 22,
-    sport_type: 'Basketball',
-    id:1
-  },
-  {
-    user_id: 200,
-    home_team: 'Arsenal',
-    away_team: 'Burnley',
-    result_type: 'winner',
-    predicted_score: '1',
-    type_extra: '',
-    start_time: '2017-12-18 17:00:00',
-    value: 'Arsenal',
-    open: true,
-    status: 'before',
-    close_on_start_time: true,
-    prediction_date: '2017-12-18',
-    points_won: 0,
-    points_updated: true,
-    game_id: 2,
-    sport_type: 'Soccer',
-    id:1
-  },
-  {
-    user_id: 200,
-    home_team: 'Titans',
-    away_team: 'Rams',
-    result_type: 'winner_range',
-    predicted_score: '1',
-    type_extra: '',
-    start_time: '2017-12-18 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-18',
-    points_won: 0,
-    points_updated: false,
-    game_id: 29,
-    sport_type: 'Football',
-    id:1
-  },
-  {
-    user_id: 200,
-    home_team: 'Brighton',
-    away_team: 'Watford',
-    result_type: 'exact_score',
-    predicted_score: '2-1',
-    type_extra: '',
-    start_time: '2017-12-17 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-17',
-    points_updated: false,
-    points_won: 0,
-    game_id: 2,
-    sport_type: 'Soccer',
-    id:2
-  },
-  {
-    user_id: 200,
-    home_team: 'Everton',
-    away_team: 'Swansea',
-    result_type: 'num_goals',
-    predicted_score: '3-1',
-    type_extra: '',
-    start_time: '2017-12-17 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-19',
-    points_updated: false,
-    points_won: 0,
-    sport_type: 'Soccer',
-    game_id: 3,
-    id:2
-  },
-  {
-    user_id: 200,
-    home_team: 'Newcastle',
-    away_team: 'West Brom',
-    result_type: 'winner',
-    predicted_score: 'x',
-    type_extra: '',
-    start_time: '2017-12-18 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-18',
-    points_updated: false,
-    points_won: 0,
-    game_id: 9,
-    sport_type: 'Soccer',
-    id:88
-  },
-  {
-    user_id: 200,
-    home_team: 'Watford',
-    away_team: 'West Brom',
-    result_type: 'to_score',
-    predicted_score: 'Richarlison',
-    type_extra: '',
-    start_time: '2017-12-18 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-18',
-    points_updated: false,
-    points_won: 0,
-    game_id: 5,
-    sport_type: 'Soccer',
-    id:2
-  },
-  {
-    user_id: 200,
-    home_team: 'Valencia',
-    away_team: 'Real Madrid',
-    result_type: 'first_score',
-    predicted_score: 'x',
-    type_extra: '',
-    start_time: '2017-12-26 20:00:00',
-    value: 'Valencia',
-    open: true,
-    status: 'before',
-    close_on_start_time: true,
-    prediction_date: '2017-12-26',
-    points_updated: false,
-    points_won: 0,
-    game_id: 4,
-    sport_type: 'Soccer',
-    id:3
-  },
-  {
-    user_id: 200,
-    home_team: 'Barcelona',
-    away_team: 'Valencia',
-    result_type: 'event',
-    predicted_score: '2-1',
-    type_extra: 'num_goals',
-    start_time: '2017-12-15 17:00:00',
-    value: null,
-    open: true,
-    status: 'before',
-    close_on_start_time: false,
-    prediction_date: '2017-12-15',
-    points_updated: false,
-    points_won: 0,
-    sport_type: 'soccer',
-    game_id: 6,
-    id:2
-  },
-];
+const superUserMode = false;
 
 
 class App extends Component {
   constructor(props) {
-    try {
-      super(props);
-      this.onUsersToggle = this.onUsersToggle.bind(this);
-      this.onUserClick = this.onUserClick.bind(this);
-      this.state = {
-        showPointsMode : false,
-      };
-    } catch (e) { alert('App exception: ' + e.message); }
+    super(props);
+    this.onPredictionsPointsToggle = this.onPredictionsPointsToggle.bind(this);
+    this.onUserClick = this.onUserClick.bind(this);
+    this.onNextClick = this.onNextClick.bind(this);
+    this.onPrevClick = this.onPrevClick.bind(this);
+    this.isPrevDisabled = this.isPrevDisabled.bind(this);
+    this.isNextDisabled = this.isNextDisabled.bind(this);
+    this.state = {
+      showPointsMode : false,
+      viewedDateIndex: 0,
+      otherUserPredictionsMode: null,
+      points: FakeData.usersPoints,
+      userPredictions: FakeData.userPredictions,
+      otherPredictions: FakeData.otherPredictions,
+    };
   }
 
   updatePrediction(prediction) {
     // Do nothing
   }
 
-  onUsersToggle() {
+  onPredictionsPointsToggle() {
     let current = this.state.showPointsMode;
     this.setState({showPointsMode: !current});
   }
 
   onUserClick(user) {
+    // We want to make sure that with the new user, we will be in the same date (or first if it didn't have predictions on that dat)
+    let currentPredictions = this.getCurrentStatePredictions();
+    let currentDays =  currentPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+    let currentDate = currentDays[this.state.viewedDateIndex];
+    let newPredictions;
     if (user.fbId == this.props.viewerId) {
+      newPredictions = this.state.userPredictions;
       this.setState({otherUserPredictionsMode:null, showPointsMode: false});
     } else {
+      newPredictions = this.state.otherPredictions.filter(prediction => prediction.user_id == user.fbId);
       this.setState({otherUserPredictionsMode:user, showPointsMode: false});
+    }
+    let newUserDays =  newPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+    let newViewedDateIndex = newUserDays.findIndex(i => (i === currentDate));
+    if (newViewedDateIndex < 0) {
+      newViewedDateIndex = 0;
+    }
+    this.setState({viewedDateIndex: newViewedDateIndex});
+  }
+
+  isPrevDisabled() {
+    if (this.state.showPointsMode) {
+      return true;
+    }
+    let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+    return (this.state.viewedDateIndex >= days.length - 1);
+  }
+
+  isNextDisabled() {
+    if (this.state.showPointsMode) {
+      return true;
+    }
+    return (this.state.viewedDateIndex == 0);
+  }
+
+  onPrevClick() {
+    if (this.state.showPointsMode) {
+      return; // TODO missing
+    }
+    let viewedDateIndex = this.state.viewedDateIndex;
+    let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+    if (viewedDateIndex < days.length - 1) {
+      this.setState({viewedDateIndex: viewedDateIndex + 1});
+    }
+
+  }
+  onNextClick() {
+    if (this.state.showPointsMode) {
+      return; // TODO missing
+    }
+    let viewedDateIndex = this.state.viewedDateIndex;
+    if (viewedDateIndex > 0) {
+      this.setState({viewedDateIndex: viewedDateIndex - 1});
     }
   }
 
-  render() {
-    let mainPart = '';
-    if (!hidePredictions) {
-      if (this.state.showPointsMode) {
-        mainPart = (
-          <UsersLeague
-          usersPoints={usersPoints}
-          userPredictions={userPredictions}
-          />
-        );
-      } else {
-        mainPart = (
-          <TodayPredictions
-            userPredictions={userPredictions}
-            updatePrediction={this.updatePrediction}
-            forceEnable={true}
-            otherUserMode={null}
-          />
-        );
-      }
+  getCurrentStatePredictions() {
+    let predictions = this.state.userPredictions;
+    if (this.state.otherUserPredictionsMode != null) {
+      predictions = this.state.otherPredictions.filter(prediction => prediction.user_id == this.state.otherUserPredictionsMode.fbId);
     }
-    let superUser = (hidePredictions ? <SuperUserEditor/> : '');
+    return predictions;
+  }
+
+  render() {
+    const {
+      userPredictions,
+      otherPredictions,
+      users,
+      points,
+      showPointsMode,
+      otherUserPredictionsMode,
+      viewedDateIndex
+    } = this.state;
+
+    let superUser = '';
+    let mainPart = '';
+    if (showPointsMode) {
+      mainPart = (
+        <UsersLeague
+          usersPoints={points}
+          userPredictions={userPredictions}
+        />
+      );
+    } else {
+      mainPart = (
+        <TodayPredictions
+          userPredictions={this.getCurrentStatePredictions()}
+          updatePrediction={this.updatePrediction}
+          forceEnable={true}
+          otherUserMode={otherUserPredictionsMode}
+          viewedDateIndex={viewedDateIndex}
+        />
+      );
+    }
+
     let buttonText = 'Compete with your friends!';
-    let   sharingMode = 'current_thread';
+    let sharingMode = 'current_thread';
+
+    let appBarTitle = "Welcome " + points[0].name;
+
+    let appBar = (
+      <MainAppBar
+        onPrevClick={this.onPrevClick}
+        onNextClick={this.onNextClick}
+        isPrevDisabled={this.isPrevDisabled}
+        isNextDisabled={this.isNextDisabled}
+        onPredictionsPointsToggle={this.onPredictionsPointsToggle}
+        title={appBarTitle}
+        />
+    );
+    let invite = (
+      <Invite
+        title="Compete with friends"
+        apiUri="sds"
+        sharingMode={sharingMode}
+        buttonText={buttonText}
+      />
+    );
+    if (superUserMode) {
+      appBar = "";
+      invite = "";
+      mainPart = "";
+      superUser = <SuperUserEditor/>
+    }
 
     return (
-      <div className="App">
+      <div className="App" style={{ paddingTop: 10 }}>
         <MuiThemeProvider>
-        <section id='list'>
+          <section id='list'>
+          {appBar}
           <Viewers
-            users={usersPoints}
+            users={points}
             viewerId={100}
-            onUsersToggle={this.onUsersToggle}
             onUserClick={this.onUserClick}
-            viewedUserId={(this.state.otherUserPredictionsMode==null ? 100 : this.state.otherUserPredictionsMode.fbId)}
+            viewedUserId={(otherUserPredictionsMode==null ? 100 : otherUserPredictionsMode.fbId)}
           />
-
           <Panel>
             <section id='items'>
               {mainPart}
               {superUser}
             </section>
           </Panel>
-          <Invite
-            title="Compete with friends"
-            apiUri="sds"
-            sharingMode={sharingMode}
-            buttonText={buttonText}
-          />
+          {invite}
           </section>
         </MuiThemeProvider>
       </div>

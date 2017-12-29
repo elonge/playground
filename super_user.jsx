@@ -53,7 +53,8 @@ class SuperUserEditor extends React.Component {
   handleSuperUserChange = (value) => {
     this.loadAllGames();
     this.loadAllPredictions();
-    this.setState({superUserAction:value});
+    let gameInPrediction = (this.state.gameInPrediction <0 ? this.state.allGames.length-1 : this.state.gameInPrediction);
+    this.setState({superUserAction:value, gameInPrediction:gameInPrediction});
   }
   handleMessageTypeChange = (value) => this.setState({messageType: value});
   handleChangeSport = (event, index, value) => this.setState({sportType:value});
@@ -116,6 +117,18 @@ class SuperUserEditor extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+  }
+
+  findSupportedSportTypes() {
+    console.log(RenderUtils.supportedResultTypes);
+    return RenderUtils.supportedResultTypes.map(result => result.sport).filter(function(item, pos){
+      return RenderUtils.supportedResultTypes.map(result => result.sport).indexOf(item)== pos;
+    });
+  }
+
+  findSupportedResulTypes(sportType) {
+    console.log("sportType="+sportType);
+    return RenderUtils.supportedResultTypes.filter(result => (result.sport.toUpperCase() == sportType.toUpperCase())).map(result => result.key);
   }
 
   onToggleClick(prediction, options) {
@@ -215,9 +228,16 @@ class SuperUserEditor extends React.Component {
   renderNewPrediction() {
     let allGamesMenuItems = "";
     allGamesMenuItems = this.state.allGames.map((game, index) =>
-      <MenuItem value = {index} primaryText = {game.home_team + ' vs ' + game.away_team} />
+      <MenuItem key={index} value = {index} primaryText = {game.home_team + ' vs ' + game.away_team} />
     );
     let defaultGameId = (this.state.gameInPrediction >= 0 ? this.state.gameInPrediction : this.state.allGames.length - 1);
+    console.log(JSON.stringify(this.state.allGames[defaultGameId]));
+    let currentSport =  this.state.allGames[defaultGameId].sport_type;
+    console.log(this.findSupportedResulTypes(currentSport));
+    let possibleResultTypes = this.findSupportedResulTypes(currentSport).map((result, index) =>
+      <MenuItem value={result} primaryText={result} />
+    );
+    console.log(possibleResultTypes);
     return (
       <div>
       <TextField
@@ -237,15 +257,7 @@ class SuperUserEditor extends React.Component {
           value={this.state.resultType}
           onChange={this.handleChangeResultType}
         >
-          <MenuItem value='winner' primaryText="Winner" />
-          <MenuItem value='to_score' primaryText="To Score" />
-          <MenuItem value='exact_score' primaryText="Exact Score" />
-          <MenuItem value='event' primaryText="Event" />
-          <MenuItem value='winner_range' primaryText="Winner by range" />
-          <MenuItem value='player_double_digit' primaryText="Player double digits" />
-          <MenuItem value='num_goals' primaryText="Number of goals" />
-          <MenuItem value='first_score' primaryText="First to score" />
-
+        {possibleResultTypes}
         </SelectField><br />
         <TextField
           hintText="Extra info (first,penalty_home,penalty_away)"
@@ -268,84 +280,37 @@ class SuperUserEditor extends React.Component {
           id="all_text"
           value={this.renderPredictionPrimaryText(this.state.gameInPrediction)}
           /><br />
+          <TextField
+            disabled={true}
+            id="all_text2"
+            value={this.renderPredictionSecondaryText(this.state.gameInPrediction)}
+            /><br />
 
         <RaisedButton label="Add prediction" primary={true} onClick={() => this.onSubmitPredictionClick()}/>
       </div>
     );
   }
-  renderPredictionSecondaryText(predictionIndex) {
-    // shortcuts..
-    let home_team = (predictionIndex >= 0 ? this.state.allPredictions[predictionIndex].home_team : '');
-    let away_team = (predictionIndex >= 0 ? this.state.allPredictions[predictionIndex].away_team : '');
-    let start_time = (predictionIndex >= 0 ? this.state.allPredictions[predictionIndex].start_time : '');
-    let prettyTime = new Date(start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-    return home_team + ' vs ' + away_team + ' (' + prettyTime + ')';
-  }
-
-  renderPrimaryBasketball(homeTeam, awayTeam, resultType, typeExtra, predictedScore) {
-    switch (resultType) {
-      case 'winner':
-        if (predictedScore == "1") {
-          return homeTeam + ' will win';
-        } else if (predictedScore == "2") {
-          return awayTeam + ' will win';
-        }
-        return 'ERROR!';
-      case 'winner_range':
-
-        let range = parseInt(typeExtra);
-        let orMore = (range == 0 ? '' : (range > 0 ? 'or more' : 'or less'));
-        range = Math.abs(range);
-        if (predictedScore == "1") {
-          return homeTeam + ' will win by ' + range + ' points ' + orMore;
-        } else if (predictedScore == "2") {
-          return awayTeam + ' will win by ' + range + ' points ' + orMore;
-        }
-        return ("ERROR");
-      case 'to_score':
-        return predictedScore + ' top scorer';
-      case 'player_double_digit':
-        return predictedScore + ' will score double digits';
-    }
-    return ("Error");
-  }
-  renderPrimarySoccer(homeTeam, awayTeam, resultType, typeExtra, predictedScore) {
-    switch (resultType) {
-      case 'winner':
-        if (predictedScore == "1") {
-          return homeTeam + ' will win';
-        } else if (predictedScore == "2") {
-          return awayTeam + ' will win';
-        } else if (predictedScore.toUpperCase() == "X") {
-          return  'Game will end with a draw';
-        }
-      case 'exact_score':
-        return 'Final score will be '+ predictedScore;
-      case 'to_score':
-        return predictedScore + ' will score';
-      case 'half_score':
-        return 'First half between ' + homeTeam + ' and ' + awayTeam + ' will end exactly ' + predictedScore;
-      case 'event':
-        switch (typeExtra) {
-          case 'penalty_home':
-            return homeTeam + ' will have a penalty';
-          case 'penalty_away':
-            return awayTeam + ' will have a penalty';
-        }
-    }
-    return ("Error");
-  }
-
-  renderPredictionPrimaryText(index) {
+  createTempPrediction(index) {
     let tempPrediction = new Object();
     tempPrediction.home_team = (index >= 0 ? this.state.allGames[index].home_team : '');
     tempPrediction.away_team = (index >= 0 ? this.state.allGames[index].away_team : '');
     tempPrediction.sport_type = (index >= 0 ? this.state.allGames[index].sport_type : '');
     tempPrediction.predicted_score = this.state.predictedScore;
     tempPrediction.result_type = this.state.resultType;
+    tempPrediction.start_time = (index >= 0 ? this.state.allGames[index].start_type : '');
     tempPrediction.value = null;
-    return RenderUtils.primaryText(tempPrediction, false);
+
+    console.log("--->" + JSON.stringify(tempPrediction));
+    return tempPrediction;
+  }
+
+  renderPredictionSecondaryText(predictionIndex) {
+    return RenderUtils.secondaryText(this.createTempPrediction(predictionIndex), false);
+  }
+
+  renderPredictionPrimaryText(index) {
+    return RenderUtils.primaryText(this.createTempPrediction(index), false);
   }
 
   renderUpdatePredictions() {
@@ -358,13 +323,18 @@ class SuperUserEditor extends React.Component {
           updatePrediction={this.onUpdateResult}
           forceEnable={true}
           usersPoints={[]}
-          otherUserMode={false}
+          otherUserMode={null}
           />
       </div>
     );
   }
 
   renderNewGame() {
+    console.log("sport types: " + this.findSupportedSportTypes());
+    let sportItems = this.findSupportedSportTypes().map((sport, index) =>
+      <MenuItem key={index} value = {sport} primaryText = {sport} />
+    );
+
     return (
       <div>
       <TextField
@@ -386,10 +356,7 @@ class SuperUserEditor extends React.Component {
           value={this.state.sportType}
           onChange={this.handleChangeSport}
         >
-          <MenuItem value='Soccer' primaryText="Soccer" />
-          <MenuItem value='Basketball' primaryText="Basketball" />
-          <MenuItem value='Football' primaryText="Football" />
-          <MenuItem value='Baseball' primaryText="Baseball" />
+        {sportItems}
         </SelectField>
         <DatePicker hintText="Game Start Date"
           defaultDate={this.state.startDate}
