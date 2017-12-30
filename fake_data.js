@@ -5,7 +5,8 @@ const usersPoints = [
     points1d: 3,
     name: 'Elon Gecht',
     online: true,
-    fbId: 100
+    fbId: 100,
+    sunday: '2017-12-24'
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -13,7 +14,8 @@ const usersPoints = [
     points1d: 3,
     name: 'Arik Benado',
     online: true,
-    fbId: 200
+    fbId: 200,
+    sunday: '2017-12-24'
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
@@ -21,9 +23,36 @@ const usersPoints = [
     points1d: 1,
     name: 'David Moyes',
     online: false,
-    fbId: 300
+    fbId: 300,
+    sunday: '2017-12-24'
   },
-
+  {
+    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
+    totalPoints: 11,
+    points1d: 0,
+    name: 'Elon Gecht',
+    online: true,
+    fbId: 100,
+    sunday: '2017-12-17'
+  },
+  {
+    profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
+    totalPoints: 9,
+    points1d: 0,
+    name: 'David Moyes',
+    online: false,
+    fbId: 300,
+    sunday: '2017-12-17'
+  },
+  {
+    profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
+    totalPoints: 8,
+    points1d: 0,
+    name: 'Arik Benado',
+    online: true,
+    fbId: 200,
+    sunday: '2017-12-17'
+  },
 ]
 const userPredictions = [
   {

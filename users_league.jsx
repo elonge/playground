@@ -27,107 +27,125 @@ const customContentStyle = {
 
 class UsersLeague extends React.Component {
   constructor(props) {
-    try {
-      super(props);
-      this.state = {
-        usersPoints: props.usersPoints,
-      };
-      this.isPrevDay = this.isPrevDay.bind(this);
-      this.isNextDay = this.isNextDay.bind(this);
-    } catch (e) { alert('UsersLeague: ' + e.message); }
+    super(props);
+    this.state = {
+      usersPoints: props.usersPoints,
+      viewedWeekIndex: props.viewedWeekIndex,
+      weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+    };
   }
 
-  isNextDay() {
-    return false;
+  // Called when switching to new viewed league or moving date
+  componentWillReceiveProps(nextProps) {
+    this.setState( {
+      viewedWeekIndex: nextProps.viewedWeekIndex,
+      usersPoints: nextProps.usersPoints,
+      weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+    });
   }
 
-  isPrevDay() {
-    return false;
+  isLastSunday(myWeek) {
+    var t = new Date();
+    t.setDate(t.getDate() - t.getDay());
+    var month = '' + (t.getMonth() + 1);
+    var day = '' + (t.getDate());
+    var year = t.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return ([year, month, day].join('-') == myWeek);
   }
 
   render() {
-    try {
-      let tableElement = (
-        <Table
-          height='300px'
-          fixedHeader={true}
-          selectable={true}
-          multiSelectable={false}
-        >
-          <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}
-            enableSelectAll={false}
-          >
-            <TableRow>
-              <TableHeaderColumn
-              >Rank</TableHeaderColumn>
-              <TableHeaderColumn
-              >Name</TableHeaderColumn>
-              <TableHeaderColumn
-              >Last Day</TableHeaderColumn>
-              <TableHeaderColumn
-              >This Week</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            displayRowCheckbox={false}
-            deselectOnClickaway={true}
-            stripedRows={false}
-          >
-            {this.state.usersPoints.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn
-                >{index+1}</TableRowColumn>
-                <TableRowColumn
-                >{row.name}</TableRowColumn>
-                <TableRowColumn
-                >{row.points1d}</TableRowColumn>
-                <TableRowColumn
-                >{row.totalPoints}</TableRowColumn>
-              </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      );
-      let title = "22/12/2017 table";
-      let titleElement = (
-        <PredictionsTitle
-          onNextDayClick = {this.onNextDayClick}
-          onPrevDayClick = {this.onPrevDayClick}
-          isPrevDay = {this.isPrevDay}
-          isNextDay = {this.isNextDay}
-          title = {title}
-        />
-      );
-      titleElement = (
-        <Subheader style={{fontSize:16}}>{title}</Subheader>
-      );
-      let leagueSelection = (
-        <SelectField
-          value="All Users"
-        >
-        <MenuItem value="All Users" key={0} primaryText="All Users"/>
-        <MenuItem value="25 Floor" key={1} primaryText="25 Floor"/>
-        <MenuItem value="United fans" key={2} primaryText="United fans"/>
-        </SelectField>
-      );
+    const {
+      usersPoints,
+      viewedWeekIndex,
+      weeks,
+    } = this.state;
+
+    let weekPoints = usersPoints.filter(user => user.sunday == weeks[viewedWeekIndex]);
+
+    if (weekPoints.length == 0)  {
       return (
-        <div>
-        <span style={{flexDirection: 'row', display:'flex'}}>
-          {titleElement}
-          {leagueSelection}
-        </span>
-          {tableElement}
-        </div>
+        <label>Debug3</label>
       );
-    } catch (e) {
-      alert('UsersLeague exception ' + e.message);
     }
+
+    let tableElement = (
+      <Table
+        height='300px'
+        fixedHeader={true}
+        selectable={true}
+        multiSelectable={false}
+      >
+        <TableHeader
+          displaySelectAll={false}
+          adjustForCheckbox={false}
+          enableSelectAll={false}
+        >
+          <TableRow>
+            <TableHeaderColumn
+            >Rank</TableHeaderColumn>
+            <TableHeaderColumn
+            >Name</TableHeaderColumn>
+            <TableHeaderColumn
+            >Last Day</TableHeaderColumn>
+            <TableHeaderColumn
+            >This Week</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody
+          displayRowCheckbox={false}
+          deselectOnClickaway={true}
+          stripedRows={false}
+        >
+          {weekPoints.map( (row, index) => (
+            <TableRow key={index}>
+              <TableRowColumn
+              >{index+1}</TableRowColumn>
+              <TableRowColumn
+              >{row.name}</TableRowColumn>
+              <TableRowColumn
+              >{row.points1d}</TableRowColumn>
+              <TableRowColumn
+              >{row.totalPoints}</TableRowColumn>
+            </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    );
+    let title;
+    if (this.isLastSunday(weeks[viewedWeekIndex])) {
+      title = weeks[viewedWeekIndex] + " table";
+    } else {
+      title = weeks[viewedWeekIndex] + " final table";
+    }
+    let titleElement = (
+      <Subheader style={{fontSize:16}}>{title}</Subheader>
+    );
+    let leagueSelection = (
+      <SelectField
+        value="All Users"
+      >
+      <MenuItem value="All Users" key={0} primaryText="All Users"/>
+      <MenuItem value="25 Floor" key={1} primaryText="25 Floor"/>
+      <MenuItem value="United fans" key={2} primaryText="United fans"/>
+      </SelectField>
+    );
+    return (
+      <div>
+      <span style={{flexDirection: 'row', display:'flex'}}>
+        {titleElement}
+        {leagueSelection}
+      </span>
+        {tableElement}
+      </div>
+    );
   }
 };
 
-UsersLeague.PropTypes = {
+UsersLeague.propTypes = {
 };
 
 export default UsersLeague;

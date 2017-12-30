@@ -322,8 +322,8 @@ class SuperUserEditor extends React.Component {
           userPredictions={myPredictions}
           updatePrediction={this.onUpdateResult}
           forceEnable={true}
-          usersPoints={[]}
           otherUserMode={null}
+          viewedDateIndex={0}
           />
       </div>
     );

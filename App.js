@@ -30,6 +30,7 @@ class App extends Component {
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
+      viewedWeekIndex: 0,
       otherUserPredictionsMode: null,
       points: FakeData.usersPoints,
       userPredictions: FakeData.userPredictions,
@@ -69,7 +70,8 @@ class App extends Component {
 
   isPrevDisabled() {
     if (this.state.showPointsMode) {
-      return true;
+      let weeks = this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+      return (this.state.viewedWeekIndex >= weeks.length - 1);
     }
     let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
     return (this.state.viewedDateIndex >= days.length - 1);
@@ -77,29 +79,37 @@ class App extends Component {
 
   isNextDisabled() {
     if (this.state.showPointsMode) {
-      return true;
+      return (this.state.viewedWeekIndex == 0);
     }
     return (this.state.viewedDateIndex == 0);
   }
 
   onPrevClick() {
     if (this.state.showPointsMode) {
-      return; // TODO missing
+      let viewedWeekIndex = this.state.viewedWeekIndex;
+      let weeks =  this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+      if (viewedWeekIndex < weeks.length - 1) {
+        this.setState({viewedWeekIndex: viewedWeekIndex + 1});
+      }
+    } else {
+      let viewedDateIndex = this.state.viewedDateIndex;
+      let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+      if (viewedDateIndex < days.length - 1) {
+        this.setState({viewedDateIndex: viewedDateIndex + 1});
+      }
     }
-    let viewedDateIndex = this.state.viewedDateIndex;
-    let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
-    if (viewedDateIndex < days.length - 1) {
-      this.setState({viewedDateIndex: viewedDateIndex + 1});
-    }
-
   }
   onNextClick() {
     if (this.state.showPointsMode) {
-      return; // TODO missing
-    }
-    let viewedDateIndex = this.state.viewedDateIndex;
-    if (viewedDateIndex > 0) {
-      this.setState({viewedDateIndex: viewedDateIndex - 1});
+      let viewedWeekIndex = this.state.viewedWeekIndex;
+      if (viewedWeekIndex > 0) {
+        this.setState({viewedWeekIndex: viewedWeekIndex - 1});
+      }
+    } else {
+      let viewedDateIndex = this.state.viewedDateIndex;
+      if (viewedDateIndex > 0) {
+        this.setState({viewedDateIndex: viewedDateIndex - 1});
+      }
     }
   }
 
@@ -119,7 +129,8 @@ class App extends Component {
       points,
       showPointsMode,
       otherUserPredictionsMode,
-      viewedDateIndex
+      viewedDateIndex,
+      viewedWeekIndex,
     } = this.state;
 
     let superUser = '';
@@ -129,6 +140,7 @@ class App extends Component {
         <UsersLeague
           usersPoints={points}
           userPredictions={userPredictions}
+          viewedWeekIndex={viewedWeekIndex}
         />
       );
     } else {
