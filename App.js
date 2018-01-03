@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 //import './App.css';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SuperUserEditor from './super_user';
 import TodayPredictions from './today_predictions.jsx'
 import Viewers from './viewers.jsx';
+import LoadingScreen from './loading_screen.jsx';
 import {Panel, Form} from 'react-weui';
 import Invite from './invite.jsx';
 import UsersLeague from './users_league.jsx';
 import MainAppBar from './main_app_bar.jsx';
+import LeagueInfo from './league_info.jsx'
 
 import FakeData from './fake_data.js';
 
 const superUserMode = false;
-
 
 class App extends Component {
   constructor(props) {
@@ -27,15 +26,23 @@ class App extends Component {
     this.onPrevClick = this.onPrevClick.bind(this);
     this.isPrevDisabled = this.isPrevDisabled.bind(this);
     this.isNextDisabled = this.isNextDisabled.bind(this);
+    this.onLeagueChanged = this.onLeagueChanged.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
       viewedWeekIndex: 0,
       otherUserPredictionsMode: null,
+      users: FakeData.users,
       points: FakeData.usersPoints,
       userPredictions: FakeData.userPredictions,
       otherPredictions: FakeData.otherPredictions,
+      leagues: FakeData.leagues,
+      viewedLeagueIndex: 0,
     };
+  }
+
+  onLeagueChanged(event, key, value) {
+    this.setState({viewedLeagueIndex: key});
   }
 
   updatePrediction(prediction) {
@@ -121,6 +128,55 @@ class App extends Component {
     return predictions;
   }
 
+  firstTodayPrediction() {
+      return this.state.userPredictions.find(this.isPrecitionToday);
+  }
+  isPrecitionToday(prediction) {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    var dateStr = [year, month, day].join('-');
+    return prediction.prediction_date == dateStr;
+  }
+
+  getInviteComponent() {
+    let invite;
+    let invitePrediction = this.firstTodayPrediction();
+    let inviteTitle = (invitePrediction == null ?
+      'Questions about today\'s games' :
+       'Questions about ' + invitePrediction.home_team +'-'+invitePrediction.away_team +' and other games');
+
+    // only owners are able to share their lists and other
+    // participants are able to post back to groups.
+    let sharingMode;
+    let buttonText;
+
+    if (this.props.threadType === 'USER_TO_PAGE') {
+      sharingMode = 'broadcast';
+      buttonText = 'Compete with your friends!';
+    } else {
+      sharingMode = 'current_thread';
+      buttonText = 'Send to conversation';
+    }
+    const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
+
+    invite = (
+      <Invite
+        title={inviteTitle}
+        apiUri={this.props.apiUri}
+        sharingMode={sharingMode}
+        buttonText={buttonText}
+        userName={me.name}
+      />
+    );
+    return invite;
+  }
+
   render() {
     const {
       userPredictions,
@@ -131,82 +187,112 @@ class App extends Component {
       otherUserPredictionsMode,
       viewedDateIndex,
       viewedWeekIndex,
+      viewedLeagueIndex,
+      leagues,
     } = this.state;
 
     let superUser = '';
-    let mainPart = '';
-    if (showPointsMode) {
-      mainPart = (
-        <UsersLeague
-          usersPoints={points}
-          userPredictions={userPredictions}
-          viewedWeekIndex={viewedWeekIndex}
-        />
-      );
-    } else {
-      mainPart = (
-        <TodayPredictions
-          userPredictions={this.getCurrentStatePredictions()}
-          updatePrediction={this.updatePrediction}
-          forceEnable={true}
-          otherUserMode={otherUserPredictionsMode}
-          viewedDateIndex={viewedDateIndex}
-        />
-      );
-    }
 
-    let buttonText = 'Compete with your friends!';
-    let sharingMode = 'current_thread';
+    let page;
 
-    let appBarTitle = "Welcome " + points[0].name;
+    if (users.length > 0) {
+      let invite = this.getInviteComponent();
 
-    let appBar = (
-      <MainAppBar
-        onPrevClick={this.onPrevClick}
-        onNextClick={this.onNextClick}
-        isPrevDisabled={this.isPrevDisabled}
-        isNextDisabled={this.isNextDisabled}
-        onPredictionsPointsToggle={this.onPredictionsPointsToggle}
-        title={appBarTitle}
-        />
-    );
-    let invite = (
-      <Invite
-        title="Compete with friends"
-        apiUri="sds"
-        sharingMode={sharingMode}
-        buttonText={buttonText}
-      />
-    );
-    if (superUserMode) {
-      appBar = "";
-      invite = "";
-      mainPart = "";
-      superUser = <SuperUserEditor/>
-    }
-
-    return (
-      <div className="App" style={{ paddingTop: 10 }}>
-        <MuiThemeProvider>
-          <section id='list'>
-          {appBar}
-          <Viewers
-            users={points}
-            viewerId={100}
+      let gamePart;
+      let topPart;
+      if (showPointsMode) {
+        gamePart = (
+          <UsersLeague
+            usersPoints={points}
+            userPredictions={userPredictions}
+            viewedWeekIndex={viewedWeekIndex}
+            viewedLeagueIndex={viewedLeagueIndex}
+            leagues={leagues}
+            onLeagueChanged={this.onLeagueChanged}
             onUserClick={this.onUserClick}
-            viewedUserId={(otherUserPredictionsMode==null ? 100 : otherUserPredictionsMode.fbId)}
           />
-          <Panel>
-            <section id='items'>
-              {mainPart}
-              {superUser}
-            </section>
-          </Panel>
-          {invite}
-          </section>
-        </MuiThemeProvider>
+        );
+        topPart = (
+          <LeagueInfo
+            users={users}
+            league={leagues[viewedLeagueIndex]}
+          />
+        );
+      } else {
+        gamePart = (
+          <TodayPredictions
+            userPredictions={this.getCurrentStatePredictions()}
+            updatePrediction={this.updatePrediction}
+            forceEnable={true}
+            otherUserMode={otherUserPredictionsMode}
+            viewedDateIndex={viewedDateIndex}
+          />
+        );
+        topPart = (
+          <Viewers
+            users={users}
+            viewerId={this.props.viewerId}
+            onUserClick={this.onUserClick}
+            viewedUserId={(otherUserPredictionsMode==null ? this.props.viewerId : otherUserPredictionsMode.fbId)}
+          />
+        );
+      }
+
+      const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
+      let appBarTitle = "Welcome " + me.name;
+      let appBar = (
+        <MainAppBar
+          onPrevClick={this.onPrevClick}
+          onNextClick={this.onNextClick}
+          isPrevDisabled={this.isPrevDisabled}
+          isNextDisabled={this.isNextDisabled}
+          onPredictionsPointsToggle={this.onPredictionsPointsToggle}
+          showPointsMode={showPointsMode}
+          title={appBarTitle}
+          onCreateLeagueCommand={this.onCreateLeagueCommand}
+        />
+      );
+
+      if (superUserMode) {
+        page = (
+          <div className="App" style={{ paddingTop: 10 }}>
+            <MuiThemeProvider>
+              <section id='list'>
+                <SuperUserEditor/>
+              </section>
+          </MuiThemeProvider>
+        </div>
+        );
+      } else {
+        page = (
+          <div className="App" style={{ paddingTop: 10 }}>
+            <MuiThemeProvider>
+              <section id='list'>
+                {appBar}
+                {topPart}
+                {gamePart}
+                {invite}
+              </section>
+            </MuiThemeProvider>
+          </div>
+        );
+      }
+    } else {
+      // Show a loading screen until app is ready
+      page = <LoadingScreen key='load' />;
+    }
+    return (
+      <div id='app'>
+        <ReactCSSTransitionGroup
+          transitionName='page'
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+        >
+          {page}
+        </ReactCSSTransitionGroup>
       </div>
     );
+
   }
 }
 

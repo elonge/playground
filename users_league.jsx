@@ -31,8 +31,11 @@ class UsersLeague extends React.Component {
     this.state = {
       usersPoints: props.usersPoints,
       viewedWeekIndex: props.viewedWeekIndex,
-      weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+      weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
+      leagues: props.leagues,
+      viewedLeagueIndex: props.viewedLeagueIndex,
     };
+    this.onCellClick = this.onCellClick.bind(this);
   }
 
   // Called when switching to new viewed league or moving date
@@ -40,6 +43,7 @@ class UsersLeague extends React.Component {
     this.setState( {
       viewedWeekIndex: nextProps.viewedWeekIndex,
       usersPoints: nextProps.usersPoints,
+      viewedLeagueIndex: nextProps.viewedLeagueIndex,
       weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
     });
   }
@@ -57,15 +61,41 @@ class UsersLeague extends React.Component {
     return ([year, month, day].join('-') == myWeek);
   }
 
+  formatDateAsDB(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  onCellClick(rowNumber, columnId) {
+    const {
+      usersPoints,
+      viewedWeekIndex,
+      weeks,
+      viewedLeagueIndex,
+      leagues,
+    } = this.state;
+
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == viewedLeagueIndex));
+    this.props.onUserClick(weekPoints[rowNumber]);
+  }
+
   render() {
     const {
       usersPoints,
       viewedWeekIndex,
       weeks,
+      viewedLeagueIndex,
+      leagues,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => user.sunday == weeks[viewedWeekIndex]);
-
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == viewedLeagueIndex));
     if (weekPoints.length == 0)  {
       return (
         <label>Debug3</label>
@@ -78,6 +108,7 @@ class UsersLeague extends React.Component {
         fixedHeader={true}
         selectable={true}
         multiSelectable={false}
+        onCellClick={this.onCellClick}
       >
         <TableHeader
           displaySelectAll={false}
@@ -98,7 +129,7 @@ class UsersLeague extends React.Component {
         <TableBody
           displayRowCheckbox={false}
           deselectOnClickaway={true}
-          stripedRows={false}
+          stripedRows={true}
         >
           {weekPoints.map( (row, index) => (
             <TableRow key={index}>
@@ -116,21 +147,25 @@ class UsersLeague extends React.Component {
       </Table>
     );
     let title;
-    if (this.isLastSunday(weeks[viewedWeekIndex])) {
-      title = weeks[viewedWeekIndex] + " table";
+    let weekHuman = this.formatDateAsDB(weeks[viewedWeekIndex]);
+    if (this.isLastSunday(weekHuman)) {
+      title = weekHuman + " table";
     } else {
-      title = weeks[viewedWeekIndex] + " final table";
+      title = weekHuman + " final table";
     }
     let titleElement = (
       <Subheader style={{fontSize:16}}>{title}</Subheader>
     );
+
+    let leagueItems = leagues.map((league, index) => (
+      <MenuItem value={index} key={index} primaryText={league.name} />
+    ));
     let leagueSelection = (
       <SelectField
-        value="All Users"
+        value={viewedLeagueIndex}
+        onChange={this.props.onLeagueChanged}
       >
-      <MenuItem value="All Users" key={0} primaryText="All Users"/>
-      <MenuItem value="25 Floor" key={1} primaryText="25 Floor"/>
-      <MenuItem value="United fans" key={2} primaryText="United fans"/>
+      {leagueItems}
       </SelectField>
     );
     return (

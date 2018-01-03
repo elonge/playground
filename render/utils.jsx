@@ -1,13 +1,17 @@
 import React from 'react';
-import {red500, green500, blue500, indigo50} from 'material-ui/styles/colors';
+import {red500, green500, blue500, indigo50, indigo100} from 'material-ui/styles/colors';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import ActionLock from 'material-ui/svg-icons/action/lock';
+import ModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import CheckBox from 'material-ui-icons/CheckBox';
 import CheckBoxOutlineBlank from 'material-ui-icons/CheckBoxOutlineBlank';
 import Avatar from 'material-ui/Avatar';
+import Badge from 'material-ui/Badge';
 import Soccer from './soccer';
 import Basketball from './basketball'
 import Football from './football';
+
+const leftAvatarStyle = {'font-size': '12px', textAlign: 'center'};
 
 var supportedResultTypes = Soccer.supportedResultTypes.concat(Basketball.supportedResultTypes).concat(Football.supportedResultTypes);
 
@@ -80,9 +84,10 @@ const leftAvatar = (prediction, hideUserPrediction) => {
   if (prediction.value == null) {
     return (
         <Avatar
-          icon={<CheckBoxOutlineBlank/>}
-          backgroundColor={indigo50}
-        />
+          style={leftAvatarStyle}
+          backgroundColor={indigo100}
+          > {prediction.points + (prediction.points > 1 ? " pts" : " pt")}
+          </Avatar>
     );
   } else if (prediction.points_updated) {
     return (
@@ -104,12 +109,14 @@ const leftAvatar = (prediction, hideUserPrediction) => {
 
 const rightAvatar = (prediction, hideUserPrediction) => {
   if (prediction.value == null) {
+    return '';
+    /*
     return (
         <Avatar
-          icon={<ActionInfo/>}
-          backgroundColor={indigo50}
+          icon={<ModeEdit/>}
         />
     );
+    */
   } else if (hideUserPrediction) {
     return (
         <Avatar

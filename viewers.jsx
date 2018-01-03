@@ -12,6 +12,7 @@ import {Footer, FooterText} from 'react-weui';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import SocialPeople from 'material-ui/svg-icons/social/people';
 import FormatListNumbered from 'material-ui/svg-icons/editor/format-list-numbered';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 const socialStyle = {
   'margin-right' : 50,
@@ -47,22 +48,26 @@ const Viewers = ({viewerId, users, onUserClick, viewedUserId}) => {
   );
 
   return (
-    <section id='viewers'>
-      <ReactCSSTransitionGroup
-        className='viewers-list-cntnr'
-        transitionName='viewer'
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}
-      >
-        {viewers}
-      </ReactCSSTransitionGroup>
+    <Card expanded={false}>
+      <CardMedia>
+        <section id='viewers'>
+          <ReactCSSTransitionGroup
+            className='viewers-list-cntnr'
+            transitionName='viewer'
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={300}
+          >
+            {viewers}
+          </ReactCSSTransitionGroup>
 
-      <Footer id='viewer-count'>
-        <FooterText>
-          {viewers.length} people are in the game!
-        </FooterText>
-      </Footer>
-    </section>
+          <Footer id='viewer-count'>
+            <FooterText>
+              {viewers.length} people are in the game!
+            </FooterText>
+          </Footer>
+        </section>
+        </CardMedia>
+    </Card>
   );
 };
 

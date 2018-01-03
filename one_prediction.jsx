@@ -13,6 +13,9 @@ import ExposureZero from 'material-ui-icons/ExposureZero';
 import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import RenderUtils from './render/utils';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import DropDownMenu from 'material-ui/DropDownMenu';
 
 const supportThreeOptionsWinner = false;
 
@@ -75,6 +78,7 @@ class OnePrediction extends React.Component {
       let primaryText = this.renderPrimaryText();
       let secondaryText = this.renderSecondaryText();
       let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
+
       return (
         <ListItem
           disabled={this.isPredictionDisabled() || this.props.otherUserMode}

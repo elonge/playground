@@ -1,3 +1,42 @@
+const users = [
+  {
+    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
+    name: 'Elon Gecht',
+    online: true,
+    fbId: 100,
+  },
+  {
+    profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
+    name: 'Arik Benado',
+    online: true,
+    fbId: 200,
+  },
+  {
+    profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
+    name: 'David Moyes',
+    online: false,
+    fbId: 300,
+  },
+];
+
+const leagues = [
+  {
+    id: 0,
+    name: 'All users',
+    creatorId: 100,
+  },
+  {
+    id: 1,
+    name: 'West 25',
+    creatorId: 200,
+  },
+  {
+    id: 2,
+    name: 'Best team',
+    creatorId: 300
+  }
+];
+
 const usersPoints = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -6,7 +45,8 @@ const usersPoints = [
     name: 'Elon Gecht',
     online: true,
     fbId: 100,
-    sunday: '2017-12-24'
+    sunday: '2017-12-24',
+    league: 0
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -15,7 +55,8 @@ const usersPoints = [
     name: 'Arik Benado',
     online: true,
     fbId: 200,
-    sunday: '2017-12-24'
+    sunday: '2017-12-24',
+    league: 0
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
@@ -24,8 +65,9 @@ const usersPoints = [
     name: 'David Moyes',
     online: false,
     fbId: 300,
-    sunday: '2017-12-24'
-  },
+    sunday: '2017-12-24',
+    league: 0
+},
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
     totalPoints: 11,
@@ -33,7 +75,8 @@ const usersPoints = [
     name: 'Elon Gecht',
     online: true,
     fbId: 100,
-    sunday: '2017-12-17'
+    sunday: '2017-12-17',
+    league: 0
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
@@ -42,7 +85,8 @@ const usersPoints = [
     name: 'David Moyes',
     online: false,
     fbId: 300,
-    sunday: '2017-12-17'
+    sunday: '2017-12-17',
+    league: 0
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -51,9 +95,52 @@ const usersPoints = [
     name: 'Arik Benado',
     online: true,
     fbId: 200,
-    sunday: '2017-12-17'
+    sunday: '2017-12-17',
+    league: 0
+  },
+  {
+    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
+    totalPoints: 15,
+    points1d: 3,
+    name: 'Elon Gecht',
+    online: true,
+    fbId: 100,
+    sunday: '2017-12-24',
+    league: 1
+  },
+  {
+    profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
+    totalPoints: 8,
+    points1d: 3,
+    name: 'Arik Benado',
+    online: true,
+    fbId: 200,
+    sunday: '2017-12-24',
+    league: 1
+  },
+  {
+    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
+    totalPoints: 15,
+    points1d: 3,
+    name: 'Elon Gecht',
+    online: true,
+    fbId: 100,
+    sunday: '2017-12-24',
+    league: 2
+  },
+  {
+    profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
+    totalPoints: 2,
+    points1d: 1,
+    name: 'David Moyes',
+    online: false,
+    fbId: 300,
+    sunday: '2017-12-24',
+    league: 2
   },
 ]
+
+
 const userPredictions = [
   {
     user_id: 100,
@@ -65,7 +152,7 @@ const userPredictions = [
     start_time: '2017-12-22 17:00:00',
     value: 'Lakers by 10 points or more',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 1,
@@ -84,7 +171,7 @@ const userPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: 'Arsenal',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -103,7 +190,7 @@ const userPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 2,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -122,7 +209,7 @@ const userPredictions = [
     start_time: '2017-12-17 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-17',
     points_updated: false,
@@ -141,7 +228,7 @@ const userPredictions = [
     start_time: '2017-12-17 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-19',
     points_updated: false,
@@ -160,7 +247,7 @@ const userPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -179,7 +266,7 @@ const userPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -198,7 +285,7 @@ const userPredictions = [
     start_time: '2017-12-26 20:00:00',
     value: 'Valencia',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-26',
     points_updated: false,
@@ -217,7 +304,7 @@ const userPredictions = [
     start_time: '2017-12-15 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-15',
     points_updated: false,
@@ -238,7 +325,7 @@ const otherPredictions = [
     start_time: '2017-12-22 17:00:00',
     value: 'Lakers by 10 points or more',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 1,
@@ -257,7 +344,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: 'Arsenal',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -276,7 +363,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 2,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -295,7 +382,7 @@ const otherPredictions = [
     start_time: '2017-12-17 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-17',
     points_updated: false,
@@ -314,7 +401,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -333,7 +420,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -352,7 +439,7 @@ const otherPredictions = [
     start_time: '2017-12-26 20:00:00',
     value: 'Valencia',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-26',
     points_updated: false,
@@ -371,7 +458,7 @@ const otherPredictions = [
     start_time: '2017-12-15 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-15',
     points_updated: false,
@@ -390,7 +477,7 @@ const otherPredictions = [
     start_time: '2017-12-22 17:00:00',
     value: 'Lakers by 10 points or more',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 1,
@@ -409,7 +496,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: 'Arsenal',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -428,7 +515,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 2,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_won: 0,
@@ -447,7 +534,7 @@ const otherPredictions = [
     start_time: '2017-12-17 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-17',
     points_updated: false,
@@ -466,7 +553,7 @@ const otherPredictions = [
     start_time: '2017-12-17 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-19',
     points_updated: false,
@@ -485,7 +572,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -504,7 +591,7 @@ const otherPredictions = [
     start_time: '2017-12-18 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
@@ -523,7 +610,7 @@ const otherPredictions = [
     start_time: '2017-12-26 20:00:00',
     value: 'Valencia',
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: true,
     prediction_date: '2017-12-26',
     points_updated: false,
@@ -542,7 +629,7 @@ const otherPredictions = [
     start_time: '2017-12-15 17:00:00',
     value: null,
     open: true,
-    status: 'before',
+    points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-15',
     points_updated: false,
@@ -554,7 +641,9 @@ const otherPredictions = [
 ];
 
 export default {
+  users,
   usersPoints,
   userPredictions,
   otherPredictions,
+  leagues,
 }

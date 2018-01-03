@@ -26,6 +26,7 @@ var winnerRange = {
   optionsDefine: ['_HOME by 7 points or more', '_HOME by less than 7 points','_AWAY by 7 points or more','_AWAY by less than 7 points'],
   nullPrimaryDefine: 'Pick your winner',
   primaryDefine: '_VALUE',
+  secondaryDefine: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue;
     let shortTeam = (prediction.value.startsWith(prediction.home_team) ? prediction.home_team : prediction.away_team);
@@ -46,6 +47,7 @@ var firstScore = {
   optionsDefine: ['_HOME', '_AWAY'],
   nullPrimaryDefine: 'Which team will score first?',
   primaryDefine: '_VALUE will score first',
+  secondaryDefine: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
     return (

@@ -298,8 +298,10 @@ class SuperUserEditor extends React.Component {
     tempPrediction.sport_type = (index >= 0 ? this.state.allGames[index].sport_type : '');
     tempPrediction.predicted_score = this.state.predictedScore;
     tempPrediction.result_type = this.state.resultType;
+    tempPrediction.type_extra = this.state.typeExtra;
     tempPrediction.start_time = (index >= 0 ? this.state.allGames[index].start_type : '');
     tempPrediction.value = null;
+    tempPrediction.points = 1;
 
     console.log("--->" + JSON.stringify(tempPrediction));
     return tempPrediction;
