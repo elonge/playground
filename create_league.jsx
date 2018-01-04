@@ -17,13 +17,16 @@ class CreateLeagueDialog extends React.Component {
       newLeagueCode: '',
       newLeagueError: '',
       joinLeagueError: '',
+      joinLeagueName: '',
       waitingToServer: false,
       enteredCode: '',
     };
     this.onNewLeagueNameChanged = this.onNewLeagueNameChanged.bind(this);
     this.onCodeUpdated = this.onCodeUpdated.bind(this);
     this.onCreateLeague = this.onCreateLeague.bind(this);
+    this.onJoinLeague = this.onJoinLeague.bind(this);
     this.onInviteFriends = this.onInviteFriends.bind(this);
+    this.onApproveJoining = this.onApproveJoining.bind(this);
     this.onDialogCancel = this.onDialogCancel.bind(this);
     this.renderCreateLeague = this.renderCreateLeague.bind(this);
     this.renderJoinLeague = this.renderJoinLeague.bind(this);
@@ -33,6 +36,14 @@ class CreateLeagueDialog extends React.Component {
     this.setState( {
       open: nextProps.open,
       isCreate: nextProps.isCreate,
+      newLeagueName: '',
+      enteredCode: '',
+      newLeagueCode: '',
+      newLeagueError: '',
+      joinLeagueError: '',
+      joinLeagueName: '',
+      waitingToServer: false,
+      enteredCode: '',
     });
   }
 
@@ -50,6 +61,30 @@ class CreateLeagueDialog extends React.Component {
 
   onInviteFriends() {
     alert("invite friends");
+  }
+
+  onApproveJoining() {
+    alert("Approve joining");
+  }
+
+  onJoinLeague() {
+    this.setState({waitingToServer: true});
+    var self=this;
+    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/lg/join/' + this.state.enteredCode;
+    axios.get(url)
+    .then(function (response) {
+      let rc = '' + response.data;
+      console.log("rc = " + rc +", " + rc.startsWith("error"));
+      if (rc.startsWith('error')) {
+        self.setState({waitingToServer: false, joinLeagueError: rc, joinLeagueName:''});
+      } else {
+        self.setState({waitingToServer: false, joinLeagueName: rc, joinLeagueError: ''});
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      self.setState({waitingToServer: false, joinLeagueError: error, joinLeagueName:''});
+    });
   }
 
   onCreateLeague() {
@@ -91,7 +126,7 @@ class CreateLeagueDialog extends React.Component {
 
     return (
       <Dialog
-        title="Leagues"
+        title="Create a new league"
         actions={actions}
         disabled={this.state.waitingToServer}
         modal={false}
@@ -103,12 +138,12 @@ class CreateLeagueDialog extends React.Component {
           value={this.state.newLeagueName}
           onChange={this.onNewLeagueNameChanged}
           errorText={this.state.newLeagueError}
-          hintText="League name"
+          hintText="Please enter a unique league name"
         /><br />
         <TextField
           disabled={true}
           hintText="League Code"
-          value={(isCode ? 'Created! Code = ' + this.state.newLeagueCode : '')}
+          value={(isCode ? 'League created! Code is ' + this.state.newLeagueCode : '')}
         /><br />
       </div>
       </Dialog>
@@ -116,6 +151,7 @@ class CreateLeagueDialog extends React.Component {
   }
 
   renderJoinLeague() {
+    let isLeague = this.state.joinLeagueName.length > 0;
     const actions = [
       <FlatButton
         label="Cancel"
@@ -124,16 +160,16 @@ class CreateLeagueDialog extends React.Component {
         onClick={this.onDialogCancel}
       />,
       <FlatButton
-        label="Join league"
+        label={isLeague ? "Approve Joining" : "Join league..."}
         primary={true}
         keyboardFocused={true}
-        onClick={this.onJoinLeague}
+        onClick={isLeague ? this.onApproveJoining : this.onJoinLeague}
       />,
     ];
 
     return (
       <Dialog
-        title="Leagues"
+        title="Join a league"
         actions={actions}
         disabled={this.state.waitingToServer}
         modal={false}
@@ -143,13 +179,13 @@ class CreateLeagueDialog extends React.Component {
       <div>
         <TextField
           disabled={false}
-          hintText="League Code"
+          hintText="Please enter the league code"
           value={this.state.enteredCode}
           errorText={this.state.joinLeagueError}
           onChange={this.onCodeUpdated}
         /><br />
         <TextField
-          value={this.state.newLeagueName}
+          value={isLeague ?"League name is " + this.state.joinLeagueName : ""}
           disabled={true}
           hintText="League name"
         /><br />
@@ -157,7 +193,6 @@ class CreateLeagueDialog extends React.Component {
       </Dialog>
     );
   }
-
 
   render() {
     if (this.state.isCreate) {
