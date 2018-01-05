@@ -93,6 +93,8 @@ class MainAppBar extends React.Component {
           open={this.state.leagueDialogOpen}
           isCreate={this.state.isCreate}
           handleClose={this.onCloseCreateDialog}
+          socket={this.props.socket}
+          senderId={this.props.senderId}
         />
       </div>
     );

@@ -108,8 +108,11 @@ class SuperUserEditor extends React.Component {
   }
   loadAllPredictions() {
     var self=this;
+    var config = {
+       headers: {"Access-Control-Allow-Origin": "*"}
+    };
     let url = 'https://infinite-caverns-93636.herokuapp.com/elon/l/p/';
-    axios.get(url)
+    axios.get(url, config)
     .then(function (response) {
       console.log(response.data[0]);
       self.setState({allPredictions: response.data[0]});

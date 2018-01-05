@@ -3,8 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-
-import axios from 'axios';
+import Snackbar from 'material-ui/Snackbar';
 
 class CreateLeagueDialog extends React.Component {
   constructor(props) {
@@ -17,19 +16,24 @@ class CreateLeagueDialog extends React.Component {
       newLeagueCode: '',
       newLeagueError: '',
       joinLeagueError: '',
-      joinLeagueName: '',
+      joinLeague: null,
       waitingToServer: false,
       enteredCode: '',
+      snackbarMessage: '',
     };
     this.onNewLeagueNameChanged = this.onNewLeagueNameChanged.bind(this);
     this.onCodeUpdated = this.onCodeUpdated.bind(this);
     this.onCreateLeague = this.onCreateLeague.bind(this);
-    this.onJoinLeague = this.onJoinLeague.bind(this);
+    this.onGetLeagueByCode = this.onGetLeagueByCode.bind(this);
     this.onInviteFriends = this.onInviteFriends.bind(this);
     this.onApproveJoining = this.onApproveJoining.bind(this);
     this.onDialogCancel = this.onDialogCancel.bind(this);
     this.renderCreateLeague = this.renderCreateLeague.bind(this);
     this.renderJoinLeague = this.renderJoinLeague.bind(this);
+    this.pushToRemote = this.pushToRemote.bind(this);
+    this.onCreateLeagueServerResponse = this.onCreateLeagueServerResponse.bind(this);
+    this.onGetLeagueServerResponse = this.onGetLeagueServerResponse.bind(this);
+    this.onJoinLeagueServerResponse = this.onJoinLeagueServerResponse.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,14 +45,36 @@ class CreateLeagueDialog extends React.Component {
       newLeagueCode: '',
       newLeagueError: '',
       joinLeagueError: '',
-      joinLeagueName: '',
+      joinLeague: null,
       waitingToServer: false,
       enteredCode: '',
+      snackbarMessage: '',
     });
   }
 
+  pushToRemote(channel, message, statusHandler) {
+    this.setState({waitingToServer: true});
+
+    this.props.socket.emit(
+      `push:${channel}`,
+      {
+        senderId: this.props.senderId,
+        ...message,
+      },
+      (status) => {
+        console.log(channel + ": " + JSON.stringify(status));
+
+        this.setState({
+          waitingToServer:false,
+        });
+
+        statusHandler(channel, status);
+      }
+    );
+  }
+
   onDialogCancel() {
-    this.setState({open: false});
+    this.setState({open: false, snackbarMessage: ''});
   };
 
   onNewLeagueNameChanged(event) {
@@ -64,54 +90,50 @@ class CreateLeagueDialog extends React.Component {
   }
 
   onApproveJoining() {
-    alert("Approve joining");
+    this.pushToRemote("league:join", {leagueId: this.state.joinLeague.id}, this.onJoinLeagueServerResponse);
   }
 
-  onJoinLeague() {
-    this.setState({waitingToServer: true});
-    var self=this;
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/lg/join/' + this.state.enteredCode;
-    axios.get(url)
-    .then(function (response) {
-      let rc = '' + response.data;
-      console.log("rc = " + rc +", " + rc.startsWith("error"));
-      if (rc.startsWith('error')) {
-        self.setState({waitingToServer: false, joinLeagueError: rc, joinLeagueName:''});
-      } else {
-        self.setState({waitingToServer: false, joinLeagueName: rc, joinLeagueError: ''});
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-      self.setState({waitingToServer: false, joinLeagueError: error, joinLeagueName:''});
-    });
+  onJoinLeagueServerResponse(channel, response) {
+    if (response.startsWith("ok")) {
+      let snackbarMessage = 'Joined league ' + this.state.joinLeague.league_name;
+      this.setState({snackbarMessage:snackbarMessage});
+    } else {
+      this.setState({joinLeagueError:response, joinLeague: null});
+    }
+  }
+
+  onGetLeagueByCode() {
+    this.pushToRemote("league:by_code", {leagueCode: this.state.enteredCode}, this.onGetLeagueServerResponse);
+  }
+
+  onGetLeagueServerResponse(channel, response) {
+    if (response.startsWith("ok: ")) {
+      let league = JSON.parse(response.substring(4));
+      this.setState({joinLeagueError:'', joinLeague: league});
+    } else {
+      this.setState({joinLeagueError:response, joinLeague: null});
+    }
   }
 
   onCreateLeague() {
-    this.setState({waitingToServer: true});
-    var self=this;
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/lg/create/' + this.state.newLeagueName;
-    axios.get(url)
-    .then(function (response) {
-      let rc = '' + response.data;
-      console.log("rc = " + rc +", " + rc.startsWith("error"));
-      if (rc.startsWith('error')) {
-        self.setState({waitingToServer: false, newLeagueError: rc, newLeagueCode:''});
-      } else {
-        self.setState({waitingToServer: false, newLeagueCode: rc, newLeagueError: ''});
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-      self.setState({waitingToServer: false, newLeagueError: error, newLeagueCode:''});
-    });
+    this.pushToRemote("league:insert", {leagueName: this.state.newLeagueName}, this.onCreateLeagueServerResponse);
+  }
+
+  onCreateLeagueServerResponse(channel, response) {
+    console.log()
+    if (response.startsWith("ok: ")) {
+      this.setState({newLeagueError:'', newLeagueCode: response.substring(4)});
+    } else {
+      this.setState({newLeagueError:response, newLeagueCode: ''});
+    }
   }
 
   renderCreateLeague() {
     let isCode = this.state.newLeagueCode.length > 0;
+    let isSnack = this.state.snackbarMessage.length > 0;
     const actions = [
       <FlatButton
-        label="Cancel"
+        label={isCode ? "Exit" : "Cancel"}
         primary={true}
         keyboardFocused={true}
         onClick={this.onDialogCancel}
@@ -121,6 +143,7 @@ class CreateLeagueDialog extends React.Component {
         primary={true}
         keyboardFocused={true}
         onClick={isCode ? this.onInviteFriends : this.onCreateLeague}
+        disabled = {isSnack || this.state.waitingToServer}
       />,
     ];
 
@@ -151,19 +174,22 @@ class CreateLeagueDialog extends React.Component {
   }
 
   renderJoinLeague() {
-    let isLeague = this.state.joinLeagueName.length > 0;
+    let isLeague = this.state.joinLeague != null;
+    let isSnack = this.state.snackbarMessage.length > 0;
     const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
         keyboardFocused={true}
+        disabled = {isSnack}
         onClick={this.onDialogCancel}
       />,
       <FlatButton
         label={isLeague ? "Approve Joining" : "Join league..."}
         primary={true}
         keyboardFocused={true}
-        onClick={isLeague ? this.onApproveJoining : this.onJoinLeague}
+        disabled = {isSnack || this.state.waitingToServer}
+        onClick={isLeague ? this.onApproveJoining : this.onGetLeagueByCode}
       />,
     ];
 
@@ -176,20 +202,26 @@ class CreateLeagueDialog extends React.Component {
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
       >
-      <div>
-        <TextField
-          disabled={false}
-          hintText="Please enter the league code"
-          value={this.state.enteredCode}
-          errorText={this.state.joinLeagueError}
-          onChange={this.onCodeUpdated}
-        /><br />
-        <TextField
-          value={isLeague ?"League name is " + this.state.joinLeagueName : ""}
-          disabled={true}
-          hintText="League name"
-        /><br />
-      </div>
+        <div>
+          <TextField
+            disabled={false}
+            hintText="Please enter the league code"
+            value={this.state.enteredCode}
+            errorText={this.state.joinLeagueError}
+            onChange={this.onCodeUpdated}
+          /><br />
+          <TextField
+            value={isLeague ?"League name is " + this.state.joinLeague.league_name : ""}
+            disabled={true}
+            hintText="League name"
+          /><br />
+          <Snackbar
+            open={isSnack}
+            message={this.state.snackbarMessage}
+            autoHideDuration={4000}
+            onRequestClose={this.onDialogCancel}
+          />
+        </div>
       </Dialog>
     );
   }

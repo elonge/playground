@@ -17,6 +17,8 @@ import LeagueInfo from './league_info.jsx'
 import FakeData from './fake_data.js';
 
 const superUserMode = false;
+const myUserId = 1482681765133413;
+let socket;
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +41,16 @@ class App extends Component {
       otherPredictions: FakeData.otherPredictions,
       leagues: FakeData.leagues,
       viewedLeagueIndex: 0,
+      socketStatus: 'OK',
     };
+  }
+
+  componentWillMount() {
+    // Connect to socket.
+    socket = io.connect(
+      `wss://infinite-caverns-93636.herokuapp.com`,
+      {reconnect: true, secure: true}
+    );
   }
 
   onLeagueChanged(event, key, value) {
@@ -250,7 +261,8 @@ class App extends Component {
           onPredictionsPointsToggle={this.onPredictionsPointsToggle}
           showPointsMode={showPointsMode}
           title={appBarTitle}
-          onCreateLeagueCommand={this.onCreateLeagueCommand}
+          socket={socket}
+          senderId={myUserId}
         />
       );
 
