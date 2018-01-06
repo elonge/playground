@@ -22,11 +22,12 @@ class LeagueInfo extends React.Component {
       league
     } = this.state;
 
-    const creator = this.props.users.find((user) => user.fbId === league.creatorId);
+    const creator = this.props.users.find((user) => user.fbId == league.owner_id);
+    console.log(league.owner_id + ": " + JSON.stringify(this.props.users));
     return (
       <Card expanded={false}>
         <CardHeader
-          title={league.name}
+          title={league.league_name}
           subtitle={"Created by " + creator.name}
           avatar={creator.profilePic}
         />

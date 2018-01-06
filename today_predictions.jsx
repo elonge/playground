@@ -29,7 +29,7 @@ class TodayPredictions extends React.Component {
     };
   }
 
-  // Called when switching to new viewed user
+  // Called when switching to new viewed user or moving date
   componentWillReceiveProps(nextProps) {
     this.setState( {
       viewedDateIndex: nextProps.viewedDateIndex,

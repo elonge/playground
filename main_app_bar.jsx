@@ -23,6 +23,7 @@ class MainAppBar extends React.Component {
     };
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
+    this.onNewLeague = this.onNewLeague.bind(this);
   }
 
   // Called when switching points/predictions
@@ -47,6 +48,10 @@ class MainAppBar extends React.Component {
 
   onCloseCreateDialog() {
     this.setState({leagueDialogOpen: false});
+  }
+
+  onNewLeague(league) {
+    this.props.onNewLeague(league);
   }
 
   render() {
@@ -95,6 +100,7 @@ class MainAppBar extends React.Component {
           handleClose={this.onCloseCreateDialog}
           socket={this.props.socket}
           senderId={this.props.senderId}
+          onNewLeague={this.onNewLeague}
         />
       </div>
     );
@@ -111,7 +117,6 @@ class MainAppBar extends React.Component {
         />
     );
   }
-
 }
 MainAppBar.propTypes = {
 };

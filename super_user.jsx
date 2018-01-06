@@ -46,7 +46,7 @@ class SuperUserEditor extends React.Component {
       this.handleChangeResultType = this.handleChangeResultType.bind(this);
       this.handleChangeTypeExtra = this.handleChangeTypeExtra.bind(this);
       this.onUpdateResult = this.onUpdateResult.bind(this);
-
+      this.renderNewPrediction = this.renderNewPrediction.bind(this);
     } catch (e) { alert('SuperUserEditor: ' + e.message); }
   }
 
@@ -234,7 +234,7 @@ class SuperUserEditor extends React.Component {
       <MenuItem key={index} value = {index} primaryText = {game.home_team + ' vs ' + game.away_team} />
     );
     let defaultGameId = (this.state.gameInPrediction >= 0 ? this.state.gameInPrediction : this.state.allGames.length - 1);
-    console.log(JSON.stringify(this.state.allGames[defaultGameId]));
+    console.log(defaultGameId + ":" + JSON.stringify(this.state.allGames[defaultGameId]));
     let currentSport =  this.state.allGames[defaultGameId].sport_type;
     console.log(this.findSupportedResulTypes(currentSport));
     let possibleResultTypes = this.findSupportedResulTypes(currentSport).map((result, index) =>

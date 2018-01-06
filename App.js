@@ -17,7 +17,6 @@ import LeagueInfo from './league_info.jsx'
 import FakeData from './fake_data.js';
 
 const superUserMode = false;
-const myUserId = 1482681765133413;
 let socket;
 
 class App extends Component {
@@ -30,6 +29,9 @@ class App extends Component {
     this.isPrevDisabled = this.isPrevDisabled.bind(this);
     this.isNextDisabled = this.isNextDisabled.bind(this);
     this.onLeagueChanged = this.onLeagueChanged.bind(this);
+    this.onNewLeague = this.onNewLeague.bind(this);
+    this.pushToRemote = this.pushToRemote.bind(this);
+    this.handleNewLeagues = this.handleNewLeagues.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -51,6 +53,53 @@ class App extends Component {
       `wss://infinite-caverns-93636.herokuapp.com`,
       {reconnect: true, secure: true}
     );
+  }
+
+  pushToRemote(channel, message, statusHandler) {
+    socket.emit(
+      `push:${channel}`,
+      {
+        senderId: this.props.viewerId,
+        ...message,
+      },
+      (status) => {
+        console.log(channel + ": " + JSON.stringify(status));
+        statusHandler(channel, status);
+      }
+    );
+  }
+
+  onNewLeague(newLeague) {
+    this.pushToRemote("league:refetch", {}, this.handleNewLeagues);
+  }
+
+  handleNewLeagues(channel, response) {
+    console.log("handleNewLeagues: " + response);
+    if (response.startsWith("ok: ")) {
+      let newData = JSON.parse(response.substring(4));
+      this.setState({leagues: newData.leagues, points:newData.points});
+    } else {
+      console.error("Failed to parse server response! " + response);
+    }
+  }
+
+  onNewLeague_client(newLeague) {
+    // Add the new league to list of user's leagues
+    let leagues = this.state.leagues.slice();
+    leagues = leagues.concat([newLeague]);
+
+    // Add entry for number of points in the new league for each weeks
+    let points = this.state.points.slice();
+    let newLeaguePoints = [];
+    let meAllUserPoints = points.filter(user => (user.fbId == this.props.viewerId && user.league == 1));
+    meAllUserPoints.forEach(function(userPoint) {
+      let clone = JSON.parse(JSON.stringify(userPoint));
+      clone.league = newLeague.id;
+      newLeaguePoints.push(clone);
+    });
+    points = points.concat(newLeaguePoints);
+
+    this.setState({leagues:leagues, points:points});
   }
 
   onLeagueChanged(event, key, value) {
@@ -216,7 +265,6 @@ class App extends Component {
         gamePart = (
           <UsersLeague
             usersPoints={points}
-            userPredictions={userPredictions}
             viewedWeekIndex={viewedWeekIndex}
             viewedLeagueIndex={viewedLeagueIndex}
             leagues={leagues}
@@ -262,7 +310,8 @@ class App extends Component {
           showPointsMode={showPointsMode}
           title={appBarTitle}
           socket={socket}
-          senderId={myUserId}
+          senderId={this.props.viewerId}
+          onNewLeague={this.onNewLeague}
         />
       );
 

@@ -1,9 +1,11 @@
+const myUserId = 1482681765133413;
+
 const users = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
     name: 'Elon Gecht',
     online: true,
-    fbId: 100,
+    fbId: 1482681765133413,
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -22,18 +24,18 @@ const users = [
 const leagues = [
   {
     id: 0,
-    name: 'All users',
-    creatorId: 100,
+    league_name: 'All users',
+    owner_id: 1482681765133413,
   },
   {
     id: 1,
-    name: 'West 25',
-    creatorId: 200,
+    league_name: 'West 25',
+    owner_id: 200,
   },
   {
     id: 2,
-    name: 'Best team',
-    creatorId: 300
+    league_name: 'Best team',
+    owner_id: 300
   }
 ];
 
@@ -44,7 +46,7 @@ const usersPoints = [
     points1d: 3,
     name: 'Elon Gecht',
     online: true,
-    fbId: 100,
+    fbId: 1482681765133413,
     sunday: '2017-12-24',
     league: 0
   },
@@ -74,7 +76,7 @@ const usersPoints = [
     points1d: 0,
     name: 'Elon Gecht',
     online: true,
-    fbId: 100,
+    fbId: 1482681765133413,
     sunday: '2017-12-17',
     league: 0
   },
@@ -104,7 +106,7 @@ const usersPoints = [
     points1d: 3,
     name: 'Elon Gecht',
     online: true,
-    fbId: 100,
+    fbId: 1482681765133413,
     sunday: '2017-12-24',
     league: 1
   },
@@ -124,7 +126,7 @@ const usersPoints = [
     points1d: 3,
     name: 'Elon Gecht',
     online: true,
-    fbId: 100,
+    fbId: 1482681765133413,
     sunday: '2017-12-24',
     league: 2
   },
@@ -143,7 +145,7 @@ const usersPoints = [
 
 const userPredictions = [
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Lakers',
     away_team: 'Warriors',
     result_type: 'winner_range',
@@ -162,7 +164,7 @@ const userPredictions = [
     id:1
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Arsenal',
     away_team: 'Burnley',
     result_type: 'winner',
@@ -181,7 +183,7 @@ const userPredictions = [
     id:1
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Titans',
     away_team: 'Rams',
     result_type: 'winner_range',
@@ -200,7 +202,7 @@ const userPredictions = [
     id:1
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Brighton',
     away_team: 'Watford',
     result_type: 'exact_score',
@@ -219,7 +221,7 @@ const userPredictions = [
     id:2
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Everton',
     away_team: 'Swansea',
     result_type: 'num_goals',
@@ -238,7 +240,7 @@ const userPredictions = [
     id:2
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Newcastle',
     away_team: 'West Brom',
     result_type: 'winner',
@@ -257,7 +259,7 @@ const userPredictions = [
     id:88
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Watford',
     away_team: 'West Brom',
     result_type: 'to_score',
@@ -276,7 +278,7 @@ const userPredictions = [
     id:2
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Valencia',
     away_team: 'Real Madrid',
     result_type: 'first_score',
@@ -295,7 +297,7 @@ const userPredictions = [
     id:3
   },
   {
-    user_id: 100,
+    user_id: 1482681765133413,
     home_team: 'Barcelona',
     away_team: 'Valencia',
     result_type: 'event',
@@ -641,6 +643,7 @@ const otherPredictions = [
 ];
 
 export default {
+  myUserId,
   users,
   usersPoints,
   userPredictions,

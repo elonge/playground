@@ -5,7 +5,6 @@ import Subheader from 'material-ui/Subheader';
 import MenuItem from 'material-ui/MenuItem'
 import SelectField from 'material-ui/SelectField';
 import PredictionsTitle from './predictions_title.jsx';
-import TodayPredictions from './today_predictions.jsx';
 
 const styles = {
   propContainer: {
@@ -82,7 +81,7 @@ class UsersLeague extends React.Component {
       leagues,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == viewedLeagueIndex));
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
     this.props.onUserClick(weekPoints[rowNumber]);
   }
 
@@ -95,7 +94,7 @@ class UsersLeague extends React.Component {
       leagues,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == viewedLeagueIndex));
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
     if (weekPoints.length == 0)  {
       return (
         <label>Debug3</label>
@@ -158,7 +157,7 @@ class UsersLeague extends React.Component {
     );
 
     let leagueItems = leagues.map((league, index) => (
-      <MenuItem value={index} key={index} primaryText={league.name} />
+      <MenuItem value={index} key={index} primaryText={league.league_name} />
     ));
     let leagueSelection = (
       <SelectField

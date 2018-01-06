@@ -5,6 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 
+import messages from './messenger-api-helpers/messages';
+
 class CreateLeagueDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +15,7 @@ class CreateLeagueDialog extends React.Component {
       isCreate: props.isCreate,
       newLeagueName: '',
       enteredCode: '',
-      newLeagueCode: '',
+      newLeague: null,
       newLeagueError: '',
       joinLeagueError: '',
       joinLeague: null,
@@ -37,12 +39,16 @@ class CreateLeagueDialog extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.open == this.state.open && nextProps.isCreate == this.state.isCreate) {
+      // outside changes should not effect dialog (unless dialog is opened/close or change question)
+      return;
+    }
     this.setState( {
       open: nextProps.open,
       isCreate: nextProps.isCreate,
       newLeagueName: '',
       enteredCode: '',
-      newLeagueCode: '',
+      newLeague: null,
       newLeagueError: '',
       joinLeagueError: '',
       joinLeague: null,
@@ -75,6 +81,7 @@ class CreateLeagueDialog extends React.Component {
 
   onDialogCancel() {
     this.setState({open: false, snackbarMessage: ''});
+    this.props.handleClose();
   };
 
   onNewLeagueNameChanged(event) {
@@ -86,7 +93,32 @@ class CreateLeagueDialog extends React.Component {
   }
 
   onInviteFriends() {
-    alert("invite friends");
+    let messageToShare;
+    let userName = 'Elon';
+    let sharingMode = 'current_thread';
+    let apiUri = 'www';
+    let title = 'title';
+    if (sharingMode == 'current_thread') {
+      let userText = messages.textUserCreatedLeague.replace('_USER', userName).replace('_LEAGUE', this.state.newLeagueName);
+      console.log(userText);
+      messageToShare = messages.shareWithConversation(apiUri, userText, this.state.newLeague.league_code);
+    } else {
+      messageToShare = messages.shareGameMessage(apiUri, title,  this.state.newLeague.league_code);
+    }
+    /*
+    window.MessengerExtensions.beginShareFlow(
+      function success(response) {
+        if (response.is_sent) {
+          window.MessengerExtensions.requestCloseBrowser(null, null);
+        }
+      }, function error(errorCode, errorMessage) {
+        alert('Invite Failed! ' + errorCode +',' + errorMessage);
+        console.error({errorCode, errorMessage});
+      },
+      messageToShare,
+      sharingMode);
+      */
+      console.log(JSON.stringify(messageToShare));
   }
 
   onApproveJoining() {
@@ -97,6 +129,7 @@ class CreateLeagueDialog extends React.Component {
     if (response.startsWith("ok")) {
       let snackbarMessage = 'Joined league ' + this.state.joinLeague.league_name;
       this.setState({snackbarMessage:snackbarMessage});
+      this.props.onNewLeague(this.state.joinLeague);
     } else {
       this.setState({joinLeagueError:response, joinLeague: null});
     }
@@ -122,14 +155,17 @@ class CreateLeagueDialog extends React.Component {
   onCreateLeagueServerResponse(channel, response) {
     console.log()
     if (response.startsWith("ok: ")) {
-      this.setState({newLeagueError:'', newLeagueCode: response.substring(4)});
+      let league = JSON.parse(response.substring(4));
+      this.setState({newLeagueError:'', newLeague: league});
+      this.props.onNewLeague(league);
     } else {
-      this.setState({newLeagueError:response, newLeagueCode: ''});
+      this.setState({newLeagueError:response, newLeague: null});
     }
   }
 
   renderCreateLeague() {
-    let isCode = this.state.newLeagueCode.length > 0;
+    let isCode = this.state.newLeague != null;
+    console.log('isCode='+isCode+"; " + JSON.stringify(this.state.newLeague));
     let isSnack = this.state.snackbarMessage.length > 0;
     const actions = [
       <FlatButton
@@ -166,7 +202,7 @@ class CreateLeagueDialog extends React.Component {
         <TextField
           disabled={true}
           hintText="League Code"
-          value={(isCode ? 'League created! Code is ' + this.state.newLeagueCode : '')}
+          value={(isCode ? 'League created! Code is ' + this.state.newLeague.league_code : '')}
         /><br />
       </div>
       </Dialog>
