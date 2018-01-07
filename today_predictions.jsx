@@ -10,8 +10,6 @@ import SelectField from 'material-ui/SelectField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Subheader from 'material-ui/Subheader';
 
-const supportThreeOptionsWinner = false;
-
 class TodayPredictions extends React.Component {
   constructor(props) {
     super(props);

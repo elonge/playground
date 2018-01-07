@@ -38,6 +38,7 @@ class SuperUserEditor extends React.Component {
         superUserAction: 'new game',
         customPushMessage: '',
         messageType: 'new prediction',
+        waitingToServer: false,
       };
       this.handleChangeGameId = this.handleChangeGameId.bind(this);
       this.handleChangeSport = this.handleChangeSport.bind(this);
@@ -47,8 +48,32 @@ class SuperUserEditor extends React.Component {
       this.handleChangeTypeExtra = this.handleChangeTypeExtra.bind(this);
       this.onUpdateResult = this.onUpdateResult.bind(this);
       this.renderNewPrediction = this.renderNewPrediction.bind(this);
+      this.pushToRemote = this.pushToRemote.bind(this);
     } catch (e) { alert('SuperUserEditor: ' + e.message); }
   }
+
+  pushToRemote(channel, message, statusHandler) {
+    console.log("pushToRemote: " + channel +"; senderId=" + this.props.senderId);
+    this.setState({waitingToServer: true});
+
+    this.props.socket.emit(
+      `push:${channel}`,
+      {
+        senderId: this.props.senderId,
+        ...message,
+      },
+      (status) => {
+        console.log(channel + ": " + JSON.stringify(status));
+
+        this.setState({
+          waitingToServer:false,
+        });
+
+        statusHandler(channel, status);
+      }
+    );
+  }
+
 
   handleSuperUserChange = (value) => {
     this.loadAllGames();
@@ -94,7 +119,71 @@ class SuperUserEditor extends React.Component {
     this.loadAllGames();
     this.loadAllPredictions();
   }
+
   loadAllGames() {
+    var self = this;
+    this.pushToRemote('superuser:all_games', {}, function(channel, response) {
+      if (response.startsWith("ok: ")) {
+        let allGames = JSON.parse(response.substring(4));
+        self.setState({allGames: allGames});
+      } else {
+        console.error("---> " + response);
+      }
+    });
+  }
+
+  loadAllPredictions() {
+    var self=this;
+    this.pushToRemote('superuser:all_predictions', {}, function(channel, response) {
+      if (response.startsWith("ok: ")) {
+        let allPredictions = JSON.parse(response.substring(4));
+        self.setState({allPredictions: allPredictions});
+      } else {
+        console.error("---> " + response);
+      }
+    });
+  }
+
+  onSubmitClick() {
+    var self=this;
+    this.setState({gameId: 'Sending'});
+    let start = this.formatDateForServer(this.state.startDate);
+
+    this.pushToRemote('superuser:game', {
+      homeTeam: self.state.homeTeam,
+      awayTeam: self.state.awayTeam,
+      sportType: self.state.sportType,
+      startTime: start,
+    }, function(channel, response) {
+      if (response.startsWith("ok: ")) {
+        self.setState({gameId: response.substring(4)});
+      } else {
+        console.error("---> " + response);
+      }
+    });
+  }
+
+  onSubmitPredictionClick() {
+    var self=this;
+    this.setState({predictionId: 'Sending'});
+    let gameId = this.state.allGames[this.state.gameInPrediction].id;
+    this.pushToRemote('superuser:prediction', {
+      gameId: gameId,
+      resultType: self.state.resultType,
+      typeExtra: self.state.typeExtra,
+      open: self.state.predictionOpen,
+      predictedScore: self.state.predictedScore,
+      points: 1
+    }, function(channel, response) {
+      if (response.startsWith("ok: ")) {
+        self.setState({predictionId: response.substring(4)});
+      } else {
+        console.error("---> " + response);
+      }
+    });
+  }
+
+  loadAllGames_axios() {
     var self=this;
     let url = 'https://infinite-caverns-93636.herokuapp.com/elon/l/g/';
     axios.get(url)
@@ -106,7 +195,7 @@ class SuperUserEditor extends React.Component {
       console.log(error);
     });
   }
-  loadAllPredictions() {
+  loadAllPredictions_axios() {
     var self=this;
     var config = {
        headers: {"Access-Control-Allow-Origin": "*"}
@@ -160,7 +249,7 @@ class SuperUserEditor extends React.Component {
     });
   }
 
-  onSubmitClick() {
+  onSubmitClick_axios() {
     var self=this;
     this.setState({gameId: 'Sending'});
     let start = this.formatDateForServer(this.state.startDate);
@@ -174,7 +263,7 @@ class SuperUserEditor extends React.Component {
       console.log(error);
     });
   }
-  onSubmitPredictionClick() {
+  onSubmitPredictionClick_axios() {
     var self=this;
     this.setState({predictionId: 'Sending'});
     let gameId = this.state.allGames[this.state.gameInPrediction].id;

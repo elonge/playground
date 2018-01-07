@@ -13,10 +13,11 @@ import Invite from './invite.jsx';
 import UsersLeague from './users_league.jsx';
 import MainAppBar from './main_app_bar.jsx';
 import LeagueInfo from './league_info.jsx'
+import ShareUtils from './share_utils.jsx';
 
 import FakeData from './fake_data.js';
 
-const superUserMode = false;
+const superUserMode = true;
 let socket;
 
 class App extends Component {
@@ -30,7 +31,8 @@ class App extends Component {
     this.isNextDisabled = this.isNextDisabled.bind(this);
     this.onLeagueChanged = this.onLeagueChanged.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
-    this.pushToRemote = this.pushToRemote.bind(this);
+    this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
+    this.pushToRemoteWithHandler = this.pushToRemoteWithHandler.bind(this);
     this.handleNewLeagues = this.handleNewLeagues.bind(this);
     this.state = {
       showPointsMode : false,
@@ -55,7 +57,7 @@ class App extends Component {
     );
   }
 
-  pushToRemote(channel, message, statusHandler) {
+  pushToRemoteWithHandler(channel, message, statusHandler) {
     socket.emit(
       `push:${channel}`,
       {
@@ -70,7 +72,12 @@ class App extends Component {
   }
 
   onNewLeague(newLeague) {
-    this.pushToRemote("league:refetch", {}, this.handleNewLeagues);
+    this.pushToRemoteWithHandler("league:refetch", {}, this.handleNewLeagues);
+  }
+
+  onInviteNewLeague(newLeague) {
+    const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
+    ShareUtils.inviteToLeague(this.props.apiUri, 'broadcast', me.name, newLeague);
   }
 
   handleNewLeagues(channel, response) {
@@ -212,8 +219,6 @@ class App extends Component {
       'Questions about today\'s games' :
        'Questions about ' + invitePrediction.home_team +'-'+invitePrediction.away_team +' and other games');
 
-    // only owners are able to share their lists and other
-    // participants are able to post back to groups.
     let sharingMode;
     let buttonText;
 
@@ -312,6 +317,7 @@ class App extends Component {
           socket={socket}
           senderId={this.props.viewerId}
           onNewLeague={this.onNewLeague}
+          onInviteNewLeague={this.onInviteNewLeague}
         />
       );
 
@@ -320,7 +326,10 @@ class App extends Component {
           <div className="App" style={{ paddingTop: 10 }}>
             <MuiThemeProvider>
               <section id='list'>
-                <SuperUserEditor/>
+                <SuperUserEditor
+                  socket={socket}
+                  senderId={this.props.viewerId}
+                />
               </section>
           </MuiThemeProvider>
         </div>

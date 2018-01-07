@@ -7,6 +7,12 @@ import Snackbar from 'material-ui/Snackbar';
 
 import messages from './messenger-api-helpers/messages';
 
+
+const dialogStyle = {
+  width: '100%',
+  maxWidth: 'none',
+};
+
 class CreateLeagueDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -93,32 +99,7 @@ class CreateLeagueDialog extends React.Component {
   }
 
   onInviteFriends() {
-    let messageToShare;
-    let userName = 'Elon';
-    let sharingMode = 'current_thread';
-    let apiUri = 'www';
-    let title = 'title';
-    if (sharingMode == 'current_thread') {
-      let userText = messages.textUserCreatedLeague.replace('_USER', userName).replace('_LEAGUE', this.state.newLeagueName);
-      console.log(userText);
-      messageToShare = messages.shareWithConversation(apiUri, userText, this.state.newLeague.league_code);
-    } else {
-      messageToShare = messages.shareGameMessage(apiUri, title,  this.state.newLeague.league_code);
-    }
-    /*
-    window.MessengerExtensions.beginShareFlow(
-      function success(response) {
-        if (response.is_sent) {
-          window.MessengerExtensions.requestCloseBrowser(null, null);
-        }
-      }, function error(errorCode, errorMessage) {
-        alert('Invite Failed! ' + errorCode +',' + errorMessage);
-        console.error({errorCode, errorMessage});
-      },
-      messageToShare,
-      sharingMode);
-      */
-      console.log(JSON.stringify(messageToShare));
+    this.props.onInviteNewLeague(this.state.newLeague);
   }
 
   onApproveJoining() {
@@ -189,6 +170,7 @@ class CreateLeagueDialog extends React.Component {
         actions={actions}
         disabled={this.state.waitingToServer}
         modal={false}
+        contentStyle={dialogStyle}
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
       >
@@ -235,6 +217,7 @@ class CreateLeagueDialog extends React.Component {
         actions={actions}
         disabled={this.state.waitingToServer}
         modal={false}
+        contentStyle={dialogStyle}
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
       >

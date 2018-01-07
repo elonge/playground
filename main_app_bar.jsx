@@ -24,6 +24,7 @@ class MainAppBar extends React.Component {
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
+    this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
   }
 
   // Called when switching points/predictions
@@ -52,6 +53,10 @@ class MainAppBar extends React.Component {
 
   onNewLeague(league) {
     this.props.onNewLeague(league);
+  }
+
+  onInviteNewLeague(league) {
+    this.props.onInviteNewLeague(league);
   }
 
   render() {
@@ -101,6 +106,7 @@ class MainAppBar extends React.Component {
           socket={this.props.socket}
           senderId={this.props.senderId}
           onNewLeague={this.onNewLeague}
+          onInviteNewLeague={this.onInviteNewLeague}          
         />
       </div>
     );
