@@ -71,6 +71,7 @@ const secondaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
+    return "ERROR (" + prediction.sport_type+")";
   }
   if (typeof supportedResultTypes[tIndx].secondaryDefine != 'undefined') {
     return replaceVars(prediction, supportedResultTypes[tIndx]).secondary;

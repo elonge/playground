@@ -14,8 +14,6 @@ import ExposurePlus1 from 'material-ui-icons/ExposurePlus1';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import RenderUtils from './render/utils';
 
-const supportThreeOptionsWinner = false;
-
 /*
  * A single list game, including controls
  */
@@ -95,7 +93,7 @@ class OnePrediction extends React.Component {
   }
 };
 
-OnePrediction.PropTypes = {
+OnePrediction.propTypes = {
 };
 
 export default OnePrediction;

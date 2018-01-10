@@ -5,6 +5,7 @@ import Subheader from 'material-ui/Subheader';
 import MenuItem from 'material-ui/MenuItem'
 import SelectField from 'material-ui/SelectField';
 import PredictionsTitle from './predictions_title.jsx';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
   propContainer: {
@@ -134,8 +135,9 @@ class UsersLeague extends React.Component {
             <TableRow key={index}>
               <TableRowColumn
               >{index+1}</TableRowColumn>
-              <TableRowColumn
-              >{row.name}</TableRowColumn>
+              <TableRowColumn>
+                <FlatButton label={row.name} secondary={true} />
+              </TableRowColumn>
               <TableRowColumn
               >{row.points1d}</TableRowColumn>
               <TableRowColumn

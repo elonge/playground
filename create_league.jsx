@@ -170,9 +170,9 @@ class CreateLeagueDialog extends React.Component {
         actions={actions}
         disabled={this.state.waitingToServer}
         modal={false}
-        contentStyle={dialogStyle}
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
+        contentStyle={dialogStyle}
       >
       <div>
         <TextField

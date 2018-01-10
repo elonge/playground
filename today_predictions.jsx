@@ -1,7 +1,6 @@
 import React from 'react';
 import {List,ListItem} from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
-import GameResultItem from './game_result_item.jsx';
 import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
 import OnePrediction from './one_prediction.jsx';
@@ -52,6 +51,7 @@ class TodayPredictions extends React.Component {
   renderPrediction(prediction) {
     return (
       <OnePrediction
+        key={prediction.id}
         prediction={prediction}
         forceEnable={this.props.forceEnable}
         onPredictionClick={this.onPredictionClick}

@@ -14,10 +14,10 @@ import UsersLeague from './users_league.jsx';
 import MainAppBar from './main_app_bar.jsx';
 import LeagueInfo from './league_info.jsx'
 import ShareUtils from './share_utils.jsx';
-
+import UserInfo from './user_info.jsx';
 import FakeData from './fake_data.js';
 
-const superUserMode = true;
+const superUserMode = false;
 let socket;
 
 class App extends Component {
@@ -34,6 +34,7 @@ class App extends Component {
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
     this.pushToRemoteWithHandler = this.pushToRemoteWithHandler.bind(this);
     this.handleNewLeagues = this.handleNewLeagues.bind(this);
+    this.onUserInfoCancel = this.onUserInfoCancel.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -69,6 +70,10 @@ class App extends Component {
         statusHandler(channel, status);
       }
     );
+  }
+
+  onUserInfoCancel() {
+    this.setState({otherUserPredictionsMode: null, showPointsMode:true});
   }
 
   onNewLeague(newLeague) {
@@ -122,7 +127,8 @@ class App extends Component {
     this.setState({showPointsMode: !current});
   }
 
-  onUserClick(user) {
+  onUserClick(userPoint) {
+    let user = this.state.users.find((user) => user.fbId === userPoint.fbId);
     // We want to make sure that with the new user, we will be in the same date (or first if it didn't have predictions on that dat)
     let currentPredictions = this.getCurrentStatePredictions();
     let currentDays =  currentPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
@@ -130,10 +136,10 @@ class App extends Component {
     let newPredictions;
     if (user.fbId == this.props.viewerId) {
       newPredictions = this.state.userPredictions;
-      this.setState({otherUserPredictionsMode:null, showPointsMode: false});
+      this.setState({otherUserPredictionsMode:null});
     } else {
       newPredictions = this.state.otherPredictions.filter(prediction => prediction.user_id == user.fbId);
-      this.setState({otherUserPredictionsMode:user, showPointsMode: false});
+      this.setState({otherUserPredictionsMode:user});
     }
     let newUserDays =  newPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
     let newViewedDateIndex = newUserDays.findIndex(i => (i === currentDate));
@@ -262,11 +268,12 @@ class App extends Component {
     let page;
 
     if (users.length > 0) {
+      const me = users.find((user) => user.fbId === this.props.viewerId);
       let invite = this.getInviteComponent();
 
       let gamePart;
       let topPart;
-      if (showPointsMode) {
+      if (showPointsMode && otherUserPredictionsMode == null) {
         gamePart = (
           <UsersLeague
             usersPoints={points}
@@ -294,16 +301,31 @@ class App extends Component {
           />
         );
         topPart = (
-          <Viewers
-            users={users}
-            viewerId={this.props.viewerId}
-            onUserClick={this.onUserClick}
-            viewedUserId={(otherUserPredictionsMode==null ? this.props.viewerId : otherUserPredictionsMode.fbId)}
+          <UserInfo
+            user={otherUserPredictionsMode == null ? me : otherUserPredictionsMode}
+            onUserInfoCancel={this.onUserInfoCancel}
+            isMe={otherUserPredictionsMode == null}
+            expanded={false}
           />
         );
+        // if (otherUserPredictionsMode == null) {
+        //   topPart = (
+        //     <Viewers
+        //       users={users}
+        //       viewerId={this.props.viewerId}
+        //       onUserClick={this.onUserClick}
+        //       viewedUserId={(otherUserPredictionsMode==null ? this.props.viewerId : otherUserPredictionsMode.fbId)}
+        //     />
+        //   );
+        // } else {
+        //   topPart = (
+        //     <UserInfo
+        //       user={otherUserPredictionsMode}
+        //     />
+        //   );
+        // }
       }
 
-      const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
       let appBarTitle = "Welcome " + me.name;
       let appBar = (
         <MainAppBar

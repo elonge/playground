@@ -7,8 +7,6 @@ import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 
-import axios from 'axios';
-import GameResultItem from './game_result_item';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import TodayPredictions from './today_predictions.jsx'
 import RenderUtils from './render/utils';
@@ -183,33 +181,31 @@ class SuperUserEditor extends React.Component {
     });
   }
 
-  loadAllGames_axios() {
+  onUpdateResult(prediction) {
     var self=this;
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/l/g/';
-    axios.get(url)
-    .then(function (response) {
-      console.log(response.data[0]);
-      self.setState({allGames: response.data[0]});
-    })
-    .catch(function (error) {
-      console.log(error);
+    this.pushToRemote('superuser:result', {
+      id: prediction.id,
+      gameId: prediction.game_id,
+      value: prediction.value,
+    }, function(channel, response) {
+        console.log("---> " + response);
     });
   }
-  loadAllPredictions_axios() {
+
+  onSubmitSendMessageClick() {
     var self=this;
-    var config = {
-       headers: {"Access-Control-Allow-Origin": "*"}
-    };
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/l/p/';
-    axios.get(url, config)
-    .then(function (response) {
-      console.log(response.data[0]);
-      self.setState({allPredictions: response.data[0]});
-    })
-    .catch(function (error) {
-      console.log(error);
+    let message = (this.state.messageType == 'new predictions' ?
+      newPredictionPushText : (this.state.messageType == 'new score' ? newScorePushText : this.state.customPushMessage));
+//    this.pushToRemote('superuser:stats', {},
+    this.pushToRemote('superuser:push', {
+      message: message,
+    },
+     function(channel, response) {
+      alert('Message sent!');
+      console.log("---> " + response);
     });
   }
+
 
   findSupportedSportTypes() {
     console.log(RenderUtils.supportedResultTypes);
@@ -234,63 +230,6 @@ class SuperUserEditor extends React.Component {
     userPredictions[pIndx].value = this.state.dialogPredictionOptions[index];
     this.setState({userPredictions: userPredictions, dialogOpen:false});
     this.onUpdateResult(userPredictions[pIndx]);
-  }
-
-
-  onUpdateResult(prediction) {
-    var self=this;
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/u/'+prediction.game_id+'/'+prediction.id+'/'+prediction.value;
-    axios.get(url)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
-  onSubmitClick_axios() {
-    var self=this;
-    this.setState({gameId: 'Sending'});
-    let start = this.formatDateForServer(this.state.startDate);
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/g/'+this.state.homeTeam+'/'+this.state.awayTeam+'/'+this.state.sportType+'/'+start;
-    axios.get(url)
-    .then(function (response) {
-      console.log(response);
-      self.setState({gameId: response.data});
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  onSubmitPredictionClick_axios() {
-    var self=this;
-    this.setState({predictionId: 'Sending'});
-    let gameId = this.state.allGames[this.state.gameInPrediction].id;
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/p/'+gameId+'/'+this.state.resultType+'/'+this.state.typeExtra+'/'+this.state.predictionOpen+'/'+this.state.predictedScore+'/'+1;
-    axios.get(url)
-    .then(function (response) {
-      console.log(response);
-      self.setState({predictionId: response.data});
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
-  onSubmitSendMessageClick() {
-    var self=this;
-    let message = (this.state.messageType == 'new predictions' ?
-      newPredictionPushText : (this.state.messageType == 'new score' ? newScorePushText : this.state.customPushMessage));
-    let url = 'https://infinite-caverns-93636.herokuapp.com/elon/m/'+message;
-    axios.get(url)
-    .then(function (response) {
-      console.log(response);
-      alert('Message sent!');
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
   }
 
   renderPushMessage() {
@@ -318,6 +257,9 @@ class SuperUserEditor extends React.Component {
   }
 
   renderNewPrediction() {
+    if (this.state.allGames.length == 0) {
+      return;
+    }
     let allGamesMenuItems = "";
     allGamesMenuItems = this.state.allGames.map((game, index) =>
       <MenuItem key={index} value = {index} primaryText = {game.home_team + ' vs ' + game.away_team} />

@@ -6,18 +6,43 @@ const users = [
     name: 'Elon Gecht',
     online: true,
     fbId: 1482681765133413,
+    moreFields: {
+      sum: 48,
+      avg: 0.494,
+      count: 2,
+      lastDaysPoints: "12253",
+      JoinedDate: '2018-01-08T19:53:29.421Z'
+    },
+    JoinedDate: '2017-12-23',
+    oneLine: 'Man United fan'
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
     name: 'Arik Benado',
     online: true,
     fbId: 200,
+    moreFields: {
+      sum: 76,
+      avg: 0.694,
+      count: 1,
+      lastDaysPoints: "42253"
+    },
+    JoinedDate: '2017-11-28',
+    oneLine: 'Keeps my head up'
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
     name: 'David Moyes',
     online: false,
     fbId: 300,
+    moreFields: {
+      sum: 11,
+      avg: 0.54,
+      count: 0,
+      lastDaysPoints: "13"
+    },
+    JoinedDate: '2018-01-04',
+    oneLine: 'Come on you irons!'
   },
 ];
 
