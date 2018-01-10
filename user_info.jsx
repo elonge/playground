@@ -32,7 +32,7 @@ class UserInfo extends React.Component {
   }
 
   handleToggle = (event, toggle) => {
-    this.setState({expanded: toggle});
+    this.props.onUserInfoExpanded();
   };
 
   handleCancelClick = (expanded) => {

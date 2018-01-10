@@ -11,9 +11,8 @@ const users = [
       avg: 0.494,
       count: 2,
       lastDaysPoints: "12253",
-      JoinedDate: '2018-01-08T19:53:29.421Z'
+      joinedDate: '2018-01-08T19:53:29.421Z'
     },
-    JoinedDate: '2017-12-23',
     oneLine: 'Man United fan'
   },
   {
@@ -25,9 +24,9 @@ const users = [
       sum: 76,
       avg: 0.694,
       count: 1,
-      lastDaysPoints: "42253"
+      lastDaysPoints: "42253",
+      joinedDate: '2018-01-02T19:53:29.421Z'
     },
-    JoinedDate: '2017-11-28',
     oneLine: 'Keeps my head up'
   },
   {
@@ -39,9 +38,9 @@ const users = [
       sum: 11,
       avg: 0.54,
       count: 0,
-      lastDaysPoints: "13"
+      lastDaysPoints: "13",
+      joinedDate: '2018-01-01T19:53:29.421Z'
     },
-    JoinedDate: '2018-01-04',
     oneLine: 'Come on you irons!'
   },
 ];

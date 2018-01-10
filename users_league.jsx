@@ -136,7 +136,7 @@ class UsersLeague extends React.Component {
               <TableRowColumn
               >{index+1}</TableRowColumn>
               <TableRowColumn>
-                <FlatButton label={row.name} secondary={true} />
+                <FlatButton label={row.name} primary={true} />
               </TableRowColumn>
               <TableRowColumn
               >{row.points1d}</TableRowColumn>

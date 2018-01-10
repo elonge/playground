@@ -35,6 +35,7 @@ class App extends Component {
     this.pushToRemoteWithHandler = this.pushToRemoteWithHandler.bind(this);
     this.handleNewLeagues = this.handleNewLeagues.bind(this);
     this.onUserInfoCancel = this.onUserInfoCancel.bind(this);
+    this.onUserInfoExpanded = this.onUserInfoExpanded.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -47,6 +48,7 @@ class App extends Component {
       leagues: FakeData.leagues,
       viewedLeagueIndex: 0,
       socketStatus: 'OK',
+      profileExpanded: false,
     };
   }
 
@@ -70,6 +72,11 @@ class App extends Component {
         statusHandler(channel, status);
       }
     );
+  }
+
+  onUserInfoExpanded() {
+    let current = this.state.profileExpanded;
+    this.setState({profileExpanded: !current});
   }
 
   onUserInfoCancel() {
@@ -150,7 +157,7 @@ class App extends Component {
   }
 
   isPrevDisabled() {
-    if (this.state.showPointsMode) {
+    if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       let weeks = this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
       return (this.state.viewedWeekIndex >= weeks.length - 1);
     }
@@ -159,14 +166,14 @@ class App extends Component {
   }
 
   isNextDisabled() {
-    if (this.state.showPointsMode) {
+    if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       return (this.state.viewedWeekIndex == 0);
     }
     return (this.state.viewedDateIndex == 0);
   }
 
   onPrevClick() {
-    if (this.state.showPointsMode) {
+    if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       let viewedWeekIndex = this.state.viewedWeekIndex;
       let weeks =  this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
       if (viewedWeekIndex < weeks.length - 1) {
@@ -181,7 +188,7 @@ class App extends Component {
     }
   }
   onNextClick() {
-    if (this.state.showPointsMode) {
+    if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       let viewedWeekIndex = this.state.viewedWeekIndex;
       if (viewedWeekIndex > 0) {
         this.setState({viewedWeekIndex: viewedWeekIndex - 1});
@@ -305,7 +312,8 @@ class App extends Component {
             user={otherUserPredictionsMode == null ? me : otherUserPredictionsMode}
             onUserInfoCancel={this.onUserInfoCancel}
             isMe={otherUserPredictionsMode == null}
-            expanded={false}
+            expanded={this.state.profileExpanded}
+            onUserInfoExpanded={this.onUserInfoExpanded}
           />
         );
         // if (otherUserPredictionsMode == null) {
