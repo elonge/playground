@@ -25,18 +25,19 @@ class SuperUserEditor extends React.Component {
         homeTeam: '',
         awayTeam: '',
         predictedScore: '',
-        sportType : 'Soccer',
+        sportType : 'soccer',
         resultType : 'winner',
         typeExtra: ' ',
         predictionOpen: true,
         startDate : new Date(),
         allGames : [],
         allPredictions : [],
-        gameInPrediction: -1,
+        gameInPrediction: 0,
         superUserAction: 'new game',
         customPushMessage: '',
         messageType: 'new prediction',
         waitingToServer: false,
+        points: 1,
       };
       this.handleChangeGameId = this.handleChangeGameId.bind(this);
       this.handleChangeSport = this.handleChangeSport.bind(this);
@@ -44,6 +45,7 @@ class SuperUserEditor extends React.Component {
       this.handlePredictedScoreChange = this.handlePredictedScoreChange.bind(this);
       this.handleChangeResultType = this.handleChangeResultType.bind(this);
       this.handleChangeTypeExtra = this.handleChangeTypeExtra.bind(this);
+      this.handleChangePoints = this.handleChangePoints.bind(this);
       this.onUpdateResult = this.onUpdateResult.bind(this);
       this.renderNewPrediction = this.renderNewPrediction.bind(this);
       this.pushToRemote = this.pushToRemote.bind(this);
@@ -61,8 +63,6 @@ class SuperUserEditor extends React.Component {
         ...message,
       },
       (status) => {
-        console.log(channel + ": " + JSON.stringify(status));
-
         this.setState({
           waitingToServer:false,
         });
@@ -84,6 +84,7 @@ class SuperUserEditor extends React.Component {
   handleChangeCustomMessage = (event, value) => this.setState({customPushMessage:value});
   handleChangeResultType = (event, index, value) => this.setState({resultType:value});
   handleChangeTypeExtra = (event, value) => this.setState({typeExtra:value});
+  handleChangePoints = (event, value) => this.setState({points:value});
   handleChangePredictionOpen = (event, index, value) => this.setState({predictionOpen:value});
   handleChangeDate = (event, date) => this.setState({startDate: date});
   handlePredictedScoreChange = (event, value) => this.setState({predictedScore: value});
@@ -123,6 +124,7 @@ class SuperUserEditor extends React.Component {
     this.pushToRemote('superuser:all_games', {}, function(channel, response) {
       if (response.startsWith("ok: ")) {
         let allGames = JSON.parse(response.substring(4));
+        allGames = allGames.filter(game => (new Date(game.start_time) >= new Date()));
         self.setState({allGames: allGames});
       } else {
         console.error("---> " + response);
@@ -293,21 +295,22 @@ class SuperUserEditor extends React.Component {
         >
         {possibleResultTypes}
         </SelectField><br />
+        {/*
         <TextField
           hintText="Extra info (first,penalty_home,penalty_away)"
           onChange = {this.handleChangeTypeExtra}
           /><br />
-        <SelectField
-          floatingLabelText="Prediction Open?"
-          value={this.state.predictionOpen}
-          onChange={this.handleChangePredictionOpen}
-        >
-          <MenuItem value={true} primaryText="True" />
-          <MenuItem value={false} primaryText="False" />
-        </SelectField><br />
+        */}
         <TextField
-          hintText="Predicted Score"
+          floatingLabelText="Predicted Player/Score"
+          hintText="e.g. Steph Curry"
           onChange = {this.handlePredictedScoreChange}
+        /><br />
+        <TextField
+          hintText="Points"
+          floatingLabelText="Points"
+          value={this.state.points}
+          onChange={this.handleChangePoints}
         /><br />
         <TextField
           disabled={true}

@@ -17,7 +17,6 @@ import ShareUtils from './share_utils.jsx';
 import UserInfo from './user_info.jsx';
 import FakeData from './fake_data.js';
 
-const superUserMode = false;
 let socket;
 
 class App extends Component {
@@ -143,7 +142,7 @@ class App extends Component {
     let newPredictions;
     if (user.fbId == this.props.viewerId) {
       newPredictions = this.state.userPredictions;
-      this.setState({otherUserPredictionsMode:null});
+      this.setState({otherUserPredictionsMode:null,showPointsMode:false});
     } else {
       newPredictions = this.state.otherPredictions.filter(prediction => prediction.user_id == user.fbId);
       this.setState({otherUserPredictionsMode:user});
@@ -351,7 +350,7 @@ class App extends Component {
         />
       );
 
-      if (superUserMode) {
+      if (this.props.superUserMode) {
         page = (
           <div className="App" style={{ paddingTop: 10 }}>
             <MuiThemeProvider>
