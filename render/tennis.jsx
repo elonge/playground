@@ -4,38 +4,35 @@ import Avatar from 'material-ui/Avatar';
 const style = {'font-size': '12px', textAlign: 'center'};
 
 const winner = {
-  sport: 'Football',
+  sport: 'Tennis',
   key: 'winner',
   options: ['_HOME', '_AWAY'],
   nullPrimary: 'Pick your winner',
   primary: 'Your winner: _VALUE',
-  secondary: '_AWAY at _HOME (_STARTTIME)',
+  secondary: '_HOME vs _AWAY (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : '2');
     return (
-        <Avatar>
-          {shortValue}
-        </Avatar>
+      <Avatar
+        style={style}
+      >
+        {prediction.value}
+      </Avatar>
     );
   }
 }
 
-const winnerRange = {
-  sport: 'Football',
-  key: 'winner_range',
-  options: ['_HOME by 7 points or more', '_HOME by less than 7 points','_AWAY by 7 points or more','_AWAY by less than 7 points'],
-  nullPrimary: 'Pick your winner',
-  primary: '_VALUE',
-  secondary: '_AWAY at _HOME (_STARTTIME)',
+const numSets = {
+  sport: 'Tennis',
+  key: 'num_sets',
+  options: ['3', '4','5'],
+  nullPrimary: 'Number of sets?',
+  primary: '_VALUE sets',
+  secondary: '_HOME vs _AWAY (_STARTTIME)',
   rightAvatar: function(prediction) {
-    let shortValue;
-    let shortTeam = (prediction.value.startsWith(prediction.home_team) ? prediction.home_team : prediction.away_team);
-    shortValue = (prediction.value.indexOf('more') < 0 ? shortTeam + ' 7-' : shortTeam + ' 7+');
     return (
-        <Avatar
-          style={style}
-        >
-          {shortValue}
+        <Avatar>
+          {prediction.value}
         </Avatar>
     );
   }
@@ -58,7 +55,7 @@ const firstScore = {
   }
 }
 
-const supportedResultTypes = [winner, firstScore, winnerRange ];
+const supportedResultTypes = [winner, numSets ];
 
 export default {
   supportedResultTypes,

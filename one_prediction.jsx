@@ -69,23 +69,21 @@ class OnePrediction extends React.Component {
   }
 
   render() {
-    try {
-      let primaryText = this.renderPrimaryText();
-      let secondaryText = this.renderSecondaryText();
-      let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
+    let primaryText = this.renderPrimaryText();
+    let secondaryText = this.renderSecondaryText();
+    let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
 
-      return (
-        <ListItem
-          disabled={this.isPredictionDisabled() || this.props.otherUserMode}
-          primaryText={primaryText}
-          secondaryText={secondaryText}
-          leftAvatar={this.renderLeftAvatar()}
-          onClick={() => this.onPredictionClick()}
-          rightAvatar= {this.renderRightAvatar()}
-          style={{textAlign:'left',backgroundColor: lineColor}}
-        />
-      );
-    } catch (e) { alert('One Prediction: ' + e.message); }
+    return (
+      <ListItem
+        disabled={this.isPredictionDisabled() || this.props.otherUserMode}
+        primaryText={primaryText}
+        secondaryText={secondaryText}
+        leftAvatar={this.renderLeftAvatar()}
+        onClick={() => this.onPredictionClick()}
+        rightAvatar= {this.renderRightAvatar()}
+        style={{textAlign:'left',backgroundColor: lineColor}}
+      />
+    );
   }
 
   onPredictionClick() {

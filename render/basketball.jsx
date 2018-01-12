@@ -3,12 +3,13 @@ import Avatar from 'material-ui/Avatar';
 
 const style = {'font-size': '12px', textAlign: 'center'};
 
-var winner = {
+const winner = {
   sport: 'basketball',
   key: 'winner',
-  optionsDefine: ['_HOME', '_AWAY'],
-  nullPrimaryDefine: 'Pick your winner',
-  primaryDefine: 'Your winner: _VALUE',
+  options: ['_HOME', '_AWAY'],
+  nullPrimary: 'Pick your winner',
+  primary: 'Your winner: _VALUE',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : '2');
     return (
@@ -19,12 +20,13 @@ var winner = {
   }
 }
 
-var toScore = {
+const toScore = {
   sport: 'basketball',
   key: 'to_score',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_PREDICT top scorer?',
-  primaryDefine: '_PREDICT top scorer?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_PREDICT top scorer?',
+  primary: '_PREDICT top scorer?',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -34,12 +36,13 @@ var toScore = {
   }
 }
 
-var winnerRange = {
+const winnerRange = {
   sport: 'basketball',
   key: 'winner_range',
-  optionsDefine: ['_HOME by 10 points or more', '_HOME by less than 10 points','_AWAY by 10 points or more','_AWAY by less than 10 points'],
-  nullPrimaryDefine: 'Pick your winner',
-  primaryDefine: '_VALUE',
+  options: ['_HOME by 10 points or more', '_HOME by less than 10 points','_AWAY by 10 points or more','_AWAY by less than 10 points'],
+  nullPrimary: 'Pick your winner',
+  primary: '_VALUE',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     let shortValue;
     let shortTeam = (prediction.value.startsWith(prediction.home_team) ? prediction.home_team : prediction.away_team);
@@ -54,12 +57,13 @@ var winnerRange = {
   }
 }
 
-var doubleDigits = {
+const doubleDigits = {
   sport: 'basketball',
   key: 'player_double_digit',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_PREDICT will score double digits?',
-  primaryDefine: '_PREDICT will score double digits?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_PREDICT will score double digits?',
+  primary: '_PREDICT will score double digits?',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -69,7 +73,24 @@ var doubleDigits = {
   }
 }
 
-var supportedResultTypes = [winner, toScore, winnerRange, doubleDigits ];
+const scoreMore = {
+  sport: 'basketball',
+  key: 'player_score_more',
+  options: ['_OPTION1', '_OPTION2'],
+  nullPrimary: 'Which will score more?',
+  primary: '_VALUE will score more',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
+  rightAvatar: function(prediction) {
+    return (
+        <Avatar>
+          {prediction.value}
+        </Avatar>
+    );
+  }
+}
+
+
+const supportedResultTypes = [winner, toScore, winnerRange, doubleDigits, scoreMore ];
 
 export default {
   supportedResultTypes,

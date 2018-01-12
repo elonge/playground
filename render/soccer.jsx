@@ -1,12 +1,14 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 
-var winner = {
+const style = {'font-size': '12px', textAlign: 'center'};
+
+const winner = {
   sport: 'soccer',
   key: 'winner',
-  optionsDefine: ['_HOME', 'Draw', '_AWAY'],
-  nullPrimaryDefine: 'Pick your winner',
-  primaryDefine: 'Your winner: _VALUE',
+  options: ['_HOME', 'Draw', '_AWAY'],
+  nullPrimary: 'Pick your winner',
+  primary: 'Your winner: _VALUE',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
     return (
@@ -17,12 +19,12 @@ var winner = {
   }
 }
 
-var toScore = {
+const toScore = {
   sport: 'soccer',
   key: 'to_score',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_PREDICT will score?',
-  primaryDefine: '_PREDICT will score?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_PREDICT will score?',
+  primary: '_PREDICT will score?',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -32,12 +34,12 @@ var toScore = {
   }
 }
 
-var firstScore = {
+const firstScore = {
   sport: 'soccer',
   key: 'first_score',
-  optionsDefine: ['_HOME', '_AWAY', 'None'],
-  nullPrimaryDefine: 'Which team will score first?',
-  primaryDefine: '_VALUE will score first',
+  options: ['_HOME', '_AWAY', 'None'],
+  nullPrimary: 'Which team will score first?',
+  primary: '_VALUE will score first',
   rightAvatar: function(prediction) {
     let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
     return (
@@ -48,12 +50,41 @@ var firstScore = {
   }
 }
 
-var numGoals = {
+const firstScoreTime = {
+  sport: 'soccer',
+  key: 'first_score_time',
+  options: ['On first 30 minutes', 'Between 31-60 minutes', 'After 60 minutes','None'],
+  nullPrimary: 'When will be the the first goal?',
+  primary: 'First goal _VALUE',
+  rightAvatar: function(prediction) {
+    let shortValue = "None";
+    switch (prediction.value) {
+      case 'On first 30 minutes':
+        shortValue = "<30";
+        break;
+      case 'Between 31-60 minutes':
+          shortValue = "31-60";
+          break;
+      case 'After 60 minutes':
+          shortValue = ">60";
+          break;
+    }
+    return (
+      <Avatar
+        style={style}
+      >
+        {shortValue}
+      </Avatar>
+    );
+  }
+}
+
+const numGoals = {
   sport: 'soccer',
   key: 'num_goals',
-  optionsDefine: ['0','1','2','3','4','5','6','7','8+'],
-  nullPrimaryDefine: 'How many goals?',
-  primaryDefine: 'Number of total goals is _VALUE',
+  options: ['0','1','2','3','4','5','6','7','8+'],
+  nullPrimary: 'How many goals?',
+  primary: 'Number of total goals is _VALUE',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -63,12 +94,12 @@ var numGoals = {
   }
 }
 
-var homePenalty = {
+const homePenalty = {
   sport: 'soccer',
   key: 'home_penalty',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_HOME will have a penalty?',
-  primaryDefine: '_HOME will have a penalty?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_HOME will have a penalty?',
+  primary: '_HOME will have a penalty?',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -78,12 +109,12 @@ var homePenalty = {
   }
 }
 
-var awayPenalty = {
+const awayPenalty = {
   sport: 'soccer',
   key: 'away_penalty',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_AWAY will have a penalty?',
-  primaryDefine: '_AWAY will have a penalty?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_AWAY will have a penalty?',
+  primary: '_AWAY will have a penalty?',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -94,12 +125,12 @@ var awayPenalty = {
 }
 
 /*** Backward compatability ***/
-var gameEvent = {
+const gameEvent = {
   sport: 'soccer',
   key: 'event',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: '_HOME will have a penalty?',
-  primaryDefine: '_HOME will have a penalty?',
+  options: ['Yes', 'No'],
+  nullPrimary: '_HOME will have a penalty?',
+  primary: '_HOME will have a penalty?',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -109,12 +140,12 @@ var gameEvent = {
   }
 }
 
-var exactScore = {
+const exactScore = {
   sport: 'soccer',
   key: 'exact_score',
-  optionsDefine: ['Yes', 'No'],
-  nullPrimaryDefine: 'Exact score will be _PREDICT',
-  primaryDefine: 'Exact score will be _PREDICT',
+  options: ['Yes', 'No'],
+  nullPrimary: 'Exact score will be _PREDICT',
+  primary: 'Exact score will be _PREDICT',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -124,7 +155,7 @@ var exactScore = {
   }
 }
 
-var supportedResultTypes = [winner, toScore, firstScore, numGoals, homePenalty, awayPenalty, exactScore, gameEvent ];
+const supportedResultTypes = [winner, toScore, firstScore, numGoals, homePenalty, awayPenalty, exactScore, gameEvent,firstScoreTime ];
 
 export default {
   supportedResultTypes,

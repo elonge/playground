@@ -87,6 +87,7 @@ class App extends Component {
   }
 
   onInviteNewLeague(newLeague) {
+    console.log("going to invite " + newLeague.league_name);
     const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
     ShareUtils.inviteToLeague(this.props.apiUri, 'broadcast', me.name, newLeague);
   }
@@ -347,6 +348,8 @@ class App extends Component {
           senderId={this.props.viewerId}
           onNewLeague={this.onNewLeague}
           onInviteNewLeague={this.onInviteNewLeague}
+          leagues={this.state.leagues}
+          users={this.state.users}
         />
       );
 

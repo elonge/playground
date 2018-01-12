@@ -47,19 +47,25 @@ const users = [
 
 const leagues = [
   {
-    id: 0,
+    id: 1,
     league_name: 'All users',
     owner_id: 1482681765133413,
+    league_code: 100121,
+    num_users: 43,
   },
   {
-    id: 1,
+    id: 4,
     league_name: 'West 25',
     owner_id: 200,
+    league_code: 100151,
+    num_users: 4,
   },
   {
     id: 2,
     league_name: 'Best team',
-    owner_id: 300
+    owner_id: 300,
+    league_code: 103321,
+    num_users: 15,
   }
 ];
 
@@ -72,7 +78,7 @@ const usersPoints = [
     online: true,
     fbId: 1482681765133413,
     sunday: '2017-12-24',
-    league: 0
+    league: 1
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -82,7 +88,7 @@ const usersPoints = [
     online: true,
     fbId: 200,
     sunday: '2017-12-24',
-    league: 0
+    league: 1
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
@@ -92,7 +98,7 @@ const usersPoints = [
     online: false,
     fbId: 300,
     sunday: '2017-12-24',
-    league: 0
+    league: 1
 },
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -102,7 +108,7 @@ const usersPoints = [
     online: true,
     fbId: 1482681765133413,
     sunday: '2017-12-17',
-    league: 0
+    league: 1
   },
   {
     profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
@@ -112,7 +118,7 @@ const usersPoints = [
     online: false,
     fbId: 300,
     sunday: '2017-12-17',
-    league: 0
+    league: 1
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -122,7 +128,7 @@ const usersPoints = [
     online: true,
     fbId: 200,
     sunday: '2017-12-17',
-    league: 0
+    league: 1
   },
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -132,7 +138,7 @@ const usersPoints = [
     online: true,
     fbId: 1482681765133413,
     sunday: '2017-12-24',
-    league: 1
+    league: 4
   },
   {
     profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
@@ -142,7 +148,7 @@ const usersPoints = [
     online: true,
     fbId: 200,
     sunday: '2017-12-24',
-    league: 1
+    league: 4
   },
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -170,13 +176,51 @@ const usersPoints = [
 const userPredictions = [
   {
     user_id: 1482681765133413,
-    home_team: 'Lakers',
-    away_team: 'Warriors',
-    result_type: 'winner_range',
-    predicted_score: '1',
+    home_team: 'Federer',
+    away_team: 'Nadal',
+    result_type: 'winner',
+    predicted_score: '',
     type_extra: '',
     start_time: '2017-12-22 17:00:00',
-    value: 'Lakers by 10 points or more',
+    value: null,
+    open: true,
+    points: 1,
+    close_on_start_time: false,
+    prediction_date: '2017-12-29',
+    points_won: 1,
+    points_updated: true,
+    game_id: 55,
+    sport_type: 'Tennis',
+    id:1
+  },
+  {
+    user_id: 1482681765133413,
+    home_team: 'Federer',
+    away_team: 'Nadal',
+    result_type: 'num_sets',
+    predicted_score: '',
+    type_extra: '',
+    start_time: '2017-12-22 17:00:00',
+    value: null,
+    open: true,
+    points: 1,
+    close_on_start_time: false,
+    prediction_date: '2017-12-29',
+    points_won: 1,
+    points_updated: true,
+    game_id: 58,
+    sport_type: 'Tennis',
+    id:1
+  },
+  {
+    user_id: 1482681765133413,
+    home_team: 'Lakers',
+    away_team: 'Warriors',
+    result_type: 'player_score_more',
+    predicted_score: 'Durant,Curry',
+    type_extra: '',
+    start_time: '2017-12-22 17:00:00',
+    value: null,
     open: true,
     points: 1,
     close_on_start_time: false,
@@ -191,11 +235,11 @@ const userPredictions = [
     user_id: 1482681765133413,
     home_team: 'Arsenal',
     away_team: 'Burnley',
-    result_type: 'winner',
+    result_type: 'first_score_time',
     predicted_score: '1',
     type_extra: '',
     start_time: '2017-12-18 17:00:00',
-    value: 'Arsenal',
+    value: null,
     open: true,
     points: 1,
     close_on_start_time: true,
@@ -494,14 +538,14 @@ const otherPredictions = [
     id:2
   },
   {
-    user_id: 300,
+    user_id: 100,
     home_team: 'Lakers',
     away_team: 'Warriors',
-    result_type: 'winner_range',
-    predicted_score: '1',
+    result_type: 'player_score_more',
+    predicted_score: 'Durant,Curry',
     type_extra: '',
     start_time: '2017-12-22 17:00:00',
-    value: 'Lakers by 10 points or more',
+    value: null,
     open: true,
     points: 1,
     close_on_start_time: false,

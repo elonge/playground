@@ -51,7 +51,7 @@ class TodayPredictions extends React.Component {
   renderPrediction(prediction) {
     return (
       <OnePrediction
-        key={prediction.id}
+        key={''+prediction.game_id + '.'+prediction.id}
         prediction={prediction}
         forceEnable={this.props.forceEnable}
         onPredictionClick={this.onPredictionClick}
@@ -79,7 +79,7 @@ class TodayPredictions extends React.Component {
 
   renderPredictionsMenu() {
     let menuItems = this.state.dialogPredictionOptions.map((option) =>
-      <MenuItem primaryText = {option} />
+      <MenuItem primaryText = {option} key={option}/>
     );
     return (
       <DropDownMenu
@@ -107,59 +107,55 @@ class TodayPredictions extends React.Component {
 
 
   render() {
-    try {
-      const {
-        viewedDateIndex,
-        userPredictions,
-        dialogOpen,
-        days
-      } = this.state;
+    const {
+      viewedDateIndex,
+      userPredictions,
+      dialogOpen,
+      days
+    } = this.state;
 
-      let viewedDateStr = this.formatDateAsDB(days[viewedDateIndex]);
-      if (userPredictions == null) {
-        return (
-          <label>Debug1</label>
+    let viewedDateStr = this.formatDateAsDB(days[viewedDateIndex]);
+    if (userPredictions == null) {
+      return (
+        <label>Debug1</label>
 //          <LoadingScreen key='load' />
-        );
+      );
+    }
+    let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
+
+    if (dayPredictions.length == 0)  {
+      return (
+        <label>Debug2</label>
+      );
+    } else {
+      let title = 'Your predictions';
+      if (this.state.otherUserMode != null) {
+        title = this.state.otherUserMode.name + "'s predictions";
       }
-      let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
+      title = title + " for " + this.renderPrettyDate(days[viewedDateIndex]);
 
-      if (dayPredictions.length == 0)  {
-        return (
-          <label>Debug2</label>
-        );
-      } else {
-        let title = 'Your predictions';
-        if (this.state.otherUserMode != null) {
-          title = this.state.otherUserMode.name + "'s predictions";
-        }
-        title = title + " for " + this.renderPrettyDate(days[viewedDateIndex]);
+      let currentPredictionSelectField;
+      let items = dayPredictions.map((prediction) =>
+        this.renderPrediction(prediction)
+      );
 
-        let currentPredictionSelectField;
-        let items = dayPredictions.map((prediction) =>
-          this.renderPrediction(prediction)
-        );
-
-        currentPredictionSelectField = this.renderPredictionsMenu();
-        return (
-          <div>
-            <Subheader>{title}</Subheader>
-            <List id="a" style={{backgroundColor: '#FAFAFA'}}>
-            {items}
-            </List>
-            <Dialog
-              title="Make your Prediction:"
-              modal={false}
-              open={dialogOpen}
-              onRequestClose={() => this.handleDialogClose()}
-            >
-            {currentPredictionSelectField}
-            </Dialog>
-          </div>
-        );
-      }
-    } catch (e) {
-      alert('today_predictions exception ' + e.message);
+      currentPredictionSelectField = this.renderPredictionsMenu();
+      return (
+        <div>
+          <Subheader>{title}</Subheader>
+          <List id="a" style={{backgroundColor: '#FAFAFA'}}>
+          {items}
+          </List>
+          <Dialog
+            title="Make your Prediction:"
+            modal={false}
+            open={dialogOpen}
+            onRequestClose={() => this.handleDialogClose()}
+          >
+          {currentPredictionSelectField}
+          </Dialog>
+        </div>
+      );
     }
   }
 };

@@ -5,8 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Snackbar from 'material-ui/Snackbar';
 
-import messages from './messenger-api-helpers/messages';
-
 
 const dialogStyle = {
   width: '100%',

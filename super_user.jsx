@@ -198,14 +198,23 @@ class SuperUserEditor extends React.Component {
     var self=this;
     let message = (this.state.messageType == 'new predictions' ?
       newPredictionPushText : (this.state.messageType == 'new score' ? newScorePushText : this.state.customPushMessage));
-//    this.pushToRemote('superuser:stats', {},
-    this.pushToRemote('superuser:push', {
-      message: message,
-    },
-     function(channel, response) {
-      alert('Message sent!');
-      console.log("---> " + response);
-    });
+
+    if (this.state.messageType == 'stats') {
+      this.pushToRemote('superuser:stats', {},
+      function(channel, response) {
+       alert('Stats were build!');
+       console.log("---> " + response);
+       return;
+     });
+    } else {
+      this.pushToRemote('superuser:push', {
+        message: message,
+      },
+       function(channel, response) {
+        alert('Message sent!');
+        console.log("---> " + response);
+      });
+    }
   }
 
 
@@ -243,6 +252,9 @@ class SuperUserEditor extends React.Component {
           </RadioButton>
           <RadioButton value="new score">
             {newScorePushText}
+          </RadioButton>
+          <RadioButton value="stats">
+            Just build stats (no message)
           </RadioButton>
           <RadioButton value="custom">
             [Type your own]

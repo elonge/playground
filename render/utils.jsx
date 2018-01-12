@@ -10,39 +10,45 @@ import Badge from 'material-ui/Badge';
 import Soccer from './soccer';
 import Basketball from './basketball'
 import Football from './football';
+import Tennis from './tennis';
 
 const leftAvatarStyle = {'font-size': '12px', textAlign: 'center'};
 
-var supportedResultTypes = Soccer.supportedResultTypes.concat(Basketball.supportedResultTypes).concat(Football.supportedResultTypes);
+const supportedResultTypes = Soccer.supportedResultTypes.concat(Basketball.supportedResultTypes).concat(Football.supportedResultTypes).concat(Tennis.supportedResultTypes);
 
 const replaceVars = (prediction, typeRender) => {
-  typeRender.options = typeRender.optionsDefine.map((option) =>
+  var typeRenderValue = JSON.parse(JSON.stringify(typeRender));
+
+  let predictionOptions = prediction.predicted_score.split(',');
+  typeRenderValue.options = typeRender.options.map((option) =>
     option.replace('_HOME', prediction.home_team)
     .replace('_AWAY', prediction.away_team)
     .replace('_PREDICT', prediction.predicted_score)
-    .replace('_VALUE', prediction.value));
+    .replace('_VALUE', prediction.value)
+    .replace('_OPTION1', predictionOptions[0])
+    .replace('_OPTION2', predictionOptions[1]));
 
-    typeRender.primary = typeRender.primaryDefine
+    typeRenderValue.primary = typeRender.primary
       .replace('_HOME', prediction.home_team)
       .replace('_AWAY', prediction.away_team)
       .replace('_VALUE', prediction.value)
       .replace('_PREDICT', prediction.predicted_score);
 
     if (typeof typeRender.secondaryDefine != 'undefined') {
-      typeRender.secondary = typeRender.secondaryDefine
+      typeRenderValue.secondary = typeRender.secondary
         .replace('_HOME', prediction.home_team)
         .replace('_AWAY', prediction.away_team)
         .replace('_VALUE', prediction.value)
         .replace('_STARTTIME', new Date(prediction.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}))
         .replace('_PREDICT', prediction.predicted_score);
     }
-    typeRender.nullPrimary = typeRender.nullPrimaryDefine
+    typeRenderValue.nullPrimary = typeRender.nullPrimary
       .replace('_HOME', prediction.home_team)
       .replace('_AWAY', prediction.away_team)
       .replace('_VALUE', prediction.value)
       .replace('_PREDICT', prediction.predicted_score);
 
-    return typeRender;
+    return typeRenderValue;
 }
 
 // Also compare sport
@@ -131,7 +137,7 @@ const rightAvatar = (prediction, hideUserPrediction) => {
       console.log('cannot find renderer for resultType=' + prediction.result_type);
       return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type;
     }
-    return replaceVars(prediction, supportedResultTypes[tIndx]).rightAvatar(prediction);
+    return supportedResultTypes[tIndx].rightAvatar(prediction);
   }
 }
 

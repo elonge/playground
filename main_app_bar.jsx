@@ -10,7 +10,8 @@ import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider';
 
-import CreateLeagueDialog from './create_league.jsx';
+//import CreateLeagueDialog from './create_league.jsx';
+import CreateLeagueDialog from './create_league2.jsx';
 
 
 class MainAppBar extends React.Component {
@@ -20,6 +21,7 @@ class MainAppBar extends React.Component {
       showPointsMode: props.showPointsMode,
       leagueDialogOpen: false,
       isCreate: false,
+      leagues: props.leagues,
     };
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
@@ -29,19 +31,18 @@ class MainAppBar extends React.Component {
 
   // Called when switching points/predictions
   componentWillReceiveProps(nextProps) {
+    console.log("leagues: " + JSON.stringify(nextProps.leagues));
     this.setState( {
       showPointsMode: nextProps.showPointsMode,
+      leagues: nextProps.leagues,
     });
   }
 
   onMenuClicked(event, value) {
     console.log(value.key);
     switch (value.key) {
-      case "create":
-        this.setState({leagueDialogOpen: true, isCreate:true});
-        break;
-      case "join":
-        this.setState({leagueDialogOpen: true, isCreate: false});
+      case "leagues":
+        this.setState({leagueDialogOpen: true});
         break;
       default:
     }
@@ -70,8 +71,7 @@ class MainAppBar extends React.Component {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
         onItemClick={this.onMenuClicked}
       >
-        <MenuItem primaryText="Create a league..." key="create" />
-        <MenuItem primaryText="Join a league..." key="join"/>
+        <MenuItem primaryText="Private Leagues..." key="leagues" />
         <Divider />
         <MenuItem primaryText="Settings..." key="settings"/>
       </IconMenu>
@@ -106,7 +106,10 @@ class MainAppBar extends React.Component {
           socket={this.props.socket}
           senderId={this.props.senderId}
           onNewLeague={this.onNewLeague}
-          onInviteNewLeague={this.onInviteNewLeague}          
+          onInviteNewLeague={this.onInviteNewLeague}
+          leagues={this.state.leagues}
+          users={this.props.users}
+
         />
       </div>
     );
