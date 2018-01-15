@@ -1,5 +1,7 @@
 const myUserId = 1482681765133413;
 
+const snackbarMOTD = "Your winner of this week is Moshe!";
+
 const users = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -315,15 +317,34 @@ const userPredictions = [
     predicted_score: 'x',
     type_extra: '',
     start_time: '2017-12-18 17:00:00',
-    value: null,
-    open: true,
+    value: 'Newcastle',
+    open: false,
     points: 1,
     close_on_start_time: false,
     prediction_date: '2017-12-18',
     points_updated: false,
     points_won: 0,
-    game_id: 9,
+    game_id: 19,
     sport_type: 'Soccer',
+    id:88
+  },
+  {
+    user_id: 1482681765133413,
+    home_team: 'Eagles',
+    away_team: 'Falcons',
+    result_type: 'winner',
+    predicted_score: 'x',
+    type_extra: '',
+    start_time: '2017-12-18 17:00:00',
+    value: 'Eagles',
+    open: true,
+    points: 1,
+    close_on_start_time: true,
+    prediction_date: '2017-12-18',
+    points_updated: true,
+    points_won: 1,
+    game_id: 9,
+    sport_type: 'Football',
     id:88
   },
   {
@@ -385,6 +406,44 @@ const userPredictions = [
   },
 ]
 const otherPredictions = [
+  {
+    user_id: 200,
+    home_team: 'Eagles',
+    away_team: 'Falcons',
+    result_type: 'winner',
+    predicted_score: 'x',
+    type_extra: '',
+    start_time: '2017-12-18 17:00:00',
+    value: 'Falcons',
+    open: true,
+    points: 1,
+    close_on_start_time: true,
+    prediction_date: '2017-12-18',
+    points_updated: true,
+    points_won: 0,
+    game_id: 9,
+    sport_type: 'Football',
+    id:88
+  },
+  {
+    user_id: 300,
+    home_team: 'Eagles',
+    away_team: 'Falcons',
+    result_type: 'winner',
+    predicted_score: 'x',
+    type_extra: '',
+    start_time: '2017-12-18 17:00:00',
+    value: 'Falcons',
+    open: true,
+    points: 1,
+    close_on_start_time: true,
+    prediction_date: '2017-12-18',
+    points_updated: true,
+    points_won: 1,
+    game_id: 9,
+    sport_type: 'Football',
+    id:88
+  },
   {
     user_id: 200,
     home_team: 'Lakers',
@@ -476,7 +535,7 @@ const otherPredictions = [
     prediction_date: '2017-12-18',
     points_updated: false,
     points_won: 0,
-    game_id: 9,
+    game_id: 19,
     sport_type: 'Soccer',
     id:88
   },
@@ -647,7 +706,7 @@ const otherPredictions = [
     prediction_date: '2017-12-18',
     points_updated: false,
     points_won: 0,
-    game_id: 9,
+    game_id: 19,
     sport_type: 'Soccer',
     id:88
   },
@@ -717,4 +776,5 @@ export default {
   userPredictions,
   otherPredictions,
   leagues,
+  snackbarMOTD,
 }

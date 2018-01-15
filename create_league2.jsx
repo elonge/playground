@@ -205,7 +205,7 @@ class CreateLeagueDialog extends React.Component {
         <br />
         <br />
         <br />
-        If you want to create a new league, please enter a unique league name here and click CREATE
+        If you want to create a new league, please enter a unique league name and click CREATE
         <br />
         <TextField
           value={this.state.newLeagueName}
@@ -299,7 +299,7 @@ class CreateLeagueDialog extends React.Component {
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
         contentStyle={dialogStyle}
-        autoDetectWindowHeight={false}
+        autoScrollBodyContent={true}
       >
       <div>
       {actionGroup}

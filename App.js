@@ -35,6 +35,7 @@ class App extends Component {
     this.handleNewLeagues = this.handleNewLeagues.bind(this);
     this.onUserInfoCancel = this.onUserInfoCancel.bind(this);
     this.onUserInfoExpanded = this.onUserInfoExpanded.bind(this);
+
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -302,9 +303,11 @@ class App extends Component {
           <TodayPredictions
             userPredictions={this.getCurrentStatePredictions()}
             updatePrediction={this.updatePrediction}
-            forceEnable={true}
+            forceEnable={false}
             otherUserMode={otherUserPredictionsMode}
             viewedDateIndex={viewedDateIndex}
+            users={users}
+            otherPredictions={otherPredictions}
           />
         );
         topPart = (
@@ -335,6 +338,9 @@ class App extends Component {
       }
 
       let appBarTitle = "Welcome " + me.name;
+      if (otherUserPredictionsMode != null) {
+        appBarTitle = otherUserPredictionsMode.name +"'s profile";
+      }
       let appBar = (
         <MainAppBar
           onPrevClick={this.onPrevClick}

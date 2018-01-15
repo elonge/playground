@@ -34,7 +34,7 @@ const replaceVars = (prediction, typeRender) => {
       .replace('_VALUE', prediction.value)
       .replace('_PREDICT', prediction.predicted_score);
 
-    if (typeof typeRender.secondaryDefine != 'undefined') {
+    if (typeof typeRender.secondary != 'undefined') {
       typeRenderValue.secondary = typeRender.secondary
         .replace('_HOME', prediction.home_team)
         .replace('_AWAY', prediction.away_team)
@@ -61,6 +61,15 @@ const predictionOptions = (prediction) => {
   return replaceVars(prediction, supportedResultTypes[tIndx]).options;
 }
 
+const predictionTitle = (prediction) => {
+  var tIndx = getResultTypeIndex(prediction);
+  if (tIndx < 0) {
+    console.log('cannot find renderer for resultType=' + prediction.result_type);
+    return "";
+  }
+  return replaceVars(prediction, supportedResultTypes[tIndx]).nullPrimary;
+}
+
 const primaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
@@ -79,7 +88,7 @@ const secondaryText = (prediction, hideUserPrediction) => {
     console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
     return "ERROR (" + prediction.sport_type+")";
   }
-  if (typeof supportedResultTypes[tIndx].secondaryDefine != 'undefined') {
+  if (typeof supportedResultTypes[tIndx].secondary != 'undefined') {
     return replaceVars(prediction, supportedResultTypes[tIndx]).secondary;
   }
 
@@ -151,5 +160,6 @@ export default {
   rightAvatar,
   leftAvatar,
   predictionOptions,
+  predictionTitle,
   supportedResultTypes
 }

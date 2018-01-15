@@ -375,6 +375,8 @@ class SuperUserEditor extends React.Component {
           forceEnable={true}
           otherUserMode={null}
           viewedDateIndex={0}
+          users={[]}
+          otherPredictions={[]}
           />
       </div>
     );

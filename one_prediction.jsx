@@ -75,7 +75,7 @@ class OnePrediction extends React.Component {
 
     return (
       <ListItem
-        disabled={this.isPredictionDisabled() || this.props.otherUserMode}
+        disabled={this.props.otherUserMode}
         primaryText={primaryText}
         secondaryText={secondaryText}
         leftAvatar={this.renderLeftAvatar()}
@@ -87,7 +87,7 @@ class OnePrediction extends React.Component {
   }
 
   onPredictionClick() {
-    this.props.onPredictionClick(this.props.prediction, RenderUtils.predictionOptions(this.props.prediction));
+    this.props.onPredictionClick(this.props.prediction, RenderUtils.predictionOptions(this.props.prediction), RenderUtils.predictionTitle(this.props.prediction));
   }
 };
 

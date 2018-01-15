@@ -1,6 +1,9 @@
 import React from 'react';
 import {List,ListItem} from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+
 import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
 import OnePrediction from './one_prediction.jsx';
@@ -8,6 +11,13 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Subheader from 'material-ui/Subheader';
+import RenderUtils from './render/utils';
+
+const customContentStyle = {
+  width: '100%',
+  maxWidth: 'none',
+};
+
 
 class TodayPredictions extends React.Component {
   constructor(props) {
@@ -15,6 +25,9 @@ class TodayPredictions extends React.Component {
     this.renderPrediction = this.renderPrediction.bind(this);
     this.handleMakePrediction = this.handleMakePrediction.bind(this);
     this.onPredictionClick = this.onPredictionClick.bind(this);
+    this.renderOtherUsersPredictions = this.renderOtherUsersPredictions.bind(this);
+    this.isShowOtherPredictions = this.isShowOtherPredictions.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
     this.state = {
       viewedDateIndex: props.viewedDateIndex,
       otherUserMode: props.otherUserMode,
@@ -22,6 +35,7 @@ class TodayPredictions extends React.Component {
       dialogOpen: false,
       dialogPrediction: null,
       dialogPredictionOptions: [],
+      dialogPredictionTitle: null,
       days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
     };
   }
@@ -64,8 +78,13 @@ class TodayPredictions extends React.Component {
     this.setState({dialogOpen: false});
   };
 
-  onPredictionClick(prediction, options) {
-    this.setState({dialogPrediction: prediction, dialogOpen: true, dialogPredictionOptions: options});
+  onPredictionClick(prediction, options, title) {
+    this.setState({
+      dialogPrediction: prediction,
+      dialogOpen: true,
+      dialogPredictionOptions: options,
+      dialogPredictionTitle: title,
+    });
   }
 
   handleMakePrediction(event, index, value) {
@@ -92,6 +111,43 @@ class TodayPredictions extends React.Component {
     );
   }
 
+  renderOtherUsersPredictions() {
+    let otherUsersPredictions = this.props.otherPredictions.filter((prediction) =>
+      (prediction.id == this.state.dialogPrediction.id &&
+        prediction.game_id == this.state.dialogPrediction.game_id &&
+        prediction.prediction_date == this.state.days[this.state.viewedDateIndex]));
+
+    let listItems = otherUsersPredictions.map((prediction) => {
+      console.log("prediction=" + JSON.stringify(prediction));
+      const user = this.props.users.find((user) => user.fbId == prediction.user_id);
+      return (
+        <ListItem
+          disabled={true}
+          leftAvatar={RenderUtils.leftAvatar(prediction, false)}
+          primaryText={user.name}
+          secondaryText={prediction.value == null ? "No prediction" : prediction.value}
+          key={user.fbId}
+          style={{textAlign:'left'}}
+        />
+      );
+    });
+
+    console.log(listItems);
+
+    return (
+      <Card>
+      <CardText>
+      <List>
+        {listItems}
+      </List>
+      </CardText>
+      <CardActions>
+        <FlatButton label="Cancel" onClick={this.handleDialogClose} />
+      </CardActions>
+      </Card>
+    );
+  }
+
   renderPrettyDate(d1) {
     var strDate = new Date(d1).toLocaleDateString();
     var today = new Date();
@@ -105,13 +161,34 @@ class TodayPredictions extends React.Component {
     return strDate;
   }
 
+  isShowOtherPredictions() {
+    if (this.props.forceEnable) {
+      return false;
+    }
+    if (this.state.dialogPrediction == null) {
+      return false;
+    }
+    if (!this.state.dialogPrediction.open) {
+      return true;
+    }
+
+    if (this.state.dialogPrediction.status == 'ended') {
+      return true;
+    }
+
+    if (this.state.dialogPrediction.close_on_start_time && new Date() > new Date(this.state.dialogPrediction.start_time)) {
+      return true;
+    }
+    return false;
+  }
 
   render() {
     const {
       viewedDateIndex,
       userPredictions,
       dialogOpen,
-      days
+      days,
+      dialogPredictionTitle
     } = this.state;
 
     let viewedDateStr = this.formatDateAsDB(days[viewedDateIndex]);
@@ -134,23 +211,34 @@ class TodayPredictions extends React.Component {
       }
       title = title + " for " + this.renderPrettyDate(days[viewedDateIndex]);
 
-      let currentPredictionSelectField;
       let items = dayPredictions.map((prediction) =>
         this.renderPrediction(prediction)
       );
 
-      currentPredictionSelectField = this.renderPredictionsMenu();
+      let currentPredictionSelectField;
+      let dialogTitle="";
+      if (this.isShowOtherPredictions()) {
+        currentPredictionSelectField = this.renderOtherUsersPredictions();
+        dialogTitle = "What other predicted";
+      } else {
+        currentPredictionSelectField = this.renderPredictionsMenu();
+        if (dialogPredictionTitle != null) {
+          dialogTitle = dialogPredictionTitle;
+        }
+      }
       return (
         <div>
           <Subheader>{title}</Subheader>
-          <List id="a" style={{backgroundColor: '#FAFAFA'}}>
+          <List key="a" style={{backgroundColor: '#FAFAFA'}}>
           {items}
           </List>
           <Dialog
-            title="Make your Prediction:"
+            title={dialogTitle}
             modal={false}
             open={dialogOpen}
             onRequestClose={() => this.handleDialogClose()}
+            contentStyle={customContentStyle}
+            autoScrollBodyContent={true}
           >
           {currentPredictionSelectField}
           </Dialog>

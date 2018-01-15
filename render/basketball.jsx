@@ -82,7 +82,9 @@ const scoreMore = {
   secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     return (
-        <Avatar>
+      <Avatar
+        style={style}
+      >
           {prediction.value}
         </Avatar>
     );

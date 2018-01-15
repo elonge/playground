@@ -12,6 +12,7 @@ import Divider from 'material-ui/Divider';
 
 //import CreateLeagueDialog from './create_league.jsx';
 import CreateLeagueDialog from './create_league2.jsx';
+import LeagueQuestionsDialog from './league_questions.jsx';
 
 
 class MainAppBar extends React.Component {
@@ -20,6 +21,7 @@ class MainAppBar extends React.Component {
     this.state = {
       showPointsMode: props.showPointsMode,
       leagueDialogOpen: false,
+      questionDialogOpen: false,
       isCreate: false,
       leagues: props.leagues,
     };
@@ -44,6 +46,8 @@ class MainAppBar extends React.Component {
       case "leagues":
         this.setState({leagueDialogOpen: true});
         break;
+      case "questions":
+        this.setState({questionDialogOpen: true});
       default:
     }
   }
@@ -72,6 +76,7 @@ class MainAppBar extends React.Component {
         onItemClick={this.onMenuClicked}
       >
         <MenuItem primaryText="Private Leagues..." key="leagues" />
+        <MenuItem primaryText="Add Questions..." key="questions" />
         <Divider />
         <MenuItem primaryText="Settings..." key="settings"/>
       </IconMenu>
@@ -87,6 +92,28 @@ class MainAppBar extends React.Component {
         color={'white'}
       /> ));
 
+    let leaguesDialog = (
+      <CreateLeagueDialog
+        open={this.state.leagueDialogOpen}
+        isCreate={this.state.isCreate}
+        handleClose={this.onCloseCreateDialog}
+        socket={this.props.socket}
+        senderId={this.props.senderId}
+        onNewLeague={this.onNewLeague}
+        onInviteNewLeague={this.onInviteNewLeague}
+        leagues={this.state.leagues}
+        users={this.props.users}
+      />
+    );
+
+    let questionsDialog = (
+      <LeagueQuestionsDialog
+        open={this.state.questionDialogOpen}
+        socket={this.props.socket}
+        senderId={this.props.senderId}
+      />
+    );
+
     let rightButton = (
       <div>
         <IconButton disabled={this.props.isPrevDisabled()}><KeyboardArrowLeft
@@ -99,18 +126,8 @@ class MainAppBar extends React.Component {
         /></IconButton>
         <IconButton>{modeIcon}
         </IconButton>
-        <CreateLeagueDialog
-          open={this.state.leagueDialogOpen}
-          isCreate={this.state.isCreate}
-          handleClose={this.onCloseCreateDialog}
-          socket={this.props.socket}
-          senderId={this.props.senderId}
-          onNewLeague={this.onNewLeague}
-          onInviteNewLeague={this.onInviteNewLeague}
-          leagues={this.state.leagues}
-          users={this.props.users}
-
-        />
+        {leaguesDialog}
+        {questionsDialog}
       </div>
     );
 
