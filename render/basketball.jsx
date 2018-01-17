@@ -6,6 +6,8 @@ const style = {'font-size': '12px', textAlign: 'center'};
 const winner = {
   sport: 'basketball',
   key: 'winner',
+  name: 'Pick the winner',
+  extraInfoDescription: null,
   options: ['_HOME', '_AWAY'],
   nullPrimary: 'Pick your winner',
   primary: 'Your winner: _VALUE',
@@ -23,6 +25,8 @@ const winner = {
 const toScore = {
   sport: 'basketball',
   key: 'to_score',
+  name: 'A player top scorer',
+  extraInfoDescription: 'Which player (e.g. Durant)',
   options: ['Yes', 'No'],
   nullPrimary: '_PREDICT top scorer?',
   primary: '_PREDICT top scorer?',
@@ -39,6 +43,8 @@ const toScore = {
 const winnerRange = {
   sport: 'basketball',
   key: 'winner_range',
+  name: 'Pick the winner and range',
+  extraInfoDescription: null,
   options: ['_HOME by 10 points or more', '_HOME by less than 10 points','_AWAY by 10 points or more','_AWAY by less than 10 points'],
   nullPrimary: 'Pick your winner',
   primary: '_VALUE',
@@ -60,6 +66,8 @@ const winnerRange = {
 const doubleDigits = {
   sport: 'basketball',
   key: 'player_double_digit',
+  name: 'A player will have double digits',
+  extraInfoDescription: 'Which player (e.g. Casspi)',
   options: ['Yes', 'No'],
   nullPrimary: '_PREDICT will score double digits?',
   primary: '_PREDICT will score double digits?',
@@ -76,6 +84,8 @@ const doubleDigits = {
 const scoreMore = {
   sport: 'basketball',
   key: 'player_score_more',
+  name: 'Player1 will score more than Player2',
+  extraInfoDescription: 'Player1,Player2 (e.g. Durant,Curry)',
   options: ['_OPTION1', '_OPTION2'],
   nullPrimary: 'Which will score more?',
   primary: '_VALUE will score more',

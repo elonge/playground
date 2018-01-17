@@ -193,6 +193,7 @@ const userPredictions = [
     points_updated: true,
     game_id: 55,
     sport_type: 'Tennis',
+    creator_id: 0,
     id:1
   },
   {
@@ -212,6 +213,7 @@ const userPredictions = [
     points_updated: true,
     game_id: 58,
     sport_type: 'Tennis',
+    creator_id: 0,
     id:1
   },
   {
@@ -231,6 +233,7 @@ const userPredictions = [
     points_updated: true,
     game_id: 22,
     sport_type: 'Basketball',
+    creator_id: 0,
     id:1
   },
   {
@@ -250,6 +253,7 @@ const userPredictions = [
     points_updated: true,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:1
   },
   {
@@ -269,6 +273,7 @@ const userPredictions = [
     points_updated: false,
     game_id: 29,
     sport_type: 'Football',
+    creator_id: 200,
     id:1
   },
   {
@@ -288,6 +293,7 @@ const userPredictions = [
     points_won: 0,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 999,
     id:2
   },
   {
@@ -307,6 +313,7 @@ const userPredictions = [
     points_won: 0,
     sport_type: 'Soccer',
     game_id: 3,
+    creator_id: 0,
     id:2
   },
   {
@@ -326,6 +333,7 @@ const userPredictions = [
     points_won: 0,
     game_id: 19,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:88
   },
   {
@@ -345,6 +353,7 @@ const userPredictions = [
     points_won: 1,
     game_id: 9,
     sport_type: 'Football',
+    creator_id: 0,
     id:88
   },
   {
@@ -364,6 +373,7 @@ const userPredictions = [
     points_won: 0,
     game_id: 5,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:2
   },
   {
@@ -383,6 +393,7 @@ const userPredictions = [
     points_won: 0,
     game_id: 4,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:3
   },
   {
@@ -402,6 +413,7 @@ const userPredictions = [
     points_won: 0,
     sport_type: 'soccer',
     game_id: 6,
+    creator_id: 0,
     id:2
   },
 ]
@@ -423,6 +435,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 9,
     sport_type: 'Football',
+    creator_id: 0,
     id:88
   },
   {
@@ -442,6 +455,7 @@ const otherPredictions = [
     points_won: 1,
     game_id: 9,
     sport_type: 'Football',
+    creator_id: 0,
     id:88
   },
   {
@@ -461,6 +475,7 @@ const otherPredictions = [
     points_updated: true,
     game_id: 22,
     sport_type: 'Basketball',
+    creator_id: 300,
     id:1
   },
   {
@@ -480,6 +495,7 @@ const otherPredictions = [
     points_updated: true,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:1
   },
   {
@@ -499,6 +515,7 @@ const otherPredictions = [
     points_updated: false,
     game_id: 29,
     sport_type: 'Football',
+    creator_id: 0,
     id:1
   },
   {
@@ -518,6 +535,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:2
   },
   {
@@ -537,6 +555,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 19,
     sport_type: 'Soccer',
+    creator_id: 300,
     id:88
   },
   {
@@ -556,6 +575,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 5,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:2
   },
   {
@@ -575,6 +595,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 4,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:3
   },
   {
@@ -594,6 +615,7 @@ const otherPredictions = [
     points_won: 0,
     sport_type: 'soccer',
     game_id: 6,
+    creator_id: 0,
     id:2
   },
   {
@@ -613,6 +635,7 @@ const otherPredictions = [
     points_updated: true,
     game_id: 22,
     sport_type: 'Basketball',
+    creator_id: 0,
     id:1
   },
   {
@@ -632,6 +655,7 @@ const otherPredictions = [
     points_updated: true,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 200,
     id:1
   },
   {
@@ -651,6 +675,7 @@ const otherPredictions = [
     points_updated: false,
     game_id: 29,
     sport_type: 'Football',
+    creator_id: 0,
     id:1
   },
   {
@@ -670,6 +695,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 2,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:2
   },
   {
@@ -689,6 +715,7 @@ const otherPredictions = [
     points_won: 0,
     sport_type: 'Soccer',
     game_id: 3,
+    creator_id: 0,
     id:2
   },
   {
@@ -708,6 +735,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 19,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:88
   },
   {
@@ -727,6 +755,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 5,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:2
   },
   {
@@ -746,6 +775,7 @@ const otherPredictions = [
     points_won: 0,
     game_id: 4,
     sport_type: 'Soccer',
+    creator_id: 0,
     id:3
   },
   {
@@ -765,6 +795,7 @@ const otherPredictions = [
     points_won: 0,
     sport_type: 'soccer',
     game_id: 6,
+    creator_id: 0,
     id:2
   },
 ];

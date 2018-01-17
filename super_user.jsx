@@ -173,7 +173,8 @@ class SuperUserEditor extends React.Component {
       typeExtra: self.state.typeExtra,
       open: self.state.predictionOpen,
       predictedScore: self.state.predictedScore,
-      points: 1
+      points: 1,
+      creatorId:0,
     }, function(channel, response) {
       if (response.startsWith("ok: ")) {
         self.setState({predictionId: response.substring(4)});

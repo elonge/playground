@@ -106,6 +106,7 @@ class MainAppBar extends React.Component {
       />
     );
 
+    console.log("this.state.questionDialogOpen=" +this.state.questionDialogOpen);
     let questionsDialog = (
       <LeagueQuestionsDialog
         open={this.state.questionDialogOpen}

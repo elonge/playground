@@ -74,7 +74,7 @@ const primaryText = (prediction, hideUserPrediction) => {
   var tIndx = getResultTypeIndex(prediction);
   if (tIndx < 0) {
     console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
-    return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type;
+    return 'ERROR ('+prediction.result_type + ':' + prediction.sport_type+")";
   }
   if (prediction.value == null || hideUserPrediction) {
     return replaceVars(prediction, supportedResultTypes[tIndx]).nullPrimary;
@@ -88,6 +88,7 @@ const secondaryText = (prediction, hideUserPrediction) => {
     console.log('cannot find renderer for resultType=' + prediction.sport_type+'::'+prediction.result_type );
     return "ERROR (" + prediction.sport_type+")";
   }
+  console.log("start_time="+prediction.start_time);
   if (typeof supportedResultTypes[tIndx].secondary != 'undefined') {
     return replaceVars(prediction, supportedResultTypes[tIndx]).secondary;
   }

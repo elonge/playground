@@ -6,6 +6,8 @@ const style = {'font-size': '12px', textAlign: 'center'};
 const winner = {
   sport: 'Football',
   key: 'winner',
+  name: 'Pick the winner',
+  extraInfoDescription: null,
   options: ['_HOME', '_AWAY'],
   nullPrimary: 'Pick your winner',
   primary: 'Your winner: _VALUE',
@@ -23,6 +25,8 @@ const winner = {
 const winnerRange = {
   sport: 'Football',
   key: 'winner_range',
+  name: 'Pick the winner and range',
+  extraInfoDescription: null,
   options: ['_HOME by 7 points or more', '_HOME by less than 7 points','_AWAY by 7 points or more','_AWAY by less than 7 points'],
   nullPrimary: 'Pick your winner',
   primary: '_VALUE',
@@ -44,6 +48,8 @@ const winnerRange = {
 const firstScore = {
   sport: 'Football',
   key: 'first_score',
+  name: 'Pick the team to score first',
+  extraInfoDescription: null,
   options: ['_HOME', '_AWAY'],
   nullPrimary: 'Which team will score first?',
   primary: '_VALUE will score first',

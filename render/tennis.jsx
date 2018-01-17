@@ -6,6 +6,8 @@ const style = {'font-size': '12px', textAlign: 'center'};
 const winner = {
   sport: 'Tennis',
   key: 'winner',
+  name: 'Pick the winner',
+  extraInfoDescription: null,
   options: ['_HOME', '_AWAY'],
   nullPrimary: 'Pick your winner',
   primary: 'Your winner: _VALUE',
@@ -25,6 +27,8 @@ const winner = {
 const numSets = {
   sport: 'Tennis',
   key: 'num_sets',
+  name: 'Number of sets',
+  extraInfoDescription: null,
   options: ['3', '4','5'],
   nullPrimary: 'Number of sets?',
   primary: '_VALUE sets',
