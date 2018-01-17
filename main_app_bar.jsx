@@ -28,6 +28,7 @@ class MainAppBar extends React.Component {
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
+    this.onNewQuestion = this.onNewQuestion.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
   }
 
@@ -58,6 +59,10 @@ class MainAppBar extends React.Component {
 
   onNewLeague(league) {
     this.props.onNewLeague(league);
+  }
+
+  onNewQuestion(league) {
+    this.props.onNewQuestion();
   }
 
   onInviteNewLeague(league) {
@@ -112,6 +117,7 @@ class MainAppBar extends React.Component {
         open={this.state.questionDialogOpen}
         socket={this.props.socket}
         senderId={this.props.senderId}
+        onNewQuestion={this.onNewQuestion}        
       />
     );
 

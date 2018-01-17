@@ -35,6 +35,8 @@ class App extends Component {
     this.handleNewLeagues = this.handleNewLeagues.bind(this);
     this.onUserInfoCancel = this.onUserInfoCancel.bind(this);
     this.onUserInfoExpanded = this.onUserInfoExpanded.bind(this);
+    this.onNewQuestion = this.onNewQuestion.bind(this);
+    this.handleNewQuestion = this.handleNewQuestion.bind(this);
 
     this.state = {
       showPointsMode : false,
@@ -74,6 +76,21 @@ class App extends Component {
     );
   }
 
+  onNewQuestion() {
+    this.pushToRemoteWithHandler("predictions:refetch", {}, this.handleNewQuestion);
+  }
+
+  handleNewQuestion(channel, response) {
+    if (response.startsWith("ok: ")) {
+      let newData = JSON.parse(response.substring(4));
+      this.setState({userPredictions: newData.userPredictions, otherPredictions:newData.otherPredictions});
+      const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
+      ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name);
+    } else {
+      console.error("Failed to parse server response! " + response);
+    }
+  }
+
   onUserInfoExpanded() {
     let current = this.state.profileExpanded;
     this.setState({profileExpanded: !current});
@@ -101,25 +118,6 @@ class App extends Component {
     } else {
       console.error("Failed to parse server response! " + response);
     }
-  }
-
-  onNewLeague_client(newLeague) {
-    // Add the new league to list of user's leagues
-    let leagues = this.state.leagues.slice();
-    leagues = leagues.concat([newLeague]);
-
-    // Add entry for number of points in the new league for each weeks
-    let points = this.state.points.slice();
-    let newLeaguePoints = [];
-    let meAllUserPoints = points.filter(user => (user.fbId == this.props.viewerId && user.league == 1));
-    meAllUserPoints.forEach(function(userPoint) {
-      let clone = JSON.parse(JSON.stringify(userPoint));
-      clone.league = newLeague.id;
-      newLeaguePoints.push(clone);
-    });
-    points = points.concat(newLeaguePoints);
-
-    this.setState({leagues:leagues, points:points});
   }
 
   onLeagueChanged(event, key, value) {
@@ -356,6 +354,7 @@ class App extends Component {
           onInviteNewLeague={this.onInviteNewLeague}
           leagues={this.state.leagues}
           users={this.state.users}
+          onNewQuestion={this.onNewQuestion}
         />
       );
 

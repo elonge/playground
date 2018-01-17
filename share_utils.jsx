@@ -20,6 +20,28 @@ const inviteToLeague = (appUri, sharingMode, myName, league) => {
   console.log(JSON.stringify(messageToShare));
 }
 
+const tellNewQuestion = (appUri, sharingMode, myName) => {
+  console.log(messages.textUserNewQuestion);
+  let userText = messages.textUserNewQuestion.replace('_USER', myName);
+  console.log(userText);
+  let messageToShare = messages.shareWithConversation(appUri, userText);
+
+  window.MessengerExtensions.beginShareFlow(
+    function success(response) {
+      if (response.is_sent) {
+        window.MessengerExtensions.requestCloseBrowser(null, null);
+      }
+    }, function error(errorCode, errorMessage) {
+      alert('Invite Failed! ' + errorCode +',' + errorMessage);
+      console.error({errorCode, errorMessage});
+    },
+    messageToShare,
+    sharingMode);
+
+  console.log(JSON.stringify(messageToShare));
+}
+
 export default {
   inviteToLeague,
+  tellNewQuestion,
 }

@@ -114,7 +114,8 @@ class LeagueQuestionsDialog extends React.Component {
   onApproveAddingPredictionResponse(channel, response) {
     console.log('response=' + response);
     if (response.startsWith("ok: ")) {
-      this.setState({snackbarMessage: "Question is visible to your friends"});
+      this.setState({snackbarMessage: "Question added!"});
+      this.props.onNewQuestion();
     } else {
       console.error("---> " + response);
     }
@@ -323,7 +324,7 @@ class LeagueQuestionsDialog extends React.Component {
         <Snackbar
           open={isSnack}
           message={snackbarMessage}
-          autoHideDuration={6000}
+          autoHideDuration={4500}
           onRequestClose={this.onSnackBarDone}
           action="Add more"
           onActionClick={this.onAddMoreQuestion}
