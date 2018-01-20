@@ -14,7 +14,6 @@ import RenderUtils from './render/utils';
 const newPredictionPushText = "Check out 5 new questions about today\'s games";
 const newScorePushText = "Scores were updated. Check your position!";
 
-
 class SuperUserEditor extends React.Component {
   constructor(props) {
     try {
@@ -37,6 +36,7 @@ class SuperUserEditor extends React.Component {
         customPushMessage: '',
         messageType: 'new prediction',
         waitingToServer: false,
+        jsonGames: null,
         points: 1,
       };
       this.handleChangeGameId = this.handleChangeGameId.bind(this);
@@ -49,6 +49,8 @@ class SuperUserEditor extends React.Component {
       this.onUpdateResult = this.onUpdateResult.bind(this);
       this.renderNewPrediction = this.renderNewPrediction.bind(this);
       this.pushToRemote = this.pushToRemote.bind(this);
+      this.handleJSONPatch  = this.handleJSONPatch.bind(this);
+      this.insertManyGames = this.insertManyGames.bind(this);
     } catch (e) { alert('SuperUserEditor: ' + e.message); }
   }
 
@@ -72,7 +74,6 @@ class SuperUserEditor extends React.Component {
     );
   }
 
-
   handleSuperUserChange = (value) => {
     this.loadAllGames();
     this.loadAllPredictions();
@@ -89,7 +90,8 @@ class SuperUserEditor extends React.Component {
   handleChangeDate = (event, date) => this.setState({startDate: date});
   handlePredictedScoreChange = (event, value) => this.setState({predictedScore: value});
   handleHomeTeamChange = (event, value) => this.setState({homeTeam: value});
-  handleAwayTeamChange = (event, value) => this.setState({awayTeam: value});;
+  handleAwayTeamChange = (event, value) => this.setState({awayTeam: value});
+  handleJSONPatch = (event, value) => this.setState({jsonGames: value});
   handleChangeGameId = (event, value) => this.setState({gameInPrediction: value});
   handleChangeTime = (event, date) => {
     var startDate = new Date(this.state.startDate);
@@ -101,11 +103,11 @@ class SuperUserEditor extends React.Component {
 
   formatDateForServer(date) {
     var d = new Date(date);
-    var month = '' + (d.getMonth() + 1);
-    var day = '' + d.getDate();
-    var year = d.getFullYear();
-    var hour = '' + d.getHours();
-    var minutes = '' + d.getMinutes();
+    var month = '' + (d.getUTCMonth() + 1);
+    var day = '' + d.getUTCDate();
+    var year = d.getUTCFullYear();
+    var hour = '' + d.getUTCHours();
+    var minutes = '' + d.getUTCMinutes();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
@@ -147,8 +149,12 @@ class SuperUserEditor extends React.Component {
   onSubmitClick() {
     var self=this;
     this.setState({gameId: 'Sending'});
-    let start = this.formatDateForServer(this.state.startDate);
+    if (this.state.jsonGames != null) {
+      this.insertManyGames(JSON.parse(this.state.jsonGames));
+      return;
+    }
 
+    let start = this.formatDateForServer(this.state.startDate);
     this.pushToRemote('superuser:game', {
       homeTeam: self.state.homeTeam,
       awayTeam: self.state.awayTeam,
@@ -156,10 +162,29 @@ class SuperUserEditor extends React.Component {
       startTime: start,
     }, function(channel, response) {
       if (response.startsWith("ok: ")) {
-        self.setState({gameId: response.substring(4)});
+        self.setState({gameId: response.substring(4), jsonGames:null});
       } else {
         console.error("---> " + response);
       }
+    });
+  }
+
+  insertManyGames(games) {
+    var self=this;
+    games.forEach(function(game) {
+      let start = self.formatDateForServer(game.time);
+      self.pushToRemote('superuser:game', {
+        homeTeam: game.home,
+        awayTeam: game.away,
+        sportType: game.sportType,
+        startTime: start,
+      }, function(channel, response) {
+        if (response.startsWith("ok: ")) {
+          self.setState({gameId: response.substring(4), jsonGames:null});
+        } else {
+          console.error("---> " + response);
+        }
+      });
     });
   }
 
@@ -420,6 +445,14 @@ class SuperUserEditor extends React.Component {
           defaultTime={this.state.startDate}
           onChange={this.handleChangeTime}
           />
+          <TextField
+            hintText="JSON!"
+            value={this.state.jsonGames == null ? '' : this.state.jsonGames}
+            multiLine={true}
+            rows={2}
+            rowsMax={10}
+            onChange = {this.handleJSONPatch}
+          /><br />
         <RaisedButton label="Add Game" primary={true} onClick={() => this.onSubmitClick()}/>
       </div>
     );
