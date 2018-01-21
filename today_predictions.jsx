@@ -3,6 +3,8 @@ import {List,ListItem} from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import Avatar from 'material-ui/Avatar';
+import AddIcon from 'material-ui/svg-icons/content/add';
 
 import PredictionsTitle from './predictions_title.jsx';
 import LoadingScreen from './loading_screen.jsx';
@@ -12,6 +14,7 @@ import SelectField from 'material-ui/SelectField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Subheader from 'material-ui/Subheader';
 import RenderUtils from './render/utils';
+import LeagueQuestionsDialog from './league_questions.jsx';
 
 const customContentStyle = {
   width: '100%',
@@ -28,6 +31,8 @@ class TodayPredictions extends React.Component {
     this.renderOtherUsersPredictions = this.renderOtherUsersPredictions.bind(this);
     this.isShowOtherPredictions = this.isShowOtherPredictions.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.onNewQuestionClick = this.onNewQuestionClick.bind(this);
+    this.onNewQuestion = this.onNewQuestion.bind(this);
     this.state = {
       viewedDateIndex: props.viewedDateIndex,
       otherUserMode: props.otherUserMode,
@@ -36,6 +41,7 @@ class TodayPredictions extends React.Component {
       dialogPrediction: null,
       dialogPredictionOptions: [],
       dialogPredictionTitle: null,
+      questionDialogOpen: false,
       days: props.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
     };
   }
@@ -182,6 +188,16 @@ class TodayPredictions extends React.Component {
     return false;
   }
 
+  onNewQuestion(toShare) {
+    console.log("toShare=" + toShare);
+    this.props.onNewQuestion(toShare);
+  }
+
+  onNewQuestionClick() {
+    console.log("onNewQuestionClick");
+    this.setState({questionDialogOpen:true});
+  }
+
   render() {
     const {
       viewedDateIndex,
@@ -198,8 +214,16 @@ class TodayPredictions extends React.Component {
 //          <LoadingScreen key='load' />
       );
     }
-    let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
+    let questionsDialog = (
+      <LeagueQuestionsDialog
+        open={this.state.questionDialogOpen}
+        socket={this.props.socket}
+        senderId={this.props.senderId}
+        onNewQuestion={this.onNewQuestion}
+      />
+    );
 
+    let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
     if (dayPredictions.length == 0)  {
       return (
         <label>Debug2</label>
@@ -231,7 +255,14 @@ class TodayPredictions extends React.Component {
           <Subheader>{title}</Subheader>
           <List key="a" style={{backgroundColor: '#FAFAFA'}}>
           {items}
+          <ListItem
+            leftAvatar={<Avatar icon={<AddIcon />} />}
+            primaryText="Add new question"
+            secondaryText="Your questions are visible to your friends"
+            onClick={this.onNewQuestionClick}
+          />
           </List>
+          {questionsDialog}
           <Dialog
             title={dialogTitle}
             modal={false}

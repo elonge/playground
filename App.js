@@ -18,6 +18,7 @@ import UserInfo from './user_info.jsx';
 import FakeData from './fake_data.js';
 
 let socket;
+let shareLastQuestion;
 
 class App extends Component {
   constructor(props) {
@@ -76,7 +77,9 @@ class App extends Component {
     );
   }
 
-  onNewQuestion() {
+  onNewQuestion(toShare) {
+    console.log("toShare=" + toShare);
+    shareLastQuestion = toShare;
     this.pushToRemoteWithHandler("predictions:refetch", {}, this.handleNewQuestion);
   }
 
@@ -85,7 +88,9 @@ class App extends Component {
       let newData = JSON.parse(response.substring(4));
       this.setState({userPredictions: newData.userPredictions, otherPredictions:newData.otherPredictions});
       const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
-      ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name);
+      if (shareLastQuestion) {
+        ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name);
+      }
     } else {
       console.error("Failed to parse server response! " + response);
     }
@@ -306,6 +311,8 @@ class App extends Component {
             viewedDateIndex={viewedDateIndex}
             users={users}
             otherPredictions={otherPredictions}
+            socket={socket}
+            senderId={this.props.senderId}
           />
         );
         topPart = (

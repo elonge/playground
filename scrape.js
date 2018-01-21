@@ -16,6 +16,10 @@ const shortNames = {
   "West Bromwich Albion" : "West Brom",
   "AFC Bournemouth" : "Bournemouth",
   "Hapoel Kiryat Shmona": "Kiryat Shmona",
+  "Maccabi Tel-Aviv": "Maccabi TLV",
+  "Hapoel Ashkelon": "Ashkelon",
+  "Alav├⌐s": "Alaves",
+  "Tottenham Hotspur": "Tottenham"
 };
 
 function convertToShort(name) {
@@ -93,6 +97,10 @@ const getSpanishGames = (year, month, day, handler, site) => {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-primera-division/15/scores?date=', 'Spain');
 }
 
+const getItalyGames = (year, month, day, handler, site) => {
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/italian-serie-a/12/scores?date=', 'Italy');
+}
+
 const getNBAGames = (year, month, day, handler) => {
   var moment = require('moment-timezone');
 
@@ -138,8 +146,9 @@ const getNBAGames = (year, month, day, handler) => {
 
 let year='2018';
 let month='1';
-let day='20';
-getNBAGames(year, month, day, handleNBAGames);
-getPLGames(year, month, day, handleSoccerGames);
+let day='21';
+// getNBAGames(year, month, day, handleNBAGames);
+// getPLGames(year, month, day, handleSoccerGames);
 getSpanishGames(year, month, day, handleSoccerGames);
-getIsraeliGames(year, month, day, handleSoccerGames);
+// getIsraeliGames(year, month, day, handleSoccerGames);
+// getItalyGames(year, month, day, handleSoccerGames);

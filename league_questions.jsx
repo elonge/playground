@@ -17,6 +17,8 @@ const dialogStyle = {
   maxWidth: 'none',
 };
 
+let shareLastQuestion;
+
 class LeagueQuestionsDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -32,6 +34,7 @@ class LeagueQuestionsDialog extends React.Component {
       nextEnabled: false,
       snackbarMessage: null,
     };
+    this.handleSaveShare = this.handleSaveShare.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrev = this.handlePrev.bind(this);
     this.getStepContent = this.getStepContent.bind(this);
@@ -99,7 +102,8 @@ class LeagueQuestionsDialog extends React.Component {
     });
   }
 
-  onApproveAddingPrediction() {
+  onApproveAddingPrediction(toShare) {
+    shareLastQuestion = toShare;
     this.pushToRemote("user:insert:prediction", {
       gameId: this.state.allGames[this.state.gameIndex].id,
       resultType: this.state.questionType.key,
@@ -115,7 +119,7 @@ class LeagueQuestionsDialog extends React.Component {
     console.log('response=' + response);
     if (response.startsWith("ok: ")) {
       this.setState({snackbarMessage: "Question added!"});
-      this.props.onNewQuestion();
+      this.props.onNewQuestion(shareLastQuestion);
     } else {
       console.error("---> " + response);
     }
@@ -138,11 +142,15 @@ class LeagueQuestionsDialog extends React.Component {
 //    this.props.handleClose();
   };
 
+  handleSaveShare() {
+    this.onApproveAddingPrediction(true);
+  }
+
   handleNext() {
     const {stepIndex} = this.state;
     console.log(stepIndex+","+this.state.finished);
     if (stepIndex == 2) {
-      this.onApproveAddingPrediction();
+      this.onApproveAddingPrediction(false);
     } else {
       this.setState({
         stepIndex: stepIndex + 1,
@@ -276,6 +284,16 @@ class LeagueQuestionsDialog extends React.Component {
     const {finished, stepIndex, questionType, snackbarMessage} = this.state;
     let isSnack = snackbarMessage != null;
 
+    let shareButton = stepIndex < 2 ? "" : (
+      <RaisedButton
+        label={'Save & Share'}
+        primary={true}
+        onClick={this.handleSaveShare}
+        disabled={!this.state.nextEnabled}
+      />
+
+    );
+
     return (
       <Dialog
         title="Add more questions"
@@ -314,16 +332,17 @@ class LeagueQuestionsDialog extends React.Component {
             style={{marginRight: 12}}
           />
           <RaisedButton
-            label={stepIndex === 2 ? 'Add Question' : 'Next'}
+            label={stepIndex === 2 ? 'Save' : 'Next'}
             primary={true}
             onClick={this.handleNext}
             disabled={!this.state.nextEnabled}
           />
+          {shareButton}
         </CardActions>
         </Card>
         <Snackbar
           open={isSnack}
-          message={snackbarMessage}
+          message={snackbarMessage == null ? "" : snackbarMessage}
           autoHideDuration={4500}
           onRequestClose={this.onSnackBarDone}
           action="Add more"

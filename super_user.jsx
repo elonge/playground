@@ -403,6 +403,8 @@ class SuperUserEditor extends React.Component {
           viewedDateIndex={0}
           users={[]}
           otherPredictions={[]}
+          socket={this.props.socket}
+          senderId={this.props.senderId}
           />
       </div>
     );

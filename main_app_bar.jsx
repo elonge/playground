@@ -61,8 +61,9 @@ class MainAppBar extends React.Component {
     this.props.onNewLeague(league);
   }
 
-  onNewQuestion(league) {
-    this.props.onNewQuestion();
+  onNewQuestion(toShare) {
+    console.log("toShare=" + toShare);
+    this.props.onNewQuestion(toShare);
   }
 
   onInviteNewLeague(league) {
@@ -117,7 +118,7 @@ class MainAppBar extends React.Component {
         open={this.state.questionDialogOpen}
         socket={this.props.socket}
         senderId={this.props.senderId}
-        onNewQuestion={this.onNewQuestion}        
+        onNewQuestion={this.onNewQuestion}
       />
     );
 
