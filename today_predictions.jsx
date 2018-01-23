@@ -76,6 +76,7 @@ class TodayPredictions extends React.Component {
         forceEnable={this.props.forceEnable}
         onPredictionClick={this.onPredictionClick}
         otherUserMode={(this.state.otherUserMode != null)}
+        users={this.props.users}
       />
     );
   }
@@ -188,9 +189,9 @@ class TodayPredictions extends React.Component {
     return false;
   }
 
-  onNewQuestion(toShare) {
+  onNewQuestion(toShare, questionText) {
     console.log("toShare=" + toShare);
-    this.props.onNewQuestion(toShare);
+    this.props.onNewQuestion(toShare, questionText);
   }
 
   onNewQuestionClick() {

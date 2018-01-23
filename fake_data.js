@@ -174,6 +174,62 @@ const usersPoints = [
   },
 ]
 
+const leagueDailyWinners = [
+  {
+    league: 1,
+    day: '2018-01-19',
+    winners: [200,1482681765133413],
+    points: 10,
+  },
+  {
+    league: 1,
+    day: '2018-01-18',
+    winners: [200],
+    points: 11,
+  },
+  {
+    league: 1,
+    day: '2018-01-17',
+    winners: [200,300],
+    points: 15,
+  },
+  {
+    league: 2,
+    day: '2018-01-19',
+    winners: [200],
+    points: 10,
+  },
+  {
+    league: 2,
+    day: '2018-01-18',
+    winners: [1482681765133413],
+    points: 31,
+  },
+  {
+    league: 2,
+    day: '2018-01-17',
+    winners: [200],
+    points: 15,
+  },
+  {
+    league: 4,
+    day: '2018-01-19',
+    winners: [200],
+    points: 17,
+  },
+  {
+    league: 4,
+    day: '2018-01-18',
+    winners: [200],
+    points: 11,
+  },
+  {
+    league: 4,
+    day: '2018-01-17',
+    winners: [200,300],
+    points: 15,
+  },
+]
 
 const userPredictions = [
   {
@@ -687,5 +743,6 @@ export default {
   userPredictions,
   otherPredictions,
   leagues,
+  leagueDailyWinners,
   snackbarMOTD,
 }

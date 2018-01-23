@@ -1,5 +1,6 @@
 import React from 'react';
 import {List,ListItem} from 'material-ui/List';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import Avatar from 'material-ui/Avatar';
 import CheckBox from 'material-ui-icons/CheckBox';
 import HighlightOff from 'material-ui-icons/HighlightOff';
@@ -69,15 +70,27 @@ class OnePrediction extends React.Component {
   }
 
   render() {
+    const prediction = this.props.prediction;
     let primaryText = this.renderPrimaryText();
-    let secondaryText = this.renderSecondaryText();
+    let thirdRow = prediction.points + " point" + (prediction.points == 1 ? "" : "s");
+    if (prediction.creator_id > 0) {
+      const creator = this.props.users.find((user) => user.fbId === prediction.creator_id);
+      thirdRow += ". Question by " + creator.name;
+    }
     let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
+    let secondaryText = (
+      <p>
+        <span style={{color: darkBlack}}>{this.renderSecondaryText()}</span> <br/>
+        {thirdRow}
+      </p>
+    );
 
     return (
       <ListItem
         disabled={this.props.otherUserMode}
         primaryText={primaryText}
         secondaryText={secondaryText}
+        secondaryTextLines={2}
         leftAvatar={this.renderLeftAvatar()}
         onClick={() => this.onPredictionClick()}
         rightAvatar= {this.renderRightAvatar()}

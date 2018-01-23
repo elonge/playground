@@ -61,9 +61,9 @@ class MainAppBar extends React.Component {
     this.props.onNewLeague(league);
   }
 
-  onNewQuestion(toShare) {
+  onNewQuestion(toShare, questionText) {
     console.log("toShare=" + toShare);
-    this.props.onNewQuestion(toShare);
+    this.props.onNewQuestion(toShare, questionText);
   }
 
   onInviteNewLeague(league) {

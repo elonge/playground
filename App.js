@@ -19,6 +19,7 @@ import FakeData from './fake_data.js';
 
 let socket;
 let shareLastQuestion;
+let lastAddedQuestionText;
 
 class App extends Component {
   constructor(props) {
@@ -38,7 +39,8 @@ class App extends Component {
     this.onUserInfoExpanded = this.onUserInfoExpanded.bind(this);
     this.onNewQuestion = this.onNewQuestion.bind(this);
     this.handleNewQuestion = this.handleNewQuestion.bind(this);
-
+    this.onDailyStatMode = this.onDailyStatMode.bind(this);
+    this.handleLeagueWinners = this.handleLeagueWinners.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -52,6 +54,8 @@ class App extends Component {
       viewedLeagueIndex: 0,
       socketStatus: 'OK',
       profileExpanded: false,
+      dailyStatMode: false,
+      leagueDailyWinners: FakeData.leagueDailyWinners,
     };
   }
 
@@ -61,6 +65,19 @@ class App extends Component {
       `wss://infinite-caverns-93636.herokuapp.com`,
       {reconnect: true, secure: true}
     );
+
+    this.pushToRemoteWithHandler('league:daily_winners', {}, this.handleLeagueWinners);
+  }
+
+  handleLeagueWinners(channel, response) {
+    var self = this;
+    if (response.startsWith("ok: ")) {
+      let newData = JSON.parse(response.substring(4));
+      self.setState({leagueDailyWinners: newData});
+      console.log("newData=" + JSON.stringify(newData));
+    } else {
+      console.error("Failed to parse server response! " + response);
+    }
   }
 
   pushToRemoteWithHandler(channel, message, statusHandler) {
@@ -71,15 +88,16 @@ class App extends Component {
         ...message,
       },
       (status) => {
-        console.log(channel + ": " + JSON.stringify(status));
+//        console.log(channel + ": " + JSON.stringify(status));
         statusHandler(channel, status);
       }
     );
   }
 
-  onNewQuestion(toShare) {
+  onNewQuestion(toShare, questionText) {
     console.log("toShare=" + toShare);
     shareLastQuestion = toShare;
+    lastAddedQuestionText = questionText;
     this.pushToRemoteWithHandler("predictions:refetch", {}, this.handleNewQuestion);
   }
 
@@ -89,11 +107,15 @@ class App extends Component {
       this.setState({userPredictions: newData.userPredictions, otherPredictions:newData.otherPredictions});
       const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
       if (shareLastQuestion) {
-        ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name);
+        ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name, lastAddedQuestionText);
       }
     } else {
       console.error("Failed to parse server response! " + response);
     }
+  }
+
+  onDailyStatMode() {
+    this.setState({dailyStatMode: !this.state.dailyStatMode});
   }
 
   onUserInfoExpanded() {
@@ -272,6 +294,7 @@ class App extends Component {
       viewedWeekIndex,
       viewedLeagueIndex,
       leagues,
+      leagueDailyWinners,
     } = this.state;
 
     let superUser = '';
@@ -285,6 +308,7 @@ class App extends Component {
       let gamePart;
       let topPart;
       if (showPointsMode && otherUserPredictionsMode == null) {
+        console.log("leagueDailyWinners="+JSON.stringify(leagueDailyWinners));
         gamePart = (
           <UsersLeague
             usersPoints={points}
@@ -293,12 +317,17 @@ class App extends Component {
             leagues={leagues}
             onLeagueChanged={this.onLeagueChanged}
             onUserClick={this.onUserClick}
+            dailyStatMode={this.state.dailyStatMode}
+            leagueDailyWinners={leagueDailyWinners}
+            users={users}
           />
         );
         topPart = (
           <LeagueInfo
             users={users}
             league={leagues[viewedLeagueIndex]}
+            dailyStatMode={this.state.dailyStatMode}
+            onDailyStatMode={this.onDailyStatMode}
           />
         );
       } else {

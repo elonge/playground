@@ -30,16 +30,24 @@ function convertToShort(name) {
   return name;
 }
 
+function dumpAll() {
+  let fileName = 'out/today_ALL.json';
+  fs.writeFileSync(fileName, JSON.stringify(allGames));
+  console.log(fileName + " was created!");
+}
+
 function handleSoccerGames(games, name) {
   let fileName = 'out/today_'+name+'.json';
   fs.writeFileSync(fileName, JSON.stringify(games));
   console.log(fileName + " was created!");
+  allGames = allGames.concat(games);
 }
 
 function handleNBAGames(games) {
   let fileName = 'out/today_nba.json';
   fs.writeFileSync(fileName, JSON.stringify(games));
   console.log(fileName + " was created!");
+  allGames = allGames.concat(games);
 }
 
 const getSoccerGames = (year, month, day, handler, site, name) => {
@@ -101,6 +109,14 @@ const getItalyGames = (year, month, day, handler, site) => {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/italian-serie-a/12/scores?date=', 'Italy');
 }
 
+const getSpanishCupGames = (year, month, day, handler, site) => {
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-copa-del-rey/80/scores?date=', 'Spain_Cup');
+}
+
+const getCarbaoCupGames = (year, month, day, handler, site) => {
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-carabao-cup/41/scores?date=', 'Carbao_Cup');
+}
+
 const getNBAGames = (year, month, day, handler) => {
   var moment = require('moment-timezone');
 
@@ -144,11 +160,15 @@ const getNBAGames = (year, month, day, handler) => {
   })();
 }
 
+let allGames = [];
+
 let year='2018';
 let month='1';
-let day='21';
-// getNBAGames(year, month, day, handleNBAGames);
-// getPLGames(year, month, day, handleSoccerGames);
+let day='23';
+getNBAGames(year, month, day, handleNBAGames);
+getPLGames(year, month, day, handleSoccerGames);
 getSpanishGames(year, month, day, handleSoccerGames);
-// getIsraeliGames(year, month, day, handleSoccerGames);
-// getItalyGames(year, month, day, handleSoccerGames);
+getIsraeliGames(year, month, day, handleSoccerGames);
+getItalyGames(year, month, day, handleSoccerGames);
+getSpanishCupGames(year, month, day, handleSoccerGames);
+getCarbaoCupGames(year, month, day, handleSoccerGames);

@@ -18,6 +18,7 @@ const dialogStyle = {
 };
 
 let shareLastQuestion;
+let lastNewQuestionPrimaryText;
 
 class LeagueQuestionsDialog extends React.Component {
   constructor(props) {
@@ -104,6 +105,7 @@ class LeagueQuestionsDialog extends React.Component {
 
   onApproveAddingPrediction(toShare) {
     shareLastQuestion = toShare;
+    lastNewQuestionPrimaryText = this.renderPredictionPrimaryText(this.state.gameIndex);
     this.pushToRemote("user:insert:prediction", {
       gameId: this.state.allGames[this.state.gameIndex].id,
       resultType: this.state.questionType.key,
@@ -119,7 +121,7 @@ class LeagueQuestionsDialog extends React.Component {
     console.log('response=' + response);
     if (response.startsWith("ok: ")) {
       this.setState({snackbarMessage: "Question added!"});
-      this.props.onNewQuestion(shareLastQuestion);
+      this.props.onNewQuestion(shareLastQuestion, lastNewQuestionPrimaryText);
     } else {
       console.error("---> " + response);
     }

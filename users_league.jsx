@@ -34,8 +34,11 @@ class UsersLeague extends React.Component {
       weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
       leagues: props.leagues,
       viewedLeagueIndex: props.viewedLeagueIndex,
+      dailyStatMode: props.dailyStatMode,
     };
     this.onCellClick = this.onCellClick.bind(this);
+    this.renderWeeklyTable = this.renderWeeklyTable.bind(this);
+    this.renderDailyWinnersTable = this.renderDailyWinnersTable.bind(this);
   }
 
   // Called when switching to new viewed league or moving date
@@ -44,7 +47,8 @@ class UsersLeague extends React.Component {
       viewedWeekIndex: nextProps.viewedWeekIndex,
       usersPoints: nextProps.usersPoints,
       viewedLeagueIndex: nextProps.viewedLeagueIndex,
-      weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse()
+      weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
+      dailyStatMode: nextProps.dailyStatMode,
     });
   }
 
@@ -73,6 +77,19 @@ class UsersLeague extends React.Component {
     return [year, month, day].join('-');
   }
 
+  formatWinners(winners) {
+    console.log("winners=" + JSON.stringify(winners[0]));
+    if (winners.length == 1) {
+      const winner = this.props.users.find((user) => user.fbId == parseInt(winners[0], 10));
+      return (winner ? winner.name : "?");
+    } else if (winners.length == 2) {
+      const winner1 = this.props.users.find((user) => user.fbId == parseInt(winners[0], 10));
+      const winner2 = this.props.users.find((user) => user.fbId == parseInt(winners[1], 10));
+      return (winner1 ? winner1.name : "?") + " & " + (winner2 ? winner2.name : "?");
+    }
+    return "Many People";
+  }
+
   onCellClick(rowNumber, columnId) {
     const {
       usersPoints,
@@ -86,23 +103,61 @@ class UsersLeague extends React.Component {
     this.props.onUserClick(weekPoints[rowNumber]);
   }
 
-  render() {
+  renderDailyWinnersTable() {
     const {
       usersPoints,
       viewedWeekIndex,
       weeks,
       viewedLeagueIndex,
       leagues,
+      dailyStatMode,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
-    if (weekPoints.length == 0)  {
-      return (
-        <label>Debug3</label>
-      );
-    }
+    const leagueWinners = this.props.leagueDailyWinners.filter(dailyWinner => (dailyWinner.league_id == leagues[viewedLeagueIndex].id));
+    return (
+      <Table
+        height='300px'
+        fixedHeader={true}
+        selectable={true}
+        multiSelectable={false}
+        onCellClick={this.onCellClick}
+      >
+        <TableHeader
+          displaySelectAll={false}
+          adjustForCheckbox={false}
+          enableSelectAll={false}
+        >
+          <TableRow>
+            <TableHeaderColumn
+            >Date</TableHeaderColumn>
+            <TableHeaderColumn
+            >Name</TableHeaderColumn>
+            <TableHeaderColumn
+            >Points</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody
+          displayRowCheckbox={false}
+          deselectOnClickaway={true}
+          stripedRows={true}
+        >
+          {leagueWinners.map( (row, index) => (
+            <TableRow key={index}>
+              <TableRowColumn
+              >{this.formatDateAsDB(row.day)}</TableRowColumn>
+              <TableRowColumn
+              >{this.formatWinners(row.winners)}</TableRowColumn>
+              <TableRowColumn
+              >{row.points}</TableRowColumn>
+            </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-    let tableElement = (
+  renderWeeklyTable(weekPoints) {
+    return (
       <Table
         height='300px'
         fixedHeader={true}
@@ -147,12 +202,36 @@ class UsersLeague extends React.Component {
         </TableBody>
       </Table>
     );
+  }
+
+  render() {
+    const {
+      usersPoints,
+      viewedWeekIndex,
+      weeks,
+      viewedLeagueIndex,
+      leagues,
+      dailyStatMode,
+    } = this.state;
+
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
+    if (weekPoints.length == 0)  {
+      return (
+        <label>Debug3</label>
+      );
+    }
+
+    let tableElement = (dailyStatMode ? this.renderDailyWinnersTable() : this.renderWeeklyTable(weekPoints));
     let title;
-    let weekHuman = this.formatDateAsDB(weeks[viewedWeekIndex]);
-    if (this.isLastSunday(weekHuman)) {
-      title = weekHuman + " table";
+    if (dailyStatMode) {
+      title = "Daily winners"
     } else {
-      title = weekHuman + " final table";
+      let weekHuman = this.formatDateAsDB(weeks[viewedWeekIndex]);
+      if (this.isLastSunday(weekHuman)) {
+        title = weekHuman + " table";
+      } else {
+        title = weekHuman + " final table";
+      }
     }
     let titleElement = (
       <Subheader style={{fontSize:16}}>{title}</Subheader>

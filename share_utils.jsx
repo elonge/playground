@@ -20,7 +20,7 @@ const inviteToLeague = (appUri, sharingMode, myName, league) => {
   console.log(JSON.stringify(messageToShare));
 }
 
-const tellNewQuestion = (appUri, sharingMode, myName) => {
+const tellNewQuestion = (appUri, sharingMode, myName, questionText) => {
   console.log(messages.textUserNewQuestion);
   let userText = messages.textUserNewQuestion.replace('_USER', myName);
   console.log(userText);
