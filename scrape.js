@@ -160,11 +160,34 @@ const getNBAGames = (year, month, day, handler) => {
   })();
 }
 
+const test1 = () => {
+  var options = {
+    url: 'http://stats.nba.com/stats/scoreboard/?GameDate=02/14/2015&LeagueID=00&DayOffset=0',
+//    proxy: "http://51.15.137.26:3128",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'cache-control': 'max-age=0',
+      Host: 'stats.nba.com',
+      Connection: 'keep-alive',
+      'Accept-Language': 'en-US,en;q=0.8,af;q=0.6',
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36',
+      'Upgrade-Insecure-Requests': 1,
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    }
+  };
+  request.get(options, function(err, response, body) {
+    console.log("body=" + body);
+    console.log("response=" + response);
+    console.log("err=" + err);
+  })
+}
+
 let allGames = [];
 
 let year='2018';
 let month='1';
-let day='23';
+let day='25';
 getNBAGames(year, month, day, handleNBAGames);
 getPLGames(year, month, day, handleSoccerGames);
 getSpanishGames(year, month, day, handleSoccerGames);
@@ -172,3 +195,4 @@ getIsraeliGames(year, month, day, handleSoccerGames);
 getItalyGames(year, month, day, handleSoccerGames);
 getSpanishCupGames(year, month, day, handleSoccerGames);
 getCarbaoCupGames(year, month, day, handleSoccerGames);
+//test1();

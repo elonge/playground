@@ -12,7 +12,7 @@ import TodayPredictions from './today_predictions.jsx'
 import RenderUtils from './render/utils';
 
 const newPredictionPushText = "Check out 5 new questions about today\'s games";
-const newScorePushText = "Scores were updated. Check your position!";
+const newScorePushText = "Scores were updated. You got _POINTS! Check out who got the most";
 
 class SuperUserEditor extends React.Component {
   constructor(props) {
@@ -223,16 +223,25 @@ class SuperUserEditor extends React.Component {
   onSubmitSendMessageClick() {
     var self=this;
     let message = (this.state.messageType == 'new predictions' ?
-      newPredictionPushText : (this.state.messageType == 'new score' ? newScorePushText : this.state.customPushMessage));
+      newPredictionPushText : this.state.customPushMessage);
 
     if (this.state.messageType == 'stats') {
-      this.pushToRemote('superuser:stats', {},
+//      this.pushToRemote('superuser:stats', {}, 1506601212791781
+      this.pushToRemote('superuser:debug1', {message: "Hello1", recId:1479995838788740},
       function(channel, response) {
        alert('Stats were build!');
        console.log("---> " + response);
        return;
      });
-    } else {
+   } else if (this.state.messageType == 'new score'){
+      this.pushToRemote('superuser:message_points', {
+        messageTemplate:newScorePushText
+      },
+      function(channel, response) {
+       alert('Message sent just to those who participated yesterday!');
+       console.log("---> " + response);
+     });
+   } else {
       this.pushToRemote('superuser:push', {
         message: message,
       },

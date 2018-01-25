@@ -19,7 +19,7 @@ import FakeData from './fake_data.js';
 
 let socket;
 let shareLastQuestion;
-let lastAddedQuestionText;
+let lastAddedQuestionInfo;
 
 class App extends Component {
   constructor(props) {
@@ -94,10 +94,10 @@ class App extends Component {
     );
   }
 
-  onNewQuestion(toShare, questionText) {
+  onNewQuestion(toShare, questionInfo) {
     console.log("toShare=" + toShare);
     shareLastQuestion = toShare;
-    lastAddedQuestionText = questionText;
+    lastAddedQuestionInfo = questionInfo;
     this.pushToRemoteWithHandler("predictions:refetch", {}, this.handleNewQuestion);
   }
 
@@ -107,7 +107,7 @@ class App extends Component {
       this.setState({userPredictions: newData.userPredictions, otherPredictions:newData.otherPredictions});
       const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
       if (shareLastQuestion) {
-        ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name, lastAddedQuestionText);
+        ShareUtils.tellNewQuestion(this.props.apiUri, 'broadcast', me.name, lastAddedQuestionInfo);
       }
     } else {
       console.error("Failed to parse server response! " + response);

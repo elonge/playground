@@ -74,14 +74,17 @@ class OnePrediction extends React.Component {
     let primaryText = this.renderPrimaryText();
     let thirdRow = prediction.points + " point" + (prediction.points == 1 ? "" : "s");
     if (prediction.creator_id > 0) {
-      const creator = this.props.users.find((user) => user.fbId === prediction.creator_id);
-      thirdRow += ". Question by " + creator.name;
+      console.log("prediction.creator_id="+prediction.creator_id);
+      const creator = this.props.users.find((user) => user.fbId == prediction.creator_id);
+      if (creator) {
+        thirdRow += ". Question by " + creator.name;
+      }
     }
     let lineColor = (this.isPredictionDisabled() ? '#F1F8E9' : '#FAFAFA');
     let secondaryText = (
       <p>
-        <span style={{color: darkBlack}}>{this.renderSecondaryText()}</span> <br/>
-        {thirdRow}
+        {this.renderSecondaryText()} <br/>
+        <span style={{color: green500}}>{thirdRow}</span>
       </p>
     );
 

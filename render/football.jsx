@@ -64,6 +64,7 @@ const firstScore = {
   }
 }
 
+
 const supportedResultTypes = [winner, firstScore, winnerRange ];
 
 export default {

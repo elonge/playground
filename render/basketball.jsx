@@ -101,8 +101,48 @@ const scoreMore = {
   }
 }
 
+const player_score_range_low = {
+  sport: 'basketball',
+  key: 'player_score_range_low',
+  name: 'A player will score (low)',
+  extraInfoDescription: 'Which player (e.g. Casspi)',
+  options: ['0-5 points', '6-10 points', 'More than 10 points'],
+  nullPrimary: 'How many points will _PREDICT score?',
+  primary: '_VALUE will score _VALUE',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
+  rightAvatar: function(prediction) {
+    return (
+      <Avatar
+        style={style}
+      >
+          {prediction.value}
+        </Avatar>
+    );
+  }
+}
 
-const supportedResultTypes = [winner, toScore, winnerRange, doubleDigits, scoreMore ];
+const player_score_range_high = {
+  sport: 'basketball',
+  key: 'player_score_range_high',
+  name: 'A player will score (high)',
+  extraInfoDescription: 'Which player (e.g. Casspi)',
+  options: ['0-10 points', '10-20 points', '20-30 points', 'More than 30 points'],
+  nullPrimary: 'How many points will _PREDICT score?',
+  primary: '_VALUE will score _VALUE',
+  secondary: '_AWAY at _HOME (_STARTTIME)',
+  rightAvatar: function(prediction) {
+    return (
+      <Avatar
+        style={style}
+      >
+          {prediction.value}
+        </Avatar>
+    );
+  }
+}
+
+
+const supportedResultTypes = [winner, toScore, winnerRange, doubleDigits, scoreMore, player_score_range_low,player_score_range_high ];
 
 export default {
   supportedResultTypes,

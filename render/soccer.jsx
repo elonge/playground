@@ -104,6 +104,25 @@ const numGoals = {
   }
 }
 
+const bothScore = {
+  sport: 'soccer',
+  key: 'both_score',
+  name: 'Both teams will score',
+  extraInfoDescription: null,
+  options: ['Yes','No'],
+  nullPrimary: 'Will both teams score?',
+  primary: 'Both teams will score? _VALUE !',
+  rightAvatar: function(prediction) {
+    return (
+        <Avatar>
+          {prediction.value}
+        </Avatar>
+    );
+  }
+}
+
+
+
 const homePenalty = {
   sport: 'soccer',
   key: 'home_penalty',
@@ -169,7 +188,44 @@ const exactScore = {
   }
 }
 
-const supportedResultTypes = [winner, toScore, firstScore, numGoals, homePenalty, awayPenalty, firstScoreTime ];
+const scoreFirst = {
+  sport: 'soccer',
+  key: 'scoreFirst',
+  name: 'Team will score first',
+  extraInfoDescription: null,
+  options: ['_HOME', '_AWAY', 'None'],
+  nullPrimary: 'Which team will score first?',
+  primary: '_VALUE will score first',
+  rightAvatar: function(prediction) {
+    let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
+    return (
+        <Avatar>
+          {shortValue}
+        </Avatar>
+    );
+  }
+}
+
+const scoreLast = {
+  sport: 'soccer',
+  key: 'scoreLast',
+  name: 'Team will score last',
+  extraInfoDescription: null,
+  options: ['_HOME', '_AWAY', 'None'],
+  nullPrimary: 'Which team will score last?',
+  primary: '_VALUE will score last',
+  rightAvatar: function(prediction) {
+    let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
+    return (
+        <Avatar>
+          {shortValue}
+        </Avatar>
+    );
+  }
+}
+
+
+const supportedResultTypes = [winner, toScore, firstScore, numGoals, homePenalty, awayPenalty, firstScoreTime, bothScore,scoreFirst,scoreLast ];
 
 export default {
   supportedResultTypes,

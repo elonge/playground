@@ -128,11 +128,11 @@ class UsersLeague extends React.Component {
           enableSelectAll={false}
         >
           <TableRow>
-            <TableHeaderColumn
+            <TableHeaderColumn style={{width: '35%'}}
             >Date</TableHeaderColumn>
-            <TableHeaderColumn
+            <TableHeaderColumn style={{width: '55%'}}
             >Name</TableHeaderColumn>
-            <TableHeaderColumn
+            <TableHeaderColumn style={{width: '10%', paddingLeft: '0px'}}
             >Points</TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -143,11 +143,11 @@ class UsersLeague extends React.Component {
         >
           {leagueWinners.map( (row, index) => (
             <TableRow key={index}>
-              <TableRowColumn
+              <TableRowColumn style={{width: '35%'}}
               >{this.formatDateAsDB(row.day)}</TableRowColumn>
-              <TableRowColumn
+              <TableRowColumn style={{width: '55%'}}
               >{this.formatWinners(row.winners)}</TableRowColumn>
-              <TableRowColumn
+              <TableRowColumn style={{width: '10%', paddingLeft: '5pt'}}
               >{row.points}</TableRowColumn>
             </TableRow>
             ))}
@@ -171,14 +171,14 @@ class UsersLeague extends React.Component {
           enableSelectAll={false}
         >
           <TableRow>
-            <TableHeaderColumn
+            <TableHeaderColumn style={{width: '10%', paddingLeft: '5px'}}
             >Rank</TableHeaderColumn>
-            <TableHeaderColumn
-            >Name</TableHeaderColumn>
-            <TableHeaderColumn
-            >Last Day</TableHeaderColumn>
-            <TableHeaderColumn
-            >This Week</TableHeaderColumn>
+            <TableHeaderColumn style={{width: '55%'}}
+            ></TableHeaderColumn>
+            <TableHeaderColumn style={{width: '15%'}}
+            >Last</TableHeaderColumn>
+            <TableHeaderColumn style={{width: '20%'}}
+            >Week</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -188,14 +188,14 @@ class UsersLeague extends React.Component {
         >
           {weekPoints.map( (row, index) => (
             <TableRow key={index}>
-              <TableRowColumn
+              <TableRowColumn style={{width: '10%', paddingLeft:'10px'}}
               >{index+1}</TableRowColumn>
-              <TableRowColumn>
+              <TableRowColumn style={{width: '55%'}}>
                 <FlatButton label={row.name} primary={true} />
               </TableRowColumn>
-              <TableRowColumn
+              <TableRowColumn style={{width: '15%'}}
               >{row.points1d}</TableRowColumn>
-              <TableRowColumn
+              <TableRowColumn style={{width: '20%'}}
               >{row.totalPoints}</TableRowColumn>
             </TableRow>
             ))}

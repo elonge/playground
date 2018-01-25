@@ -189,9 +189,9 @@ class TodayPredictions extends React.Component {
     return false;
   }
 
-  onNewQuestion(toShare, questionText) {
+  onNewQuestion(toShare, questionInfo) {
     console.log("toShare=" + toShare);
-    this.props.onNewQuestion(toShare, questionText);
+    this.props.onNewQuestion(toShare, questionInfo);
   }
 
   onNewQuestionClick() {
