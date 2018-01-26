@@ -17,6 +17,12 @@ import ShareUtils from './share_utils.jsx';
 import UserInfo from './user_info.jsx';
 import FakeData from './fake_data.js';
 
+
+const addStyle = {
+  marginRight: 20,
+};
+
+
 let socket;
 let shareLastQuestion;
 let lastAddedQuestionInfo;

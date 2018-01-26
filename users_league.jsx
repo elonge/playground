@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem'
 import SelectField from 'material-ui/SelectField';
 import PredictionsTitle from './predictions_title.jsx';
 import FlatButton from 'material-ui/FlatButton';
+import AddIcon from 'material-ui/svg-icons/content/add';
 
 const styles = {
   propContainer: {
@@ -240,6 +241,11 @@ class UsersLeague extends React.Component {
     let leagueItems = leagues.map((league, index) => (
       <MenuItem value={index} key={index} primaryText={league.league_name} />
     ));
+    if (leagues.length < 4) {
+      leagueItems = leagueItems.concat(
+        <MenuItem value="new" key='new' primaryText="[New League...]" leftIcon={<AddIcon />}/>
+      );
+    }
     let leagueSelection = (
       <SelectField
         value={viewedLeagueIndex}

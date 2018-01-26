@@ -226,8 +226,9 @@ class SuperUserEditor extends React.Component {
       newPredictionPushText : this.state.customPushMessage);
 
     if (this.state.messageType == 'stats') {
-//      this.pushToRemote('superuser:stats', {}, 1506601212791781
-      this.pushToRemote('superuser:debug1', {message: "Hello1", recId:1479995838788740},
+      //  1506601212791781 / 1479995838788740
+      this.pushToRemote('superuser:stats', {},
+//      this.pushToRemote('superuser:debug1', {message: "Questions about Man United, Sanchez, Maccabi TLV and more", recId:1479995838788740},
       function(channel, response) {
        alert('Stats were build!');
        console.log("---> " + response);
