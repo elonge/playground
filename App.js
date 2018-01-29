@@ -47,6 +47,8 @@ class App extends Component {
     this.handleNewQuestion = this.handleNewQuestion.bind(this);
     this.onDailyStatMode = this.onDailyStatMode.bind(this);
     this.handleLeagueWinners = this.handleLeagueWinners.bind(this);
+    this.onLeagueDialogOpen = this.onLeagueDialogOpen.bind(this);
+    this.onLeagueDialogClose = this.onLeagueDialogClose.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -62,6 +64,8 @@ class App extends Component {
       profileExpanded: false,
       dailyStatMode: false,
       leagueDailyWinners: FakeData.leagueDailyWinners,
+      allCompetitions: FakeData.allCompetitions,
+      leagueDialogOpen: false,
     };
   }
 
@@ -80,7 +84,6 @@ class App extends Component {
     if (response.startsWith("ok: ")) {
       let newData = JSON.parse(response.substring(4));
       self.setState({leagueDailyWinners: newData});
-      console.log("newData=" + JSON.stringify(newData));
     } else {
       console.error("Failed to parse server response! " + response);
     }
@@ -98,6 +101,14 @@ class App extends Component {
         statusHandler(channel, status);
       }
     );
+  }
+
+  onLeagueDialogClose() {
+    this.setState({leagueDialogOpen:false});
+  }
+
+  onLeagueDialogOpen() {
+    this.setState({leagueDialogOpen:true});
   }
 
   onNewQuestion(toShare, questionInfo) {
@@ -134,6 +145,7 @@ class App extends Component {
   }
 
   onNewLeague(newLeague) {
+    this.setState({leagueDialogOpen:false});
     this.pushToRemoteWithHandler("league:refetch", {}, this.handleNewLeagues);
   }
 
@@ -141,6 +153,7 @@ class App extends Component {
     console.log("going to invite " + newLeague.league_name);
     const me = this.state.users.find((user) => user.fbId === this.props.viewerId);
     ShareUtils.inviteToLeague(this.props.apiUri, 'broadcast', me.name, newLeague);
+    this.onNewLeague(newLeague);
   }
 
   handleNewLeagues(channel, response) {
@@ -189,6 +202,9 @@ class App extends Component {
   }
 
   isPrevDisabled() {
+    if (this.state.leagueDialogOpen) {
+      return true;
+    }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       let weeks = this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
       return (this.state.viewedWeekIndex >= weeks.length - 1);
@@ -198,6 +214,9 @@ class App extends Component {
   }
 
   isNextDisabled() {
+    if (this.state.leagueDialogOpen) {
+      return true;
+    }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
       return (this.state.viewedWeekIndex == 0);
     }
@@ -301,6 +320,7 @@ class App extends Component {
       viewedLeagueIndex,
       leagues,
       leagueDailyWinners,
+      leagueDialogOpen,
     } = this.state;
 
     let superUser = '';
@@ -314,8 +334,7 @@ class App extends Component {
       let gamePart;
       let topPart;
       if (showPointsMode && otherUserPredictionsMode == null) {
-        console.log("leagueDailyWinners="+JSON.stringify(leagueDailyWinners));
-        gamePart = (
+        gamePart = ( leagueDialogOpen ? "" :
           <UsersLeague
             usersPoints={points}
             viewedWeekIndex={viewedWeekIndex}
@@ -334,6 +353,13 @@ class App extends Component {
             league={leagues[viewedLeagueIndex]}
             dailyStatMode={this.state.dailyStatMode}
             onDailyStatMode={this.onDailyStatMode}
+            viewerId={this.props.viewerId}
+            allCompetitions={this.state.allCompetitions}
+            socket={socket}
+            onDialogOpen={this.onLeagueDialogOpen}
+            onDialogClose={this.onLeagueDialogClose}
+            onInviteNewLeague={this.onInviteNewLeague}
+            onNewLeague={this.onNewLeague}
           />
         );
       } else {
@@ -377,12 +403,13 @@ class App extends Component {
         // }
       }
 
-      let appBarTitle = "Welcome " + me.name;
+      let appBarTitle = "";
       if (otherUserPredictionsMode != null) {
         appBarTitle = otherUserPredictionsMode.name +"'s profile";
       }
       let appBar = (
         <MainAppBar
+          disabled={leagueDialogOpen}
           onPrevClick={this.onPrevClick}
           onNextClick={this.onNextClick}
           isPrevDisabled={this.isPrevDisabled}

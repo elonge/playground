@@ -2,6 +2,57 @@ const myUserId = 1482681765133413;
 
 const snackbarMOTD = "Your winner of this week is Moshe!";
 
+const allCompetitions = [
+  {
+    id: 1,
+    name: 'Australian Open',
+    sport: 'Tennis',
+    endDate: '2018-01-29'
+  },
+  {
+    id: 2,
+    name: 'Premier League',
+    sport: 'Soccer',
+    endDate: '2018-05-22'
+  },
+  {
+    id: 3,
+    name: 'La Liga',
+    sport: 'Soccer',
+    endDate: '2018-05-22'
+  },
+  {
+    id: 4,
+    name: 'Serie A',
+    sport: 'Soccer',
+    endDate: '2018-05-22'
+  },
+  {
+    id: 5,
+    name: 'Bundesliga',
+    sport: 'Soccer',
+    endDate: '2018-05-22'
+  },
+  {
+    id: 6,
+    name: 'Israeli League',
+    sport: 'Soccer',
+    endDate: '2018-05-22'
+  },
+  {
+    id: 7,
+    name: 'NBA season',
+    sport: 'Basketball',
+    endDate: '2018-04-22'
+  },
+  {
+    id: 8,
+    name: 'NBA playoff',
+    sport: 'Basketball',
+    endDate: '2018-04-22'
+  },
+];
+
 const users = [
   {
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
@@ -236,11 +287,11 @@ const userPredictions = [
     user_id: 1482681765133413,
     home_team: 'Federer',
     away_team: 'Nadal',
-    result_type: 'winner',
-    predicted_score: '',
+    result_type: 'player_score_range_low',
+    predicted_score: 'LeBron',
     type_extra: '',
     start_time: '2017-12-22 17:00:00',
-    value: null,
+    value: '20-30',
     open: true,
     points: 1,
     close_on_start_time: false,
@@ -248,7 +299,7 @@ const userPredictions = [
     points_won: 1,
     points_updated: true,
     game_id: 55,
-    sport_type: 'Tennis',
+    sport_type: 'Basketball',
     creator_id: 0,
     id:1
   },
@@ -744,5 +795,6 @@ export default {
   otherPredictions,
   leagues,
   leagueDailyWinners,
+  allCompetitions,
   snackbarMOTD,
 }

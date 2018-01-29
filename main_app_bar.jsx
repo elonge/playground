@@ -88,15 +88,15 @@ class MainAppBar extends React.Component {
       </IconMenu>
     );
 
-    let modeIcon = ((this.state.showPointsMode ?
+    let modeIcon = (this.state.showPointsMode ?
       <CheckBox
-        onClick={() => this.props.onPredictionsPointsToggle()}
+        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
         color={'white'}
       />  :
       <FormatListNumbered
-        onClick={() => this.props.onPredictionsPointsToggle()}
+        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
         color={'white'}
-      /> ));
+      /> );
 
     let leaguesDialog = (
       <CreateLeagueDialog
@@ -132,20 +132,20 @@ class MainAppBar extends React.Component {
           onClick={() => this.props.onNextClick()}
           color={'white'}
         /></IconButton>
-        <IconButton>{modeIcon}
+        <IconButton disabled={this.props.disabled}>{modeIcon}
         </IconButton>
-        {leaguesDialog}
-        {questionsDialog}
+        {/*leaguesDialog*/}
+        {/*questionsDialog*/}
       </div>
     );
 
-//         iconElementLeft={<IconButton><NavigationExpandMore /></IconButton>}
+//iconElementLeft={<IconButton><NavigationExpandMore /></IconButton>}
+//iconElementLeft={leftButton}
 
     return (
       <AppBar
         title={this.props.title}
         titleStyle={{fontSize: 18}}
-        iconElementLeft={leftButton}
         iconElementRight={rightButton}
         style={{position: 'fixed', top:0}}
         />

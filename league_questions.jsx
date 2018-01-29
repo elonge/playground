@@ -10,6 +10,7 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RenderUtils from './render/utils';
+import ContentSend from 'material-ui/svg-icons/content/send';
 
 
 const dialogStyle = {
@@ -75,8 +76,6 @@ class LeagueQuestionsDialog extends React.Component {
         ...message,
       },
       (status) => {
-        console.log(channel + ": " + JSON.stringify(status));
-
         this.setState({
           waitingToServer:false,
         });
@@ -92,7 +91,7 @@ class LeagueQuestionsDialog extends React.Component {
 
   loadAllGames() {
     var self = this;
-    this.pushToRemote('superuser:all_games', {}, function(channel, response) {
+    this.pushToRemote('game:latest', {}, function(channel, response) {
       if (response.startsWith("ok: ")) {
         let allGames = JSON.parse(response.substring(4));
         allGames = allGames.filter(game => (new Date(game.start_time) >= new Date()));
@@ -294,8 +293,8 @@ class LeagueQuestionsDialog extends React.Component {
         primary={true}
         onClick={this.handleSaveShare}
         disabled={!this.state.nextEnabled}
+        icon={stepIndex == 2 ? <ContentSend/> : ""}
       />
-
     );
 
     return (
@@ -315,10 +314,10 @@ class LeagueQuestionsDialog extends React.Component {
         <CardHeader style={{padding: 0}}>
           <Stepper activeStep={stepIndex}>
             <Step>
-              <StepLabel>Choose Game</StepLabel>
+              <StepLabel>Game</StepLabel>
             </Step>
             <Step>
-              <StepLabel>Set Question</StepLabel>
+              <StepLabel>Question</StepLabel>
             </Step>
             <Step>
               <StepLabel>Save & Share </StepLabel>

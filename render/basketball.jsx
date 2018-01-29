@@ -108,7 +108,7 @@ const player_score_range_low = {
   extraInfoDescription: 'Which player (e.g. Casspi)',
   options: ['0-5 points', '6-10 points', 'More than 10 points'],
   nullPrimary: 'How many points will _PREDICT score?',
-  primary: '_VALUE will score _VALUE',
+  primary: '_PREDICT will score _VALUE',
   secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     return (
@@ -128,7 +128,7 @@ const player_score_range_high = {
   extraInfoDescription: 'Which player (e.g. Casspi)',
   options: ['0-10 points', '10-20 points', '20-30 points', 'More than 30 points'],
   nullPrimary: 'How many points will _PREDICT score?',
-  primary: '_VALUE will score _VALUE',
+  primary: '_PREDICT will score _VALUE',
   secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {
     return (

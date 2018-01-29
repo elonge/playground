@@ -21,6 +21,7 @@ const shortNames = {
   "Alav├⌐s": "Alaves",
   "Tottenham Hotspur": "Tottenham",
   "Borussia Monchengladbach": "Monchengladbach",
+  "Deportivo La Coruña": "La Coruña",
 };
 
 function convertToShort(name) {
@@ -144,7 +145,6 @@ const getNBAGames = (year, month, day, handler) => {
     });
 
     let html = textContent;
-    console.log(html);
     var $ = cheerio.load(html);
     let games=[];
     let classes=['table .row1', 'table .row2'];
@@ -196,7 +196,8 @@ let allGames = [];
 
 let year='2018';
 let month='1';
-let day='26';
+let day='29';
+
 getNBAGames(year, month, day, handleNBAGames);
 getPLGames(year, month, day, handleSoccerGames);
 getSpanishGames(year, month, day, handleSoccerGames);

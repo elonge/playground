@@ -298,7 +298,9 @@ class CreateLeagueDialog extends React.Component {
         modal={false}
         open={this.state.open}
         onRequestClose={this.onDialogCancel}
-        contentStyle={dialogStyle}
+        contentStyle={{width: '100%', transform: 'translate(0, 0)'}}
+        bodyStyle={{padding: 0}}
+        style={{paddingTop: 0, height: '100vh'}}
         autoScrollBodyContent={true}
       >
       <div>

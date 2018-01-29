@@ -105,7 +105,7 @@ class UserInfo extends React.Component {
             toggled={this.state.expanded}
             onToggle={this.handleToggle}
             labelPosition="right"
-            label={this.state.expanded ? "Hide stats" : "Show stats"}
+            label={this.state.expanded ? "Hide players stats" : "Show players stats"}
           />
         </CardText>
         <CardText expandable={true}>
