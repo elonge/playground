@@ -169,9 +169,9 @@ class CreateLeagueDialog extends React.Component {
       case 2:
         return (
           <p>
-          <label style={{fontSize:"22px"}}>Your league was created!</label><br/><br/>
-          <label style={{fontSize:"18px"}}>Code to join the league:</label>
-          <label style={{fontSize:"18px", float:'right', color:'red'}}>{this.state.newLeague.league_code}</label>
+          <label style={{fontSize:"22px", color: 'rgba(0, 0, 0, 0.87)'}}>Your league was created!</label><br/><br/>
+          <label style={{fontSize:"18px", color: 'rgba(0, 0, 0, 0.87)'}}>Code to join the league:</label>
+          <label style={{fontSize:"18px", float:'right', color:'#FF4081'}}>{this.state.newLeague.league_code}</label>
           </p>
         );
       default:

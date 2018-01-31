@@ -36,7 +36,6 @@ class App extends Component {
     this.onPrevClick = this.onPrevClick.bind(this);
     this.isPrevDisabled = this.isPrevDisabled.bind(this);
     this.isNextDisabled = this.isNextDisabled.bind(this);
-    this.onLeagueChanged = this.onLeagueChanged.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
     this.pushToRemoteWithHandler = this.pushToRemoteWithHandler.bind(this);
@@ -49,6 +48,9 @@ class App extends Component {
     this.handleLeagueWinners = this.handleLeagueWinners.bind(this);
     this.onLeagueDialogOpen = this.onLeagueDialogOpen.bind(this);
     this.onLeagueDialogClose = this.onLeagueDialogClose.bind(this);
+    this.onCompetitionsUpdate = this.onCompetitionsUpdate.bind(this);
+    this.onCurrentLeagueChanged = this.onCurrentLeagueChanged.bind(this);
+    this.getCurrentStatePredictions = this.getCurrentStatePredictions.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -59,13 +61,13 @@ class App extends Component {
       userPredictions: FakeData.userPredictions,
       otherPredictions: FakeData.otherPredictions,
       leagues: FakeData.leagues,
-      viewedLeagueIndex: 0,
       socketStatus: 'OK',
       profileExpanded: false,
       dailyStatMode: false,
       leagueDailyWinners: FakeData.leagueDailyWinners,
       allCompetitions: FakeData.allCompetitions,
       leagueDialogOpen: false,
+      currentLeague: FakeData.leagues[0],
     };
   }
 
@@ -144,9 +146,18 @@ class App extends Component {
     this.setState({otherUserPredictionsMode: null, showPointsMode:true});
   }
 
+  onCurrentLeagueChanged(league) {
+    this.setState({currentLeague: league});
+  }
+
   onNewLeague(newLeague) {
     this.setState({leagueDialogOpen:false});
     this.pushToRemoteWithHandler("league:refetch", {}, this.handleNewLeagues);
+  }
+
+  onCompetitionsUpdate(league) {
+    console.log("competition updated: " + league.id);
+    this.setState({leagueDialogOpen:false, currentLeague:league});
   }
 
   onInviteNewLeague(newLeague) {
@@ -164,10 +175,6 @@ class App extends Component {
     } else {
       console.error("Failed to parse server response! " + response);
     }
-  }
-
-  onLeagueChanged(event, key, value) {
-    this.setState({viewedLeagueIndex: key});
   }
 
   updatePrediction(prediction) {
@@ -209,7 +216,7 @@ class App extends Component {
       let weeks = this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
       return (this.state.viewedWeekIndex >= weeks.length - 1);
     }
-    let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+    let days =  this.getCurrentStatePredictions().map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
     return (this.state.viewedDateIndex >= days.length - 1);
   }
 
@@ -232,7 +239,7 @@ class App extends Component {
       }
     } else {
       let viewedDateIndex = this.state.viewedDateIndex;
-      let days =  this.state.userPredictions.map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
+      let days =  this.getCurrentStatePredictions().map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
       if (viewedDateIndex < days.length - 1) {
         this.setState({viewedDateIndex: viewedDateIndex + 1});
       }
@@ -257,6 +264,7 @@ class App extends Component {
     if (this.state.otherUserPredictionsMode != null) {
       predictions = this.state.otherPredictions.filter(prediction => prediction.user_id == this.state.otherUserPredictionsMode.fbId);
     }
+    predictions = predictions.filter(prediction => prediction.league == this.state.currentLeague.id);
     return predictions;
   }
 
@@ -317,7 +325,7 @@ class App extends Component {
       otherUserPredictionsMode,
       viewedDateIndex,
       viewedWeekIndex,
-      viewedLeagueIndex,
+      currentLeague,
       leagues,
       leagueDailyWinners,
       leagueDialogOpen,
@@ -338,9 +346,8 @@ class App extends Component {
           <UsersLeague
             usersPoints={points}
             viewedWeekIndex={viewedWeekIndex}
-            viewedLeagueIndex={viewedLeagueIndex}
+            currentLeague={currentLeague}
             leagues={leagues}
-            onLeagueChanged={this.onLeagueChanged}
             onUserClick={this.onUserClick}
             dailyStatMode={this.state.dailyStatMode}
             leagueDailyWinners={leagueDailyWinners}
@@ -350,7 +357,7 @@ class App extends Component {
         topPart = (
           <LeagueInfo
             users={users}
-            league={leagues[viewedLeagueIndex]}
+            league={currentLeague}
             dailyStatMode={this.state.dailyStatMode}
             onDailyStatMode={this.onDailyStatMode}
             viewerId={this.props.viewerId}
@@ -360,6 +367,7 @@ class App extends Component {
             onDialogClose={this.onLeagueDialogClose}
             onInviteNewLeague={this.onInviteNewLeague}
             onNewLeague={this.onNewLeague}
+            onCompetitionsUpdate={this.onCompetitionsUpdate}
           />
         );
       } else {
@@ -424,6 +432,8 @@ class App extends Component {
           leagues={this.state.leagues}
           users={this.state.users}
           onNewQuestion={this.onNewQuestion}
+          currentLeague={this.state.currentLeague}
+          onCurrentLeagueChanged={this.onCurrentLeagueChanged}
         />
       );
 

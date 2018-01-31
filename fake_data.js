@@ -105,6 +105,7 @@ const leagues = [
     owner_id: 1482681765133413,
     league_code: 100121,
     num_users: 43,
+    competitions: [1,2]
   },
   {
     id: 4,
@@ -112,6 +113,7 @@ const leagues = [
     owner_id: 200,
     league_code: 100151,
     num_users: 4,
+    competitions: [1]
   },
   {
     id: 2,
@@ -119,6 +121,7 @@ const leagues = [
     owner_id: 300,
     league_code: 103321,
     num_users: 15,
+    competitions: [1,2,4,6]
   }
 ];
 
@@ -301,6 +304,7 @@ const userPredictions = [
     game_id: 55,
     sport_type: 'Basketball',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -321,6 +325,7 @@ const userPredictions = [
     game_id: 58,
     sport_type: 'Tennis',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -341,6 +346,7 @@ const userPredictions = [
     game_id: 22,
     sport_type: 'Basketball',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -361,6 +367,7 @@ const userPredictions = [
     game_id: 2,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -381,6 +388,7 @@ const userPredictions = [
     game_id: 29,
     sport_type: 'Football',
     creator_id: 200,
+    league: 2,
     id:1
   },
   {
@@ -401,6 +409,7 @@ const userPredictions = [
     sport_type: 'Soccer',
     game_id: 3,
     creator_id: 0,
+    league: 1,
     id:2
   },
   {
@@ -421,6 +430,7 @@ const userPredictions = [
     game_id: 19,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:88
   },
   {
@@ -441,6 +451,7 @@ const userPredictions = [
     game_id: 9,
     sport_type: 'Football',
     creator_id: 0,
+    league: 2,
     id:88
   },
   {
@@ -461,6 +472,7 @@ const userPredictions = [
     game_id: 5,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:2
   },
   {
@@ -481,6 +493,7 @@ const userPredictions = [
     game_id: 4,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 2,
     id:3
   },
 ]
@@ -503,6 +516,7 @@ const otherPredictions = [
     game_id: 9,
     sport_type: 'Football',
     creator_id: 0,
+    league: 1,
     id:88
   },
   {
@@ -523,6 +537,7 @@ const otherPredictions = [
     game_id: 9,
     sport_type: 'Football',
     creator_id: 0,
+    league: 1,
     id:88
   },
   {
@@ -543,6 +558,7 @@ const otherPredictions = [
     game_id: 22,
     sport_type: 'Basketball',
     creator_id: 300,
+    league: 1,
     id:1
   },
   {
@@ -563,6 +579,7 @@ const otherPredictions = [
     game_id: 2,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 2,
     id:1
   },
   {
@@ -583,6 +600,7 @@ const otherPredictions = [
     game_id: 29,
     sport_type: 'Football',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -603,6 +621,7 @@ const otherPredictions = [
     game_id: 19,
     sport_type: 'Soccer',
     creator_id: 300,
+    league: 4,
     id:88
   },
   {
@@ -623,6 +642,7 @@ const otherPredictions = [
     game_id: 5,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:2
   },
   {
@@ -643,6 +663,7 @@ const otherPredictions = [
     game_id: 4,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 2,
     id:3
   },
   {
@@ -663,6 +684,7 @@ const otherPredictions = [
     game_id: 22,
     sport_type: 'Basketball',
     creator_id: 0,
+    league: 1,
     id:1
   },
   {
@@ -683,6 +705,7 @@ const otherPredictions = [
     game_id: 2,
     sport_type: 'Soccer',
     creator_id: 200,
+    league: 1,
     id:1
   },
   {
@@ -703,6 +726,7 @@ const otherPredictions = [
     game_id: 29,
     sport_type: 'Football',
     creator_id: 0,
+    league: 2,
     id:1
   },
   {
@@ -723,6 +747,7 @@ const otherPredictions = [
     sport_type: 'Soccer',
     game_id: 3,
     creator_id: 0,
+    league: 1,
     id:2
   },
   {
@@ -743,6 +768,7 @@ const otherPredictions = [
     game_id: 19,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:88
   },
   {
@@ -763,6 +789,7 @@ const otherPredictions = [
     game_id: 5,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:2
   },
   {
@@ -783,6 +810,7 @@ const otherPredictions = [
     game_id: 4,
     sport_type: 'Soccer',
     creator_id: 0,
+    league: 1,
     id:3
   },
 ];

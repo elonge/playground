@@ -160,6 +160,7 @@ class SuperUserEditor extends React.Component {
       awayTeam: self.state.awayTeam,
       sportType: self.state.sportType,
       startTime: start,
+      competitionId: 0, /* EGEG - temp */
     }, function(channel, response) {
       if (response.startsWith("ok: ")) {
         self.setState({gameId: response.substring(4), jsonGames:null});
@@ -178,6 +179,7 @@ class SuperUserEditor extends React.Component {
         awayTeam: game.away,
         sportType: game.sportType,
         startTime: start,
+        competitionId: game.competitionId,
       }, function(channel, response) {
         if (response.startsWith("ok: ")) {
           self.setState({gameId: response.substring(4), jsonGames:null});

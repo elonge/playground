@@ -39,7 +39,7 @@ class JoinLeagueDialog extends React.Component {
     this.handleNext = this.handleNext.bind(this);
     this.handlePrev = this.handlePrev.bind(this);
     this.getStepContent = this.getStepContent.bind(this);
-    this.selectionRenderer = this.selectionRenderer.bind(this);
+    this.competitionsRenderer = this.competitionsRenderer.bind(this);
   }
 
   pushToRemote(channel, message, statusHandler) {
@@ -138,8 +138,10 @@ class JoinLeagueDialog extends React.Component {
 
         return (
           <p>
-          <label style={{fontSize:"22px"}}>{this.state.joinLeague.league_name}</label><br/><br/>
-          <label style={{fontSize:"16px", color:'#3F51B5'}}>{'Questions about: ' + this.selectionRenderer(this.state.joinLeague.competitions)}</label>
+          <label style={{fontSize:"16px", color: '#3F51B5'}}>Join league </label>
+          <label style={{fontSize:"16px", color: '#3F51B5'}}>{this.state.joinLeague.league_name}</label><br/><br/>
+          <label style={{fontSize:"16px", color:'#455A64'}}>Questions about </label>
+          <label style={{fontSize:"16px", color:'#455A64'}}>{this.competitionsRenderer(this.state.joinLeague.competitions)}</label>
           </p>
         );
       default:
@@ -147,7 +149,7 @@ class JoinLeagueDialog extends React.Component {
     }
   }
 
-  selectionRenderer(values) {
+  competitionsRenderer(values) {
     if (values.length == 0) {
       return 'No competitions';
     } else if (values.length == 1) {

@@ -52,7 +52,7 @@ function handleNBAGames(games) {
   allGames = allGames.concat(games);
 }
 
-const getSoccerGames = (year, month, day, handler, site, name) => {
+const getSoccerGames = (year, month, day, handler, site, name, competitionId) => {
   var moment = require('moment-timezone');
 
   if (month.length < 2) month = '0' + month;
@@ -83,6 +83,7 @@ const getSoccerGames = (year, month, day, handler, site, name) => {
         let fullTime = moment(year+"-"+month+"-"+day+" "+timeSite+ " +02:00", "YYYY-MM-DD hh:mm a Z");
         currentGame.time = fullTime.tz("utc").format();
         currentGame.sportType = "soccer";
+        currentGame.competitionId = competitionId;
         games.push(currentGame);
       });
     });
@@ -96,35 +97,35 @@ const getSoccerGames = (year, month, day, handler, site, name) => {
 }
 
 const getPLGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-premier-league/23/scores?date=', 'PL');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-premier-league/23/scores?date=', 'PL',1);
 }
 
 const getIsraeliGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/israeli-premier-league/2359/scores?date=', 'IL');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/israeli-premier-league/2359/scores?date=', 'IL',5);
 }
 
 const getSpanishGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-primera-division/15/scores?date=', 'Spain');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-primera-division/15/scores?date=', 'Spain',2);
 }
 
 const getItalyGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/italian-serie-a/12/scores?date=', 'Italy');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/italian-serie-a/12/scores?date=', 'Italy',3);
 }
 
 const getSpanishCupGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-copa-del-rey/80/scores?date=', 'Spain_Cup');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-copa-del-rey/80/scores?date=', 'Spain_Cup',2);
 }
 
 const getCarbaoCupGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-carabao-cup/41/scores?date=', 'Carbao_Cup');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-carabao-cup/41/scores?date=', 'Carbao_Cup',1);
 }
 
 const getFACupGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-fa-cup/40/scores?date=', 'FA_Cup');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-fa-cup/40/scores?date=', 'FA_Cup',1);
 }
 
 const getGermanyGames = (year, month, day, handler, site) => {
-  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/german-bundesliga/10/scores?date=', 'Germany');
+  getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/german-bundesliga/10/scores?date=', 'Germany',4);
 }
 
 const getNBAGames = (year, month, day, handler) => {
@@ -157,6 +158,7 @@ const getNBAGames = (year, month, day, handler) => {
         let fullTime = moment(year+"-"+month+"-"+day+" "+timeSite+ " -05:00", "YYYY-MM-DD hh:mm a Z");
         currentGame.time = fullTime.tz("utc").format();
         currentGame.sportType = "basketball";
+        currentGame.competitionId = 6;
         games.push(currentGame);
       });
     });
@@ -196,7 +198,7 @@ let allGames = [];
 
 let year='2018';
 let month='1';
-let day='29';
+let day='31';
 
 getNBAGames(year, month, day, handleNBAGames);
 getPLGames(year, month, day, handleSoccerGames);

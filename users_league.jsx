@@ -33,7 +33,7 @@ class UsersLeague extends React.Component {
       viewedWeekIndex: props.viewedWeekIndex,
       weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
       leagues: props.leagues,
-      viewedLeagueIndex: props.viewedLeagueIndex,
+      currentLeague: props.currentLeague,
       dailyStatMode: props.dailyStatMode,
     };
     this.onCellClick = this.onCellClick.bind(this);
@@ -46,7 +46,7 @@ class UsersLeague extends React.Component {
     this.setState( {
       viewedWeekIndex: nextProps.viewedWeekIndex,
       usersPoints: nextProps.usersPoints,
-      viewedLeagueIndex: nextProps.viewedLeagueIndex,
+      currentLeague: nextProps.currentLeague,
       weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
       dailyStatMode: nextProps.dailyStatMode,
     });
@@ -94,11 +94,11 @@ class UsersLeague extends React.Component {
       usersPoints,
       viewedWeekIndex,
       weeks,
-      viewedLeagueIndex,
+      currentLeague,
       leagues,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == currentLeague.id));
     this.props.onUserClick(weekPoints[rowNumber]);
   }
 
@@ -107,12 +107,12 @@ class UsersLeague extends React.Component {
       usersPoints,
       viewedWeekIndex,
       weeks,
-      viewedLeagueIndex,
+      currentLeague,
       leagues,
       dailyStatMode,
     } = this.state;
 
-    const leagueWinners = this.props.leagueDailyWinners.filter(dailyWinner => (dailyWinner.league_id == leagues[viewedLeagueIndex].id));
+    const leagueWinners = this.props.leagueDailyWinners.filter(dailyWinner => (dailyWinner.league_id == currentLeague.id));
     return (
       <Table
         height='300px'
@@ -208,12 +208,13 @@ class UsersLeague extends React.Component {
       usersPoints,
       viewedWeekIndex,
       weeks,
-      viewedLeagueIndex,
+      currentLeague,
       leagues,
       dailyStatMode,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == leagues[viewedLeagueIndex].id));
+    console.log("currentLeague=" + JSON.stringify(currentLeague));
+    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == currentLeague.id));
     if (weekPoints.length == 0)  {
       return (
         <label>Debug3</label>
@@ -237,11 +238,11 @@ class UsersLeague extends React.Component {
     );
 
     let leagueItems = leagues.map((league, index) => (
-      <MenuItem value={index} key={index} primaryText={league.league_name} />
+      <MenuItem value={league} key={index} primaryText={league.league_name} />
     ));
     let leagueSelection = (
       <SelectField
-        value={viewedLeagueIndex}
+        value={currentLeague}
         onChange={this.props.onLeagueChanged}
       >
       {leagueItems}
@@ -251,7 +252,6 @@ class UsersLeague extends React.Component {
       <div>
       <span style={{flexDirection: 'row', display:'flex'}}>
         {titleElement}
-        {leagueSelection}
       </span>
         {tableElement}
       </div>

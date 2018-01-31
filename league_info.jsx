@@ -5,10 +5,11 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
-import SocialGroup from 'material-ui/svg-icons/social/group';
+import SocialGroupAdd from 'material-ui/svg-icons/social/group-add';
 import SocialShare from 'material-ui/svg-icons/social/share';
 import MoreHoriz from 'material-ui/svg-icons/navigation/more-horiz';
 import ContentSend from 'material-ui/svg-icons/content/send';
+import {Icon, GIFT_ICONS} from './my_icons.jsx';
 
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -16,6 +17,7 @@ import IconMenu from 'material-ui/IconMenu';
 import Divider from 'material-ui/Divider';
 import CreateLeagueDialog from './create_league3.jsx';
 import JoinLeagueDialog from './join_league.jsx';
+import EditLeagueDialog from './edit_league.jsx';
 
 
 const style = {
@@ -31,15 +33,18 @@ class LeagueInfo extends React.Component {
       dailyStatMode: props.dailyStatMode,
       createLeagueDialogOpen: false,
       joinLeagueDialogOpen: false,
+      editLeagueDialogOpen: false,
     };
     this.onPrivateLeagueMenuClick = this.onPrivateLeagueMenuClick.bind(this);
     this.onDialogClose = this.onDialogClose.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
+    this.onCompetitionsUpdate = this.onCompetitionsUpdate.bind(this);
   }
 
   // Called when switching leagues
   componentWillReceiveProps(nextProps) {
+    console.log("nextProps of LeagueInfo");
     this.setState( {
       league: nextProps.league,
       dailyStatMode: nextProps.dailyStatMode,
@@ -47,7 +52,7 @@ class LeagueInfo extends React.Component {
   }
 
   onDialogClose() {
-    this.setState({joinLeagueDialogOpen:false, createLeagueDialogOpen:false});
+    this.setState({joinLeagueDialogOpen:false, createLeagueDialogOpen:false, editLeagueDialogOpen:false});
     this.props.onDialogClose();
   }
 
@@ -65,6 +70,10 @@ class LeagueInfo extends React.Component {
     this.props.onNewLeague(newLeague);
   }
 
+  onCompetitionsUpdate(league) {
+    this.setState({editLeagueDialogOpen:false});
+    this.props.onCompetitionsUpdate(league);
+  }
   onPrivateLeagueMenuClick(event, value) {
     console.log("onPrivateLeagueMenuClick: " + value);
     if (value == 'new') {
@@ -73,6 +82,32 @@ class LeagueInfo extends React.Component {
     } else if (value == 'join') {
       this.setState({joinLeagueDialogOpen:true});
       this.props.onDialogOpen();
+    } else if (value == 'edit') {
+      this.setState({editLeagueDialogOpen:true});
+      this.props.onDialogOpen();
+    } else if (value == 'share') {
+      this.props.onInviteNewLeague(this.state.league);
+    }
+  }
+
+  competitionsRenderer(values) {
+    if (values.length == 0) {
+      return 'No competitions';
+    } else if (values.length == 1) {
+      return this.props.allCompetitions.find((competition) => competition.id == values[0]).name;
+    } else if (values.length == this.props.allCompetitions.length) {
+      return "All competitions";
+    } else {
+      let first=this.props.allCompetitions.find((competition) => competition.id == values[0]).name;
+      let second=this.props.allCompetitions.find((competition) => competition.id == values[1]).name;
+      if (values.length == 2) {
+        return first+" and "+second;
+      } else if (values.length == 3) {
+        let third=this.props.allCompetitions.find((competition) => competition.id == values[2]).name;
+        return first+", "+second + " and " + third;
+      } else {
+        return first+", "+second + " and " + (values.length-2) + " other competitions";
+      }
     }
   }
 
@@ -82,6 +117,7 @@ class LeagueInfo extends React.Component {
       dailyStatMode,
       createLeagueDialogOpen,
       joinLeagueDialogOpen,
+      editLeagueDialogOpen,
     } = this.state;
 
     const creator = this.props.users.find((user) => user.fbId == league.owner_id);
@@ -108,11 +144,26 @@ class LeagueInfo extends React.Component {
       />
       : ""
     );
-    let leagueInfoCard = ( (createLeagueDialogOpen || joinLeagueDialogOpen) ? "" :
+
+    let editLeagueDialog = ( editLeagueDialogOpen ?
+      <EditLeagueDialog
+        socket={this.props.socket}
+        senderId={this.props.viewerId}
+        allCompetitions={this.props.allCompetitions}
+        league={league}
+        onClose={this.onDialogClose}
+        onCompetitionsUpdate={this.onCompetitionsUpdate}
+      />
+      : ""
+    );
+
+
+    let leagueInfoCard = ( (createLeagueDialogOpen || joinLeagueDialogOpen || editLeagueDialogOpen) ? "" :
       <Card expanded={false}>
         <CardHeader
           title={league.league_name}
-          subtitle={"Created by " + creator.name}
+          subtitle={this.competitionsRenderer(league.competitions)}
+          subtitleStyle={{width:'200px'}}
           avatar={creator.profilePic}
         />
         <CardText>
@@ -132,11 +183,13 @@ class LeagueInfo extends React.Component {
           >
             <MenuItem primaryText="Private Leagues Menu" disabled={true} style={{color: '#559'}}/>
             <Divider />
-            <MenuItem value="share" primaryText="Share League" leftIcon={<SocialShare />}/>
-            <MenuItem value="join" primaryText="Join Another League..." leftIcon={<SocialGroup />}/>
-            <MenuItem value="new" primaryText="Create a New League..." leftIcon={<ContentAdd />}/>
+            <MenuItem value="share" primaryText="Share this league" leftIcon={<SocialShare />}/>
+            <MenuItem value="edit" primaryText="Edit competitions..." leftIcon={<Icon icon={GIFT_ICONS['Stadium']} top='0px' margin='12px' left='4px' />}/>
             <Divider />
-            <MenuItem value="leave" primaryText="Leave This League" leftIcon={<ContentRemove />}/>
+            <MenuItem value="join" primaryText="Join another league..." leftIcon={<SocialGroupAdd />}/>
+            <MenuItem value="new" primaryText="Create a new league..." leftIcon={<ContentAdd />}/>
+            {/**<Divider />
+            <MenuItem value="leave" primaryText="Leave this league" leftIcon={<ContentRemove />}/> **/}
           </IconMenu>
         </CardText>
       </Card>
@@ -147,6 +200,7 @@ class LeagueInfo extends React.Component {
       {leagueInfoCard}
       {createLeagueDialog}
       {joinLeagueDialog}
+      {editLeagueDialog}
       </div>
     );
   }

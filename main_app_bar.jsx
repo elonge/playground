@@ -9,6 +9,8 @@ import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider';
+import Drawer from 'material-ui/Drawer';
+import SocialGroup from 'material-ui/svg-icons/social/group';
 
 //import CreateLeagueDialog from './create_league.jsx';
 import CreateLeagueDialog from './create_league2.jsx';
@@ -24,12 +26,15 @@ class MainAppBar extends React.Component {
       questionDialogOpen: false,
       isCreate: false,
       leagues: props.leagues,
+      leaguesDrawerOpen: false,
+      currentLeague: props.currentLeague,
     };
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
     this.onNewQuestion = this.onNewQuestion.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
+    this.onLeaguesClicked = this.onLeaguesClicked.bind(this);
   }
 
   // Called when switching points/predictions
@@ -38,6 +43,7 @@ class MainAppBar extends React.Component {
     this.setState( {
       showPointsMode: nextProps.showPointsMode,
       leagues: nextProps.leagues,
+      currentLeague: nextProps.currentLeague,
     });
   }
 
@@ -51,6 +57,15 @@ class MainAppBar extends React.Component {
         this.setState({questionDialogOpen: true});
       default:
     }
+  }
+
+  onChangeLeague(league) {
+    this.props.onCurrentLeagueChanged(league);
+    this.setState({leaguesDrawerOpen:false});
+  }
+
+  onLeaguesClicked() {
+    this.setState({leaguesDrawerOpen: !this.state.leaguesDrawerOpen});
   }
 
   onCloseCreateDialog() {
@@ -88,16 +103,6 @@ class MainAppBar extends React.Component {
       </IconMenu>
     );
 
-    let modeIcon = (this.state.showPointsMode ?
-      <CheckBox
-        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
-        color={'white'}
-      />  :
-      <FormatListNumbered
-        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
-        color={'white'}
-      /> );
-
     let leaguesDialog = (
       <CreateLeagueDialog
         open={this.state.leagueDialogOpen}
@@ -112,6 +117,16 @@ class MainAppBar extends React.Component {
       />
     );
 
+    let leaguesDrawerItems = this.state.leagues.map((league) => (
+      <MenuItem
+        key={league.id}
+        value={league.id}
+        primaryText={league.league_name}
+        checked={league.id == this.state.currentLeague.id}
+        onClick={() => this.onChangeLeague(league)}
+      />
+    ));
+
     console.log("this.state.questionDialogOpen=" +this.state.questionDialogOpen);
     let questionsDialog = (
       <LeagueQuestionsDialog
@@ -121,6 +136,16 @@ class MainAppBar extends React.Component {
         onNewQuestion={this.onNewQuestion}
       />
     );
+
+    let modeIcon = (this.state.showPointsMode ?
+      <CheckBox
+        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
+        color={'white'}
+      />  :
+      <FormatListNumbered
+        onClick={this.props.disabled ? "" : () => this.props.onPredictionsPointsToggle()}
+        color={'white'}
+      /> );
 
     let rightButton = (
       <div>
@@ -134,6 +159,11 @@ class MainAppBar extends React.Component {
         /></IconButton>
         <IconButton disabled={this.props.disabled}>{modeIcon}
         </IconButton>
+        <Drawer open={this.state.leaguesDrawerOpen} docked={false}>
+          <MenuItem primaryText="Your Leagues" disabled={true} style={{color: '#559'}}/>
+          <Divider />
+          {leaguesDrawerItems}
+        </Drawer>
         {/*leaguesDialog*/}
         {/*questionsDialog*/}
       </div>
@@ -147,6 +177,10 @@ class MainAppBar extends React.Component {
         title={this.props.title}
         titleStyle={{fontSize: 18}}
         iconElementRight={rightButton}
+        iconElementLeft={<IconButton><SocialGroup
+          onClick={() => this.onLeaguesClicked()}
+          color={'white'}
+          /></IconButton>}
         style={{position: 'fixed', top:0}}
         />
     );
