@@ -197,16 +197,16 @@ const test1 = () => {
 let allGames = [];
 
 let year='2018';
-let month='1';
-let day='31';
+let month='2';
+let day='01';
 
-getNBAGames(year, month, day, handleNBAGames);
-getPLGames(year, month, day, handleSoccerGames);
-getSpanishGames(year, month, day, handleSoccerGames);
-getIsraeliGames(year, month, day, handleSoccerGames);
-getItalyGames(year, month, day, handleSoccerGames);
+//getNBAGames(year, month, day, handleNBAGames);
+//getPLGames(year, month, day, handleSoccerGames);
+//getSpanishGames(year, month, day, handleSoccerGames);
+//getIsraeliGames(year, month, day, handleSoccerGames);
+//getItalyGames(year, month, day, handleSoccerGames);
 getSpanishCupGames(year, month, day, handleSoccerGames);
-getCarbaoCupGames(year, month, day, handleSoccerGames);
-getFACupGames(year, month, day, handleSoccerGames);
-getGermanyGames(year, month, day, handleSoccerGames);
+//getCarbaoCupGames(year, month, day, handleSoccerGames);
+//getFACupGames(year, month, day, handleSoccerGames);
+//getGermanyGames(year, month, day, handleSoccerGames);
 //test1();

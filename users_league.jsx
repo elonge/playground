@@ -30,39 +30,22 @@ class UsersLeague extends React.Component {
     super(props);
     this.state = {
       usersPoints: props.usersPoints,
-      viewedWeekIndex: props.viewedWeekIndex,
-      weeks: props.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
       leagues: props.leagues,
       currentLeague: props.currentLeague,
       dailyStatMode: props.dailyStatMode,
     };
     this.onCellClick = this.onCellClick.bind(this);
-    this.renderWeeklyTable = this.renderWeeklyTable.bind(this);
+    this.renderLeagueTable = this.renderLeagueTable.bind(this);
     this.renderDailyWinnersTable = this.renderDailyWinnersTable.bind(this);
   }
 
   // Called when switching to new viewed league or moving date
   componentWillReceiveProps(nextProps) {
     this.setState( {
-      viewedWeekIndex: nextProps.viewedWeekIndex,
       usersPoints: nextProps.usersPoints,
       currentLeague: nextProps.currentLeague,
-      weeks: nextProps.usersPoints.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse(),
       dailyStatMode: nextProps.dailyStatMode,
     });
-  }
-
-  isLastSunday(myWeek) {
-    var t = new Date();
-    t.setDate(t.getDate() - t.getDay());
-    var month = '' + (t.getMonth() + 1);
-    var day = '' + (t.getDate());
-    var year = t.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return ([year, month, day].join('-') == myWeek);
   }
 
   formatDateAsDB(date) {
@@ -92,21 +75,17 @@ class UsersLeague extends React.Component {
   onCellClick(rowNumber, columnId) {
     const {
       usersPoints,
-      viewedWeekIndex,
-      weeks,
       currentLeague,
       leagues,
     } = this.state;
 
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == currentLeague.id));
-    this.props.onUserClick(weekPoints[rowNumber]);
+    let leaguePoints = usersPoints.filter(user => user.league == currentLeague.id);
+    this.props.onUserClick(leaguePoints[rowNumber]);
   }
 
   renderDailyWinnersTable() {
     const {
       usersPoints,
-      viewedWeekIndex,
-      weeks,
       currentLeague,
       leagues,
       dailyStatMode,
@@ -155,7 +134,7 @@ class UsersLeague extends React.Component {
     );
   }
 
-  renderWeeklyTable(weekPoints) {
+  renderLeagueTable(leaguePoints) {
     return (
       <Table
         height='300px'
@@ -177,7 +156,7 @@ class UsersLeague extends React.Component {
             <TableHeaderColumn style={{width: '15%'}}
             >Last</TableHeaderColumn>
             <TableHeaderColumn style={{width: '20%'}}
-            >Week</TableHeaderColumn>
+            >Total</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody
@@ -185,7 +164,7 @@ class UsersLeague extends React.Component {
           deselectOnClickaway={true}
           stripedRows={true}
         >
-          {weekPoints.map( (row, index) => (
+          {leaguePoints.map( (row, index) => (
             <TableRow key={index}>
               <TableRowColumn style={{width: '10%', paddingLeft:'10px'}}
               >{index+1}</TableRowColumn>
@@ -206,32 +185,25 @@ class UsersLeague extends React.Component {
   render() {
     const {
       usersPoints,
-      viewedWeekIndex,
-      weeks,
       currentLeague,
       leagues,
       dailyStatMode,
     } = this.state;
 
     console.log("currentLeague=" + JSON.stringify(currentLeague));
-    let weekPoints = usersPoints.filter(user => (user.sunday == weeks[viewedWeekIndex] && user.league == currentLeague.id));
-    if (weekPoints.length == 0)  {
+    let leaguePoints = usersPoints.filter(user => user.league == currentLeague.id);
+    if (leaguePoints.length == 0)  {
       return (
         <label>Debug3</label>
       );
     }
 
-    let tableElement = (dailyStatMode ? this.renderDailyWinnersTable() : this.renderWeeklyTable(weekPoints));
+    let tableElement = (dailyStatMode ? this.renderDailyWinnersTable() : this.renderLeagueTable(leaguePoints));
     let title;
     if (dailyStatMode) {
-      title = "Daily winners"
+      title = "Daily winners";
     } else {
-      let weekHuman = this.formatDateAsDB(weeks[viewedWeekIndex]);
-      if (this.isLastSunday(weekHuman)) {
-        title = weekHuman + " table";
-      } else {
-        title = weekHuman + " final table";
-      }
+      title = "Current table";
     }
     let titleElement = (
       <Subheader style={{fontSize:16}}>{title}</Subheader>

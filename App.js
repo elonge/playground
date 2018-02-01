@@ -54,7 +54,6 @@ class App extends Component {
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
-      viewedWeekIndex: 0,
       otherUserPredictionsMode: null,
       users: FakeData.users,
       points: FakeData.usersPoints,
@@ -178,7 +177,16 @@ class App extends Component {
   }
 
   updatePrediction(prediction) {
-    // Do nothing
+    let leaguesWithPrediction = this.state.userPredictions.filter(i => (i.game_id === prediction.game_id && i.id === prediction.id)).map(i => i.league);
+    this.logEvents("prediction_update for leagues = " + JSON.stringify(leaguesWithPrediction));
+    /* Do nothing
+    this.pushToRemote('game:update:prediction', {
+      id:prediction.id,
+      gameId:prediction.game_id,
+      value:prediction.value,
+      forLeagueIds: leaguesWithPrediction,
+    });
+    */
   }
 
   onPredictionsPointsToggle() {
@@ -213,8 +221,7 @@ class App extends Component {
       return true;
     }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
-      let weeks = this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
-      return (this.state.viewedWeekIndex >= weeks.length - 1);
+      return true;
     }
     let days =  this.getCurrentStatePredictions().map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
     return (this.state.viewedDateIndex >= days.length - 1);
@@ -225,18 +232,14 @@ class App extends Component {
       return true;
     }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
-      return (this.state.viewedWeekIndex == 0);
+      return true;
     }
     return (this.state.viewedDateIndex == 0);
   }
 
   onPrevClick() {
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
-      let viewedWeekIndex = this.state.viewedWeekIndex;
-      let weeks =  this.state.points.map(user => user.sunday).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
-      if (viewedWeekIndex < weeks.length - 1) {
-        this.setState({viewedWeekIndex: viewedWeekIndex + 1});
-      }
+      return; /* shouldn't call here at all */
     } else {
       let viewedDateIndex = this.state.viewedDateIndex;
       let days =  this.getCurrentStatePredictions().map(prediction => prediction.prediction_date).filter((v, i, a) => a.indexOf(v) === i).sort().reverse();
@@ -247,10 +250,7 @@ class App extends Component {
   }
   onNextClick() {
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
-      let viewedWeekIndex = this.state.viewedWeekIndex;
-      if (viewedWeekIndex > 0) {
-        this.setState({viewedWeekIndex: viewedWeekIndex - 1});
-      }
+      return; /* shouldn't call here at all */
     } else {
       let viewedDateIndex = this.state.viewedDateIndex;
       if (viewedDateIndex > 0) {
@@ -324,7 +324,6 @@ class App extends Component {
       showPointsMode,
       otherUserPredictionsMode,
       viewedDateIndex,
-      viewedWeekIndex,
       currentLeague,
       leagues,
       leagueDailyWinners,
@@ -345,7 +344,6 @@ class App extends Component {
         gamePart = ( leagueDialogOpen ? "" :
           <UsersLeague
             usersPoints={points}
-            viewedWeekIndex={viewedWeekIndex}
             currentLeague={currentLeague}
             leagues={leagues}
             onUserClick={this.onUserClick}
@@ -382,6 +380,8 @@ class App extends Component {
             otherPredictions={otherPredictions}
             socket={socket}
             senderId={this.props.senderId}
+            currentLeague={currentLeague}
+            leagues={leagues}
           />
         );
         topPart = (

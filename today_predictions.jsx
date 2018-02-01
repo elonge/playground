@@ -33,6 +33,7 @@ class TodayPredictions extends React.Component {
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.onNewQuestionClick = this.onNewQuestionClick.bind(this);
     this.onNewQuestion = this.onNewQuestion.bind(this);
+    this.onDialogQuestionClose = this.onDialogQuestionClose.bind(this);
     this.state = {
       viewedDateIndex: props.viewedDateIndex,
       otherUserMode: props.otherUserMode,
@@ -199,6 +200,10 @@ class TodayPredictions extends React.Component {
     this.setState({questionDialogOpen:true});
   }
 
+  onDialogQuestionClose() {
+    this.setState({questionDialogOpen:false})
+  }
+
   render() {
     const {
       viewedDateIndex,
@@ -221,6 +226,9 @@ class TodayPredictions extends React.Component {
         socket={this.props.socket}
         senderId={this.props.senderId}
         onNewQuestion={this.onNewQuestion}
+        leagues={this.props.leagues}
+        currentLeague={this.props.currentLeague}
+        handleClose={this.onDialogQuestionClose}
       />
     );
 

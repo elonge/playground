@@ -9,8 +9,8 @@ import {Step, Stepper,StepLabel} from 'material-ui/Stepper';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Checkbox from 'material-ui/Checkbox';
 import RenderUtils from './render/utils';
-import ContentSend from 'material-ui/svg-icons/content/send';
 
 
 const dialogStyle = {
@@ -35,6 +35,7 @@ class LeagueQuestionsDialog extends React.Component {
       predictedScore: '',
       nextEnabled: false,
       snackbarMessage: null,
+      shareAllLeagues: true,
     };
     this.handleSaveShare = this.handleSaveShare.bind(this);
     this.handleNext = this.handleNext.bind(this);
@@ -51,6 +52,7 @@ class LeagueQuestionsDialog extends React.Component {
     this.onApproveAddingPredictionResponse = this.onApproveAddingPredictionResponse.bind(this);
     this.onSnackBarDone = this.onSnackBarDone.bind(this);
     this.onAddMoreQuestion = this.onAddMoreQuestion.bind(this);
+    this.renderLastStep = this.renderLastStep.bind(this);
   }
 
   handleChangeGame = (event, value) => this.setState({gameIndex: value, nextEnabled:true});
@@ -107,6 +109,14 @@ class LeagueQuestionsDialog extends React.Component {
     lastNewQuestionInfo = new Object();
     lastNewQuestionInfo.home_team = this.state.allGames[this.state.gameIndex].home_team;
     lastNewQuestionInfo.away_team = this.state.allGames[this.state.gameIndex].away_team;
+    let forLeagueIds = [];
+    // EGEG (FIXME) - prevent adding a quetion if user doesn't have any private league
+    if (this.state.shareAllLeagues)  {
+      forLeagueIds = this.state.leagues.filter(league => league.id > 1).map(league => league.id);
+    } else if (this.currentLeague.id > 1) {
+      forLeagueIds = [this.currentLeague.id];
+    }
+
     this.pushToRemote("user:insert:prediction", {
       gameId: this.state.allGames[this.state.gameIndex].id,
       resultType: this.state.questionType.key,
@@ -115,6 +125,7 @@ class LeagueQuestionsDialog extends React.Component {
       predictedScore: this.state.predictedScore,
       points: 1,
       creatorId: this.props.senderId,
+      forLeagueIds: forLeagueIds,
     }, this.onApproveAddingPredictionResponse);
   }
 
@@ -142,7 +153,7 @@ class LeagueQuestionsDialog extends React.Component {
 
   onDialogCancel() {
     this.setState({open: false, stepIndex:0});
-//    this.props.handleClose();
+    this.props.handleClose();
   };
 
   handleSaveShare() {
@@ -169,6 +180,15 @@ class LeagueQuestionsDialog extends React.Component {
     }
   };
 
+  updateCheck() {
+    this.setState((oldState) => {
+      return {
+        shareAllLeagues: !oldState.shareAllLeagues,
+      };
+    });
+  }
+
+
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -176,18 +196,34 @@ class LeagueQuestionsDialog extends React.Component {
       case 1:
         return this.renderSetQuestion();
       case 2:
-        return (
-          <div>
-          <label style={{color:'red'}}>Your new question</label>
-          <br />
-          <label>{this.renderPredictionPrimaryText(this.state.gameIndex)}</label>
-          <br />
-          <label>{this.renderPredictionSecondaryText(this.state.gameIndex)}</label>
-          </div>
-        );
+        return this.renderLastStep();
       default:
         return 'Something went wrong!';
     }
+  }
+
+  renderLastStep() {
+    let checkboxElement;
+    if (this.props.leagues.length > 2) {
+      checkboxElement = (
+        <Checkbox
+          label={this.state.shareAllLeagues ? "Visible to all your leagues" : "Visible to " + this.props.currentLeague.league_name + " only"}
+          checked={this.state.shareAllLeagues}
+          onCheck={this.updateCheck.bind(this)}
+          disabled={this.props.currentLeague.id == 1}
+        />
+      );
+    }
+    return (
+      <div>
+      <label style={{fontSize:"18px", color: 'rgba(0, 0, 0, 0.87)'}}>Your new question</label><br/>
+      <br />
+      <label style={{color: 'rgba(0, 0, 0, 0.87)'}}>{this.renderPredictionPrimaryText(this.state.gameIndex)}</label>
+      <br />
+      <label style={{color: 'rgba(0, 0, 0, 0.87)'}}>{this.renderPredictionSecondaryText(this.state.gameIndex)}</label><br/><br/>
+      {checkboxElement}
+      </div>
+    );
   }
 
   renderSelectGame() {
@@ -293,7 +329,6 @@ class LeagueQuestionsDialog extends React.Component {
         primary={true}
         onClick={this.handleSaveShare}
         disabled={!this.state.nextEnabled}
-        icon={stepIndex == 2 ? <ContentSend/> : ""}
       />
     );
 

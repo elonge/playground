@@ -133,7 +133,6 @@ const usersPoints = [
     name: 'Elon Gecht',
     online: true,
     fbId: 1482681765133413,
-    sunday: '2017-12-24',
     league: 1
   },
   {
@@ -143,7 +142,6 @@ const usersPoints = [
     name: 'Arik Benado',
     online: true,
     fbId: 200,
-    sunday: '2017-12-24',
     league: 1
   },
   {
@@ -153,47 +151,15 @@ const usersPoints = [
     name: 'David Moyes',
     online: false,
     fbId: 300,
-    sunday: '2017-12-24',
     league: 1
 },
-  {
-    profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
-    totalPoints: 11,
-    points1d: 0,
-    name: 'Elon Gecht',
-    online: true,
-    fbId: 1482681765133413,
-    sunday: '2017-12-17',
-    league: 1
-  },
-  {
-    profilePic: 'https://www.tbnsport.com/wp-content/uploads/moyes-manage.jpg',
-    totalPoints: 9,
-    points1d: 0,
-    name: 'David Moyes',
-    online: false,
-    fbId: 300,
-    sunday: '2017-12-17',
-    league: 1
-  },
-  {
-    profilePic: 'https://scontent.xx.fbcdn.net/v/t1.0-1/199362_5456381841_7751_n.jpg?oh=bb3391fa44f361b5e20a961f9a0900bd&oe=5AF52DC1',
-    totalPoints: 8,
-    points1d: 0,
-    name: 'Arik Benado',
-    online: true,
-    fbId: 200,
-    sunday: '2017-12-17',
-    league: 1
-  },
-  {
+{
     profilePic: 'https://i.pinimg.com/736x/eb/b0/70/ebb0708dccbff54f723969ff300f386b--game-of-thrones-costumes-game-of-thrones-tv.jpg',
     totalPoints: 15,
     points1d: 3,
     name: 'Elon Gecht',
     online: true,
     fbId: 1482681765133413,
-    sunday: '2017-12-24',
     league: 4
   },
   {
@@ -203,7 +169,6 @@ const usersPoints = [
     name: 'Arik Benado',
     online: true,
     fbId: 200,
-    sunday: '2017-12-24',
     league: 4
   },
   {
@@ -213,7 +178,6 @@ const usersPoints = [
     name: 'Elon Gecht',
     online: true,
     fbId: 1482681765133413,
-    sunday: '2017-12-24',
     league: 2
   },
   {
@@ -223,7 +187,6 @@ const usersPoints = [
     name: 'David Moyes',
     online: false,
     fbId: 300,
-    sunday: '2017-12-24',
     league: 2
   },
 ]

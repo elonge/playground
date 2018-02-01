@@ -53,15 +53,6 @@ class UserInfo extends React.Component {
         }
       />
     );
-    let numWinnerItem = (user.moreFields.count == 0 || user.moreFields.count == null) ? "" : (
-      <ListItem
-        primaryText={user.moreFields.count + " time" + (user.moreFields.count == 1 ? '' : 's') + " league winner"}
-        leftAvatar={
-          <Avatar src="media/winner_icon.png" backgroundColor={'white'} />
-        }
-      />
-    );
-
     let successPctItem =  (
       <ListItem
         primaryText={Math.round(user.moreFields.avg * 100) + "% success rate"}
@@ -111,7 +102,6 @@ class UserInfo extends React.Component {
         <CardText expandable={true}>
           <List>
             {totalPointsItem}
-            {numWinnerItem}
             {successPctItem}
             {lastDaysItem}
           </List>

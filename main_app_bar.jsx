@@ -12,11 +12,6 @@ import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
 import SocialGroup from 'material-ui/svg-icons/social/group';
 
-//import CreateLeagueDialog from './create_league.jsx';
-import CreateLeagueDialog from './create_league2.jsx';
-import LeagueQuestionsDialog from './league_questions.jsx';
-
-
 class MainAppBar extends React.Component {
   constructor(props) {
     super(props);
@@ -103,20 +98,6 @@ class MainAppBar extends React.Component {
       </IconMenu>
     );
 
-    let leaguesDialog = (
-      <CreateLeagueDialog
-        open={this.state.leagueDialogOpen}
-        isCreate={this.state.isCreate}
-        handleClose={this.onCloseCreateDialog}
-        socket={this.props.socket}
-        senderId={this.props.senderId}
-        onNewLeague={this.onNewLeague}
-        onInviteNewLeague={this.onInviteNewLeague}
-        leagues={this.state.leagues}
-        users={this.props.users}
-      />
-    );
-
     let leaguesDrawerItems = this.state.leagues.map((league) => (
       <MenuItem
         key={league.id}
@@ -126,16 +107,6 @@ class MainAppBar extends React.Component {
         onClick={() => this.onChangeLeague(league)}
       />
     ));
-
-    console.log("this.state.questionDialogOpen=" +this.state.questionDialogOpen);
-    let questionsDialog = (
-      <LeagueQuestionsDialog
-        open={this.state.questionDialogOpen}
-        socket={this.props.socket}
-        senderId={this.props.senderId}
-        onNewQuestion={this.onNewQuestion}
-      />
-    );
 
     let modeIcon = (this.state.showPointsMode ?
       <CheckBox
@@ -164,8 +135,6 @@ class MainAppBar extends React.Component {
           <Divider />
           {leaguesDrawerItems}
         </Drawer>
-        {/*leaguesDialog*/}
-        {/*questionsDialog*/}
       </div>
     );
 
