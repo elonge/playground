@@ -348,4 +348,62 @@ const getUserPoints_new = () =>
   .whereRaw('(league_id = ANY(for_league_ids) or for_league_ids is null) and (league_id = ANY(user_predictions.for_league_ids2) or user_predictions.for_league_ids2 is null) and prediction_date > leagues.created_time')
 
 
+
+
+  2018-02-01T13:22:39.000000+00:00 app[api]: Build started by user elon.gecht@gmail.com
+  2018-02-01T13:23:17.781487+00:00 app[api]: Release v839 created by user elon.gecht@gmail.com
+  2018-02-01T13:23:17.781487+00:00 app[api]: Deploy 33723572 by user elon.gecht@gmail.com
+  2018-02-01T13:23:18.166194+00:00 heroku[web.1]: Restarting
+  2018-02-01T13:23:18.166715+00:00 heroku[web.1]: State changed from up to starting
+  2018-02-01T13:22:39.000000+00:00 app[api]: Build succeeded
+  2018-02-01T13:23:18.923131+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+  2018-02-01T13:23:18.944840+00:00 heroku[router]: at=info method=GET path="/socket.io/?EIO=3&transport=websocket&sid=bncHv9ZJZriJ6ZfsAAAB" host=infinite-caverns-93636.herokuapp.com request_id=cc9a5deb-3d7a-4f17-8ef8-d5df626d6ec6 fwd="79.181.167.40" dyno=web.1 connect=1ms service=353549ms status=101 bytes=175 protocol=https
+  2018-02-01T13:23:18.944767+00:00 heroku[router]: at=info method=GET path="/socket.io/?EIO=3&transport=websocket&sid=akKARn6F6l0_BwQuAAAA" host=infinite-caverns-93636.herokuapp.com request_id=6ad0676d-d54e-423a-ba46-7fd92e6060d4 fwd="79.181.167.40" dyno=web.1 connect=1ms service=354198ms status=101 bytes=175 protocol=https
+  2018-02-01T13:23:19.032973+00:00 heroku[web.1]: Process exited with status 143
+  2018-02-01T13:23:22.981616+00:00 heroku[web.1]: Starting process with command `npm start`
+  2018-02-01T13:23:24.781187+00:00 app[web.1]:
+  2018-02-01T13:23:24.781206+00:00 app[web.1]: > chat-extensions@0.1.0 start /app
+  2018-02-01T13:23:24.781207+00:00 app[web.1]: > node ./bin/www
+  2018-02-01T13:23:24.781208+00:00 app[web.1]:
+  2018-02-01T13:23:25.224785+00:00 app[web.1]: /app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:328
+  2018-02-01T13:23:25.224818+00:00 app[web.1]:         throw e;
+  2018-02-01T13:23:25.224820+00:00 app[web.1]:         ^
+  2018-02-01T13:23:25.224822+00:00 app[web.1]:
+  2018-02-01T13:23:25.224823+00:00 app[web.1]: Error: Couldn't find preset "latest" relative to directory "/app"
+  2018-02-01T13:23:25.224825+00:00 app[web.1]:     at /app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:293:19
+  2018-02-01T13:23:25.224829+00:00 app[web.1]:     at OptionManager.resolvePresets (/app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:275:20)
+  2018-02-01T13:23:25.224827+00:00 app[web.1]:     at Array.map (<anonymous>)
+  2018-02-01T13:23:25.224832+00:00 app[web.1]:     at OptionManager.mergeOptions (/app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:249:14)
+  2018-02-01T13:23:25.224830+00:00 app[web.1]:     at OptionManager.mergePresets (/app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:264:10)
+  2018-02-01T13:23:25.224834+00:00 app[web.1]:     at OptionManager.init (/app/node_modules/babel-core/lib/transformation/file/options/option-manager.js:368:12)
+  2018-02-01T13:23:25.224837+00:00 app[web.1]:     at loader (/app/node_modules/babel-register/lib/node.js:144:14)
+  2018-02-01T13:23:25.224836+00:00 app[web.1]:     at compile (/app/node_modules/babel-register/lib/node.js:103:45)
+  2018-02-01T13:23:25.224839+00:00 app[web.1]:     at Object.require.extensions.(anonymous function) [as .js] (/app/node_modules/babel-register/lib/node.js:154:7)
+  2018-02-01T13:23:25.224841+00:00 app[web.1]:     at Module.load (module.js:573:32)
+  2018-02-01T13:23:25.232350+00:00 app[web.1]:
+  2018-02-01T13:23:25.238379+00:00 app[web.1]: npm ERR! Linux 4.4.0-1011-aws
+  2018-02-01T13:23:25.238562+00:00 app[web.1]: npm ERR! argv "/app/.heroku/node/bin/node" "/app/.heroku/node/bin/npm" "start"
+  2018-02-01T13:23:25.238856+00:00 app[web.1]: npm ERR! npm  v4.0.5
+  2018-02-01T13:23:25.238721+00:00 app[web.1]: npm ERR! node v9.5.0
+  2018-02-01T13:23:25.239142+00:00 app[web.1]: npm ERR! chat-extensions@0.1.0 start: `node ./bin/www`
+  2018-02-01T13:23:25.239026+00:00 app[web.1]: npm ERR! code ELIFECYCLE
+  2018-02-01T13:23:25.239418+00:00 app[web.1]: npm ERR! Failed at the chat-extensions@0.1.0 start script 'node ./bin/www'.
+  2018-02-01T13:23:25.239225+00:00 app[web.1]: npm ERR! Exit status 1
+  2018-02-01T13:23:25.239324+00:00 app[web.1]: npm ERR!
+  2018-02-01T13:23:25.239578+00:00 app[web.1]: npm ERR! Make sure you have the latest version of node.js and npm installed.
+  2018-02-01T13:23:25.239679+00:00 app[web.1]: npm ERR! If you do, this is most likely a problem with the chat-extensions package,
+  2018-02-01T13:23:25.239780+00:00 app[web.1]: npm ERR! not with npm itself.
+  2018-02-01T13:23:25.239877+00:00 app[web.1]: npm ERR! Tell the author that this fails on your system:
+  2018-02-01T13:23:25.239973+00:00 app[web.1]: npm ERR!     node ./bin/www
+  2018-02-01T13:23:25.240072+00:00 app[web.1]: npm ERR! You can get information on how to open an issue for this project with:
+  2018-02-01T13:23:25.240154+00:00 app[web.1]: npm ERR!     npm bugs chat-extensions
+  2018-02-01T13:23:25.240560+00:00 app[web.1]: npm ERR! There is likely additional logging output above.
+  2018-02-01T13:23:25.240249+00:00 app[web.1]: npm ERR! Or if that isn't available, you can get their info via:
+  2018-02-01T13:23:25.240375+00:00 app[web.1]: npm ERR!     npm owner ls chat-extensions
+  2018-02-01T13:23:25.244425+00:00 app[web.1]:
+  2018-02-01T13:23:25.244567+00:00 app[web.1]: npm ERR! Please include the following file with any support request:
+  2018-02-01T13:23:25.244632+00:00 app[web.1]: npm ERR!     /app/npm-debug.log
+  2018-02-01T13:23:25.310008+00:00 heroku[web.1]: State changed from starting to crashed
+  2018-02-01T13:23:25.312764+00:00 heroku[web.1]: State changed from crashed to starting
+  2018-02-01T13:23:25.295396+00:00 heroku[web.1]: Process exited with status 1
 **/

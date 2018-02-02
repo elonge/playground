@@ -29,7 +29,7 @@ class LeagueInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      league: props.league,
+      league: props.currentLeague,
       dailyStatMode: props.dailyStatMode,
       createLeagueDialogOpen: false,
       joinLeagueDialogOpen: false,
@@ -46,7 +46,7 @@ class LeagueInfo extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log("nextProps of LeagueInfo");
     this.setState( {
-      league: nextProps.league,
+      league: nextProps.currentLeague,
       dailyStatMode: nextProps.dailyStatMode,
     });
   }

@@ -51,6 +51,7 @@ class App extends Component {
     this.onCompetitionsUpdate = this.onCompetitionsUpdate.bind(this);
     this.onCurrentLeagueChanged = this.onCurrentLeagueChanged.bind(this);
     this.getCurrentStatePredictions = this.getCurrentStatePredictions.bind(this);
+    this.updatePrediction = this.updatePrediction.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -177,9 +178,17 @@ class App extends Component {
   }
 
   updatePrediction(prediction) {
-    let leaguesWithPrediction = this.state.userPredictions.filter(i => (i.game_id === prediction.game_id && i.id === prediction.id)).map(i => i.league);
-    this.logEvents("prediction_update for leagues = " + JSON.stringify(leaguesWithPrediction));
-    /* Do nothing
+    const userPredictions = this.state.userPredictions.slice();
+    let leaguesWithPrediction = [];
+    // Update all instances of this prediction (in all leagues) with value. Save list of leagues
+    userPredictions.map((p, index) => {
+      if (p.game_id === prediction.game_id && p.id === prediction.id) {
+        userPredictions[index].value = prediction.value;
+        leaguesWithPrediction.push(p.league);
+      }
+    });
+    this.setState({userPredictions: userPredictions});
+    /* Do nothing in playground. In real app:
     this.pushToRemote('game:update:prediction', {
       id:prediction.id,
       gameId:prediction.game_id,

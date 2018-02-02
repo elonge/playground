@@ -251,8 +251,8 @@ const leagueDailyWinners = [
 const userPredictions = [
   {
     user_id: 1482681765133413,
-    home_team: 'Federer',
-    away_team: 'Nadal',
+    home_team: 'Cavailers',
+    away_team: 'Suns',
     result_type: 'player_score_range_low',
     predicted_score: 'LeBron',
     type_extra: '',
@@ -289,6 +289,27 @@ const userPredictions = [
     sport_type: 'Tennis',
     creator_id: 0,
     league: 1,
+    id:1
+  },
+  {
+    user_id: 1482681765133413,
+    home_team: 'Federer',
+    away_team: 'Nadal',
+    result_type: 'num_sets',
+    predicted_score: '',
+    type_extra: '',
+    start_time: '2017-12-22 17:00:00',
+    value: null,
+    open: true,
+    points: 1,
+    close_on_start_time: false,
+    prediction_date: '2017-12-29',
+    points_won: 1,
+    points_updated: true,
+    game_id: 58,
+    sport_type: 'Tennis',
+    creator_id: 0,
+    league: 2,
     id:1
   },
   {

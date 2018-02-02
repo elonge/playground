@@ -96,39 +96,39 @@ const getSoccerGames = (year, month, day, handler, site, name, competitionId) =>
   })();
 }
 
-const getPLGames = (year, month, day, handler, site) => {
+function getPLGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-premier-league/23/scores?date=', 'PL',1);
 }
 
-const getIsraeliGames = (year, month, day, handler, site) => {
+function getIsraeliGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/israeli-premier-league/2359/scores?date=', 'IL',5);
 }
 
-const getSpanishGames = (year, month, day, handler, site) => {
+function getSpanishGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-primera-division/15/scores?date=', 'Spain',2);
 }
 
-const getItalyGames = (year, month, day, handler, site) => {
+function getItalyGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/italian-serie-a/12/scores?date=', 'Italy',3);
 }
 
-const getSpanishCupGames = (year, month, day, handler, site) => {
+function getSpanishCupGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/spanish-copa-del-rey/80/scores?date=', 'Spain_Cup',2);
 }
 
-const getCarbaoCupGames = (year, month, day, handler, site) => {
+function getCarbaoCupGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-carabao-cup/41/scores?date=', 'Carbao_Cup',1);
 }
 
-const getFACupGames = (year, month, day, handler, site) => {
+function getFACupGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/english-fa-cup/40/scores?date=', 'FA_Cup',1);
 }
 
-const getGermanyGames = (year, month, day, handler, site) => {
+function getGermanyGames (year, month, day, handler, site) {
   getSoccerGames(year, month, day, handler, 'http://www.espnfc.com/german-bundesliga/10/scores?date=', 'Germany',4);
 }
 
-const getNBAGames = (year, month, day, handler) => {
+function getNBAGames(year, month, day, handler) {
   var moment = require('moment-timezone');
 
   if (month.length < 2) month = '0' + month;
@@ -198,15 +198,15 @@ let allGames = [];
 
 let year='2018';
 let month='2';
-let day='01';
+let day='02';
 
-//getNBAGames(year, month, day, handleNBAGames);
-//getPLGames(year, month, day, handleSoccerGames);
-//getSpanishGames(year, month, day, handleSoccerGames);
-//getIsraeliGames(year, month, day, handleSoccerGames);
-//getItalyGames(year, month, day, handleSoccerGames);
-getSpanishCupGames(year, month, day, handleSoccerGames);
-//getCarbaoCupGames(year, month, day, handleSoccerGames);
-//getFACupGames(year, month, day, handleSoccerGames);
-//getGermanyGames(year, month, day, handleSoccerGames);
+// getNBAGames(year, month, day, handleNBAGames);
+// setTimeout(getPLGames(year, month, day, handleSoccerGames), 1000);
+setTimeout(() => getSpanishGames(year, month, day, handleSoccerGames), 2000);
+// setTimeout(getIsraeliGames(year, month, day, handleSoccerGames), 3000);
+// setTimeout(getItalyGames(year, month, day, handleSoccerGames), 4000);
+// setTimeout(getSpanishCupGames(year, month, day, handleSoccerGames), 5000);
+// setTimeout(getCarbaoCupGames(year, month, day, handleSoccerGames), 6000);
+// setTimeout(getFACupGames(year, month, day, handleSoccerGames), 7000);
+setTimeout(() => getGermanyGames(year, month, day, handleSoccerGames), 8000);
 //test1();

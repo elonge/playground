@@ -233,58 +233,57 @@ class TodayPredictions extends React.Component {
     );
 
     let dayPredictions = userPredictions.filter(prediction => prediction.prediction_date == viewedDateStr);
+    let title;
     if (dayPredictions.length == 0)  {
-      return (
-        <label>Debug2</label>
-      );
+      title = "No questions on " +  this.props.currentLeague.league_name;
     } else {
-      let title = 'Your predictions';
+      title = 'Your predictions';
       if (this.state.otherUserMode != null) {
         title = this.state.otherUserMode.name + "'s predictions";
       }
       title = title + " for " + this.renderPrettyDate(days[viewedDateIndex]);
-
-      let items = dayPredictions.map((prediction) =>
-        this.renderPrediction(prediction)
-      );
-
-      let currentPredictionSelectField;
-      let dialogTitle="";
-      if (this.isShowOtherPredictions()) {
-        currentPredictionSelectField = this.renderOtherUsersPredictions();
-        dialogTitle = "What other predicted";
-      } else {
-        currentPredictionSelectField = this.renderPredictionsMenu();
-        if (dialogPredictionTitle != null) {
-          dialogTitle = dialogPredictionTitle;
-        }
-      }
-      return (
-        <div>
-          <Subheader>{title}</Subheader>
-          <List key="a" style={{backgroundColor: '#FAFAFA'}}>
-          {items}
-          <ListItem
-            leftAvatar={<Avatar icon={<AddIcon />} />}
-            primaryText="Add new question"
-            secondaryText="Your questions are visible to your friends"
-            onClick={this.onNewQuestionClick}
-          />
-          </List>
-          {questionsDialog}
-          <Dialog
-            title={dialogTitle}
-            modal={false}
-            open={dialogOpen}
-            onRequestClose={() => this.handleDialogClose()}
-            contentStyle={customContentStyle}
-            autoScrollBodyContent={true}
-          >
-          {currentPredictionSelectField}
-          </Dialog>
-        </div>
-      );
     }
+    let items = dayPredictions.map((prediction) =>
+      this.renderPrediction(prediction)
+    );
+
+    let currentPredictionSelectField;
+    let dialogTitle="";
+    if (this.isShowOtherPredictions()) {
+      currentPredictionSelectField = this.renderOtherUsersPredictions();
+      dialogTitle = "What other predicted";
+    } else {
+      currentPredictionSelectField = this.renderPredictionsMenu();
+      if (dialogPredictionTitle != null) {
+        dialogTitle = dialogPredictionTitle;
+      }
+    }
+    return (
+      <div>
+        <Subheader>{title}</Subheader>
+        <List key="a" style={{backgroundColor: '#FAFAFA'}}>
+        {items}
+        <ListItem
+          leftAvatar={<Avatar icon={<AddIcon />} />}
+          primaryText="Add a new question"
+          secondaryText={this.props.leagues.length > 1 ? "Only visible in your private leagues" : "You need to set up a private league first"}
+          disabled={this.props.leagues.length == 1}
+          onClick={this.onNewQuestionClick}
+        />
+        </List>
+        {questionsDialog}
+        <Dialog
+          title={dialogTitle}
+          modal={false}
+          open={dialogOpen}
+          onRequestClose={() => this.handleDialogClose()}
+          contentStyle={customContentStyle}
+          autoScrollBodyContent={true}
+        >
+        {currentPredictionSelectField}
+        </Dialog>
+      </div>
+    );
   }
 };
 

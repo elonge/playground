@@ -10,6 +10,8 @@ import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import MenuItem from 'material-ui/MenuItem'
 import Divider from 'material-ui/Divider';
 import Drawer from 'material-ui/Drawer';
+import Badge from 'material-ui/Badge';
+
 import SocialGroup from 'material-ui/svg-icons/social/group';
 
 class MainAppBar extends React.Component {
@@ -81,23 +83,6 @@ class MainAppBar extends React.Component {
   }
 
   render() {
-
-    let leftButton = (
-      <IconMenu
-        iconButtonElement={
-          <IconButton><NavigationExpandMore /></IconButton>
-        }
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-        onItemClick={this.onMenuClicked}
-      >
-        <MenuItem primaryText="Private Leagues..." key="leagues" />
-        <MenuItem primaryText="Add Questions..." key="questions" />
-        <Divider />
-        <MenuItem primaryText="Settings..." key="settings"/>
-      </IconMenu>
-    );
-
     let leaguesDrawerItems = this.state.leagues.map((league) => (
       <MenuItem
         key={league.id}
@@ -141,15 +126,33 @@ class MainAppBar extends React.Component {
 //iconElementLeft={<IconButton><NavigationExpandMore /></IconButton>}
 //iconElementLeft={leftButton}
 
+  let leftButton = (
+    <Badge
+      badgeContent={4}
+      secondary={true}
+      badgeStyle={{top: 20, right: 20}}
+    >
+      <IconButton><SocialGroup
+        onClick={() => this.onLeaguesClicked()}
+        color={'white'}
+      /></IconButton>
+    </Badge>
+  );
+
+  leftButton = (
+    <IconButton><SocialGroup
+      onClick={() => this.onLeaguesClicked()}
+      color={'white'}
+    /></IconButton>
+
+  );
+
     return (
       <AppBar
         title={this.props.title}
         titleStyle={{fontSize: 18}}
         iconElementRight={rightButton}
-        iconElementLeft={<IconButton><SocialGroup
-          onClick={() => this.onLeaguesClicked()}
-          color={'white'}
-          /></IconButton>}
+        iconElementLeft={leftButton}
         style={{position: 'fixed', top:0}}
         />
     );
