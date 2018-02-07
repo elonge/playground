@@ -198,15 +198,15 @@ let allGames = [];
 
 let year='2018';
 let month='2';
-let day='02';
+let day='07';
 
-// getNBAGames(year, month, day, handleNBAGames);
-// setTimeout(getPLGames(year, month, day, handleSoccerGames), 1000);
+getNBAGames(year, month, day, handleNBAGames);
+setTimeout(() => getPLGames(year, month, day, handleSoccerGames), 1000);
 setTimeout(() => getSpanishGames(year, month, day, handleSoccerGames), 2000);
-// setTimeout(getIsraeliGames(year, month, day, handleSoccerGames), 3000);
-// setTimeout(getItalyGames(year, month, day, handleSoccerGames), 4000);
-// setTimeout(getSpanishCupGames(year, month, day, handleSoccerGames), 5000);
-// setTimeout(getCarbaoCupGames(year, month, day, handleSoccerGames), 6000);
-// setTimeout(getFACupGames(year, month, day, handleSoccerGames), 7000);
+setTimeout(() => getIsraeliGames(year, month, day, handleSoccerGames), 100);
+setTimeout(() => getItalyGames(year, month, day, handleSoccerGames), 4000);
+setTimeout(() => getSpanishCupGames(year, month, day, handleSoccerGames), 5000);
+setTimeout(() => getCarbaoCupGames(year, month, day, handleSoccerGames), 6000);
+setTimeout(() => getFACupGames(year, month, day, handleSoccerGames), 7000);
 setTimeout(() => getGermanyGames(year, month, day, handleSoccerGames), 8000);
 //test1();

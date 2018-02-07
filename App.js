@@ -364,7 +364,7 @@ class App extends Component {
         topPart = (
           <LeagueInfo
             users={users}
-            league={currentLeague}
+            currentLeague={currentLeague}
             dailyStatMode={this.state.dailyStatMode}
             onDailyStatMode={this.onDailyStatMode}
             viewerId={this.props.viewerId}
@@ -420,7 +420,7 @@ class App extends Component {
         // }
       }
 
-      let appBarTitle = "";
+      let appBarTitle = currentLeague.league_name;
       if (otherUserPredictionsMode != null) {
         appBarTitle = otherUserPredictionsMode.name +"'s profile";
       }
@@ -454,6 +454,8 @@ class App extends Component {
                 <SuperUserEditor
                   socket={socket}
                   senderId={this.props.viewerId}
+                  currentLeague={currentLeague}
+                  leagues={leagues}
                 />
               </section>
           </MuiThemeProvider>

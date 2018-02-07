@@ -15,6 +15,7 @@ import MainAppBar from './main_app_bar.jsx';
 import LeagueInfo from './league_info.jsx'
 import ShareUtils from './share_utils.jsx';
 import UserInfo from './user_info.jsx';
+import FakeData from './fake_data.js';
 
 let socket;
 
@@ -25,8 +26,8 @@ class SuperUserApp extends Component {
 
   componentWillMount() {
     // Connect to socket.
-    socket = io.connect(
-      `wss://infinite-caverns-93636.herokuapp.com`,
+    socket = io.connect(this.props.socketAddress,
+//      `wss://infinite-caverns-93636.herokuapp.com`,
       {reconnect: true, secure: true}
     );
   }
@@ -53,6 +54,8 @@ class SuperUserApp extends Component {
             <SuperUserEditor
               socket={socket}
               senderId={this.props.viewerId}
+              currentLeague={FakeData.leagues[0]}
+              leagues={FakeData.leagues}
             />
           </section>
       </MuiThemeProvider>

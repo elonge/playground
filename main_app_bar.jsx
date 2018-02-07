@@ -13,6 +13,7 @@ import Drawer from 'material-ui/Drawer';
 import Badge from 'material-ui/Badge';
 
 import SocialGroup from 'material-ui/svg-icons/social/group';
+import EditSettingDialog from './edit_settings.jsx'
 
 class MainAppBar extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class MainAppBar extends React.Component {
       leagues: props.leagues,
       leaguesDrawerOpen: false,
       currentLeague: props.currentLeague,
+      editSettingsDialogOpen: false,
     };
     this.onMenuClicked = this.onMenuClicked.bind(this);
     this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
@@ -32,6 +34,7 @@ class MainAppBar extends React.Component {
     this.onNewQuestion = this.onNewQuestion.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
     this.onLeaguesClicked = this.onLeaguesClicked.bind(this);
+    this.onSettingsClicked = this.onSettingsClicked.bind(this);
   }
 
   // Called when switching points/predictions
@@ -42,6 +45,10 @@ class MainAppBar extends React.Component {
       leagues: nextProps.leagues,
       currentLeague: nextProps.currentLeague,
     });
+  }
+
+  onSettingsClicked() {
+    this.props.onSettingsClicked();
   }
 
   onMenuClicked(event, value) {
@@ -119,6 +126,8 @@ class MainAppBar extends React.Component {
           <MenuItem primaryText="Your Leagues" disabled={true} style={{color: '#559'}}/>
           <Divider />
           {leaguesDrawerItems}
+          <Divider />
+          <MenuItem primaryText="Settings..." onClick={() => this.onSettingsClicked()}}/>
         </Drawer>
       </div>
     );
@@ -147,6 +156,16 @@ class MainAppBar extends React.Component {
 
   );
 
+  let editSettingsDialog = ( this.state.editSettingsDialogOpen ?
+    <EditSettingDialog
+      socket={this.props.socket}
+      senderId={this.props.viewerId}
+      onClose={this.onDialogClose}
+      settings={{}}
+    />
+    : ""
+  );
+
     return (
       <AppBar
         title={this.props.title}
@@ -154,6 +173,7 @@ class MainAppBar extends React.Component {
         iconElementRight={rightButton}
         iconElementLeft={leftButton}
         style={{position: 'fixed', top:0}}
+        onTitleClick={() => this.onLeaguesClicked()}
         />
     );
   }

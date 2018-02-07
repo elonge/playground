@@ -286,14 +286,7 @@ points_won          | 1
 points_updated      | t
 -[ RECORD 2 ]-------+-----------------------------------
 
-select league_id,for_league_ids,"game_predictions".id,"game_predictions".game_id,predicted_score,prediction_updated,prediction_date,creator_id,home_team,competition_id,user_predictions.user_id,value,points_updated from "game_predictions"
-left join "games" on "game_predictions"."game_id" = "games"."id"
-left join "user_predictions" on "game_predictions"."id" = "user_predictions"."prediction_id" and "user_predictions"."user_id" = 1482681765133413 and "game_predictions"."game_id" = "user_predictions"."game_id"
-left join users_leagues on users_leagues.user_id=1482681765133413
-where prediction_date > current_date - interval '7 days' and
-(for_league_ids is null or league_id = ANY(for_league_ids)) and
-exists(select competition_id from leagues_competitions where competition_id=games.competition_id and league_id=users_leagues.league_id)
- order by "start_time" asc;
+select league_id,for_league_ids,"game_predictions".id,"game_predictions".game_id,predicted_score,prediction_updated,prediction_date,creator_id,home_team,competition_id,user_predictions.user_id,value,points_updated from "game_predictions" left join "games" on "game_predictions"."game_id" = "games"."id" left join "user_predictions" on "game_predictions"."id" = "user_predictions"."prediction_id" and "user_predictions"."user_id" = 1482681765133413 and "game_predictions"."game_id" = "user_predictions"."game_id" left join users_leagues on users_leagues.user_id=1482681765133413 where prediction_date > current_date - interval '7 days' and (for_league_ids is null or league_id = ANY(for_league_ids)) and exists(select competition_id from leagues_competitions where competition_id=games.competition_id and league_id=users_leagues.league_id) order by "start_time" asc;
 
 
  (for_league_ids is null or league_id = ANY(for_league_ids))

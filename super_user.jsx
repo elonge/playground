@@ -11,8 +11,8 @@ import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import TodayPredictions from './today_predictions.jsx'
 import RenderUtils from './render/utils';
 
-const newPredictionPushText = "Check out 5 new questions about today\'s games";
-const newScorePushText = "Scores were updated. You got _POINTS! Check out who got the most";
+const newPredictionPushText = "New questions about _GAMES";
+const newScorePushText = "Scores were updated. You got _POINTS. Check out who got the most";
 
 class SuperUserEditor extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class SuperUserEditor extends React.Component {
         predictedScore: '',
         sportType : 'soccer',
         resultType : 'winner',
-        typeExtra: ' ',
+        typeExtra: '',
         predictionOpen: true,
         startDate : new Date(),
         allGames : [],
@@ -34,10 +34,11 @@ class SuperUserEditor extends React.Component {
         gameInPrediction: 0,
         superUserAction: 'new game',
         customPushMessage: '',
-        messageType: 'new prediction',
+        messageType: 'new predictions',
         waitingToServer: false,
         jsonGames: null,
         points: 1,
+        priority: 3,
       };
       this.handleChangeGameId = this.handleChangeGameId.bind(this);
       this.handleChangeSport = this.handleChangeSport.bind(this);
@@ -46,6 +47,7 @@ class SuperUserEditor extends React.Component {
       this.handleChangeResultType = this.handleChangeResultType.bind(this);
       this.handleChangeTypeExtra = this.handleChangeTypeExtra.bind(this);
       this.handleChangePoints = this.handleChangePoints.bind(this);
+      this.handleChangePriority = this.handleChangePriority.bind(this);
       this.onUpdateResult = this.onUpdateResult.bind(this);
       this.renderNewPrediction = this.renderNewPrediction.bind(this);
       this.pushToRemote = this.pushToRemote.bind(this);
@@ -86,6 +88,7 @@ class SuperUserEditor extends React.Component {
   handleChangeResultType = (event, index, value) => this.setState({resultType:value});
   handleChangeTypeExtra = (event, value) => this.setState({typeExtra:value});
   handleChangePoints = (event, value) => this.setState({points:value});
+  handleChangePriority = (event, value) => this.setState({priority:value});
   handleChangePredictionOpen = (event, index, value) => this.setState({predictionOpen:value});
   handleChangeDate = (event, date) => this.setState({startDate: date});
   handlePredictedScoreChange = (event, value) => this.setState({predictedScore: value});
@@ -202,6 +205,7 @@ class SuperUserEditor extends React.Component {
       predictedScore: self.state.predictedScore,
       points: self.state.points,
       creatorId:0,
+      priority:self.state.priority,
     }, function(channel, response) {
       if (response.startsWith("ok: ")) {
         self.setState({predictionId: response.substring(4)});
@@ -223,6 +227,7 @@ class SuperUserEditor extends React.Component {
   }
 
   onSubmitSendMessageClick() {
+    console.log("Clicked on " + this.state.messageType);
     var self=this;
     let message = (this.state.messageType == 'new predictions' ?
       newPredictionPushText : this.state.customPushMessage);
@@ -230,11 +235,27 @@ class SuperUserEditor extends React.Component {
     if (this.state.messageType == 'stats') {
       //  1506601212791781 / 1479995838788740
       this.pushToRemote('superuser:stats', {},
-//      this.pushToRemote('superuser:debug1', {message: "Questions about Man United, Sanchez, Maccabi TLV and more", recId:1479995838788740},
       function(channel, response) {
        alert('Stats were build!');
        console.log("---> " + response);
        return;
+     });
+   } else if (this.state.messageType == 'debug'){
+      this.pushToRemote('superuser:debug1', {
+        message:"Debugging!",
+        recId: 1482681765133413
+      },
+      function(channel, response) {
+       alert('Debug message was sent!');
+       console.log("---> " + response);
+     });
+   } else if (this.state.messageType == 'new predictions'){
+      this.pushToRemote('superuser:message_games', {
+        messageTemplate:newPredictionPushText
+      },
+      function(channel, response) {
+       alert('Message sent just to those who have games!');
+       console.log("---> " + response);
      });
    } else if (this.state.messageType == 'new score'){
       this.pushToRemote('superuser:message_points', {
@@ -293,6 +314,9 @@ class SuperUserEditor extends React.Component {
           </RadioButton>
           <RadioButton value="stats">
             Just build stats (no message)
+          </RadioButton>
+          <RadioButton value="debug">
+            Send a debug message to myself
           </RadioButton>
           <RadioButton value="custom">
             [Type your own]
@@ -363,6 +387,12 @@ class SuperUserEditor extends React.Component {
           onChange={this.handleChangePoints}
         /><br />
         <TextField
+          hintText="Priority"
+          floatingLabelText="Priority"
+          value={this.state.priority}
+          onChange={this.handleChangePriority}
+        /><br />
+        <TextField
           disabled={true}
           id="all_text"
           value={this.renderPredictionPrimaryText(this.state.gameInPrediction)}
@@ -405,6 +435,8 @@ class SuperUserEditor extends React.Component {
   renderUpdatePredictions() {
     //this.state.allPredictions.map(prediction => prediction.value = null);
     let myPredictions = this.state.allPredictions.filter(p => p.prediction_updated==false);
+    console.log("leagues=" + JSON.stringify(this.props.leagues));
+    console.log("currentLeague=" + JSON.stringify(this.props.currentLeague));
     return (
       <div>
         <TodayPredictions
@@ -417,6 +449,8 @@ class SuperUserEditor extends React.Component {
           otherPredictions={[]}
           socket={this.props.socket}
           senderId={this.props.senderId}
+          currentLeague={this.props.currentLeague}
+          leagues={this.props.leagues}
           />
       </div>
     );

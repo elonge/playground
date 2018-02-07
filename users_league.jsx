@@ -151,10 +151,12 @@ class UsersLeague extends React.Component {
           <TableRow>
             <TableHeaderColumn style={{width: '10%', paddingLeft: '5px'}}
             >Rank</TableHeaderColumn>
-            <TableHeaderColumn style={{width: '55%'}}
+            <TableHeaderColumn style={{width: '46%'}}
             ></TableHeaderColumn>
-            <TableHeaderColumn style={{width: '15%'}}
+            <TableHeaderColumn style={{width: '12%'}}
             >Last</TableHeaderColumn>
+            <TableHeaderColumn style={{width: '12%'}}
+            >Week</TableHeaderColumn>
             <TableHeaderColumn style={{width: '20%'}}
             >Total</TableHeaderColumn>
           </TableRow>
@@ -168,12 +170,14 @@ class UsersLeague extends React.Component {
             <TableRow key={index}>
               <TableRowColumn style={{width: '10%', paddingLeft:'10px'}}
               >{index+1}</TableRowColumn>
-              <TableRowColumn style={{width: '55%'}}>
+              <TableRowColumn style={{width: '46%'}}>
                 <FlatButton label={row.name} primary={true} />
               </TableRowColumn>
-              <TableRowColumn style={{width: '15%'}}
+              <TableRowColumn style={{width: '12%', fontSize:'12px'}}
               >{row.points1d}</TableRowColumn>
-              <TableRowColumn style={{width: '20%'}}
+              <TableRowColumn style={{width: '12%', fontSize:'12px'}}
+              >{row.points1w}</TableRowColumn>
+              <TableRowColumn style={{width: '20%', fontSize:'12px'}}
               >{row.totalPoints}</TableRowColumn>
             </TableRow>
             ))}
@@ -192,18 +196,16 @@ class UsersLeague extends React.Component {
 
     console.log("currentLeague=" + JSON.stringify(currentLeague));
     let leaguePoints = usersPoints.filter(user => user.league == currentLeague.id);
-    if (leaguePoints.length == 0)  {
-      return (
-        <label>Debug3</label>
-      );
-    }
-
     let tableElement = (dailyStatMode ? this.renderDailyWinnersTable() : this.renderLeagueTable(leaguePoints));
     let title;
-    if (dailyStatMode) {
-      title = "Daily winners";
+    if (leaguePoints.length == 0) {
+      title = "There are still no points on " + currentLeague.league_name;
     } else {
-      title = "Current table";
+      if (dailyStatMode) {
+        title = "Daily winners";
+      } else {
+        title = "Current table";
+      }
     }
     let titleElement = (
       <Subheader style={{fontSize:16}}>{title}</Subheader>
@@ -212,14 +214,6 @@ class UsersLeague extends React.Component {
     let leagueItems = leagues.map((league, index) => (
       <MenuItem value={league} key={index} primaryText={league.league_name} />
     ));
-    let leagueSelection = (
-      <SelectField
-        value={currentLeague}
-        onChange={this.props.onLeagueChanged}
-      >
-      {leagueItems}
-      </SelectField>
-    );
     return (
       <div>
       <span style={{flexDirection: 'row', display:'flex'}}>

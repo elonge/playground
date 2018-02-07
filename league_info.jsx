@@ -171,7 +171,7 @@ class LeagueInfo extends React.Component {
             toggled={this.state.dailyStatMode}
             onToggle={this.handleToggle}
             labelPosition="right"
-            label={dailyStatMode ? "Daily Winners" : "Weekly League"}
+            label={dailyStatMode ? "Daily Winners" : "Total Points"}
           />
           <IconMenu
             style={style}
@@ -184,7 +184,7 @@ class LeagueInfo extends React.Component {
             <MenuItem primaryText="Private Leagues Menu" disabled={true} style={{color: '#559'}}/>
             <Divider />
             <MenuItem value="share" primaryText="Share this league" leftIcon={<SocialShare />}/>
-            <MenuItem value="edit" primaryText="Edit competitions..." leftIcon={<Icon icon={GIFT_ICONS['Stadium']} top='0px' margin='12px' left='4px' />}/>
+            <MenuItem value="edit" disabled={league.id == 1} primaryText="Edit competitions..." leftIcon={<Icon icon={GIFT_ICONS['Stadium']} top='0px' margin='12px' left='4px' />}/>
             <Divider />
             <MenuItem value="join" primaryText="Join another league..." leftIcon={<SocialGroupAdd />}/>
             <MenuItem value="new" primaryText="Create a new league..." leftIcon={<ContentAdd />}/>

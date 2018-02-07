@@ -110,11 +110,11 @@ class LeagueQuestionsDialog extends React.Component {
     lastNewQuestionInfo.home_team = this.state.allGames[this.state.gameIndex].home_team;
     lastNewQuestionInfo.away_team = this.state.allGames[this.state.gameIndex].away_team;
     let forLeagueIds = [];
-    // EGEG (FIXME) - prevent adding a quetion if user doesn't have any private league
+    // Shouldn't happen:  adding a quetion should be diabled if user doesn't have any private league
     if (this.state.shareAllLeagues)  {
-      forLeagueIds = this.state.leagues.filter(league => league.id > 1).map(league => league.id);
-    } else if (this.currentLeague.id > 1) {
-      forLeagueIds = [this.currentLeague.id];
+      forLeagueIds = this.props.leagues.filter(league => league.id > 1).map(league => league.id);
+    } else if (this.props.currentLeague.id > 1) {
+      forLeagueIds = [this.props.currentLeague.id];
     }
 
     this.pushToRemote("user:insert:prediction", {

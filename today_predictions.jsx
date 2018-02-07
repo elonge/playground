@@ -210,7 +210,8 @@ class TodayPredictions extends React.Component {
       userPredictions,
       dialogOpen,
       days,
-      dialogPredictionTitle
+      dialogPredictionTitle,
+      otherUserMode
     } = this.state;
 
     let viewedDateStr = this.formatDateAsDB(days[viewedDateIndex]);
@@ -258,18 +259,21 @@ class TodayPredictions extends React.Component {
         dialogTitle = dialogPredictionTitle;
       }
     }
+    let addNewPrediction = ( viewedDateIndex == 0 && !otherUserMode ?
+      <ListItem
+        leftAvatar={<Avatar icon={<AddIcon />} />}
+        primaryText="Add a new question"
+        secondaryText={this.props.leagues.length > 1 ? "Only visible in your private leagues" : "You need to set up a private league first"}
+        disabled={this.props.leagues.length == 1}
+        onClick={this.onNewQuestionClick}
+      /> : "");
+
     return (
       <div>
         <Subheader>{title}</Subheader>
         <List key="a" style={{backgroundColor: '#FAFAFA'}}>
         {items}
-        <ListItem
-          leftAvatar={<Avatar icon={<AddIcon />} />}
-          primaryText="Add a new question"
-          secondaryText={this.props.leagues.length > 1 ? "Only visible in your private leagues" : "You need to set up a private league first"}
-          disabled={this.props.leagues.length == 1}
-          onClick={this.onNewQuestionClick}
-        />
+        {addNewPrediction}
         </List>
         {questionsDialog}
         <Dialog
