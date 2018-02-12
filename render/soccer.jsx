@@ -27,8 +27,8 @@ const toScore = {
   name: 'A player will score',
   extraInfoDescription: 'Which player (e.g. Messi)',
   options: ['Yes', 'No'],
-  nullPrimary: '_PREDICT will score?',
-  primary: '_PREDICT will score?',
+  nullPrimary: 'Will _PREDICT score?',
+  primary: 'Will _PREDICT score?',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -38,23 +38,23 @@ const toScore = {
   }
 }
 
-const firstScore = {
-  sport: 'soccer',
-  key: 'first_score',
-  name: 'A team will score first',
-  extraInfoDescription: null,
-  options: ['_HOME', '_AWAY', 'None'],
-  nullPrimary: 'Which team will score first?',
-  primary: '_VALUE will score first',
-  rightAvatar: function(prediction) {
-    let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
-    return (
-        <Avatar>
-          {shortValue}
-        </Avatar>
-    );
-  }
-}
+// const firstScore = {
+//   sport: 'soccer',
+//   key: 'first_score',
+//   name: 'A team will score first',
+//   extraInfoDescription: null,
+//   options: ['_HOME', '_AWAY', 'None'],
+//   nullPrimary: 'Which team will score first?',
+//   primary: '_VALUE will score first',
+//   rightAvatar: function(prediction) {
+//     let shortValue = (prediction.value == prediction.home_team ? '1' : prediction.value == prediction.away_team ? '2' : 'X');
+//     return (
+//         <Avatar>
+//           {shortValue}
+//         </Avatar>
+//     );
+//   }
+// }
 
 const firstScoreTime = {
   sport: 'soccer',
@@ -111,7 +111,7 @@ const bothScore = {
   extraInfoDescription: null,
   options: ['Yes','No'],
   nullPrimary: 'Will both teams score?',
-  primary: 'Both teams will score? _VALUE !',
+  primary: 'Will both teams score? _VALUE',
   rightAvatar: function(prediction) {
     return (
         <Avatar>
@@ -225,7 +225,7 @@ const scoreLast = {
 }
 
 
-const supportedResultTypes = [winner, toScore, firstScore, numGoals, homePenalty, awayPenalty, firstScoreTime, bothScore,scoreFirst,scoreLast ];
+const supportedResultTypes = [winner, toScore, numGoals, homePenalty, awayPenalty, firstScoreTime, bothScore,scoreFirst,scoreLast ];
 
 export default {
   supportedResultTypes,

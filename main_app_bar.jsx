@@ -13,23 +13,16 @@ import Drawer from 'material-ui/Drawer';
 import Badge from 'material-ui/Badge';
 
 import SocialGroup from 'material-ui/svg-icons/social/group';
-import EditSettingDialog from './edit_settings.jsx'
 
 class MainAppBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showPointsMode: props.showPointsMode,
-      leagueDialogOpen: false,
-      questionDialogOpen: false,
-      isCreate: false,
       leagues: props.leagues,
       leaguesDrawerOpen: false,
       currentLeague: props.currentLeague,
-      editSettingsDialogOpen: false,
     };
-    this.onMenuClicked = this.onMenuClicked.bind(this);
-    this.onCloseCreateDialog = this.onCloseCreateDialog.bind(this);
     this.onNewLeague = this.onNewLeague.bind(this);
     this.onNewQuestion = this.onNewQuestion.bind(this);
     this.onInviteNewLeague = this.onInviteNewLeague.bind(this);
@@ -49,18 +42,7 @@ class MainAppBar extends React.Component {
 
   onSettingsClicked() {
     this.props.onSettingsClicked();
-  }
-
-  onMenuClicked(event, value) {
-    console.log(value.key);
-    switch (value.key) {
-      case "leagues":
-        this.setState({leagueDialogOpen: true});
-        break;
-      case "questions":
-        this.setState({questionDialogOpen: true});
-      default:
-    }
+    this.setState({leaguesDrawerOpen:false});
   }
 
   onChangeLeague(league) {
@@ -70,10 +52,6 @@ class MainAppBar extends React.Component {
 
   onLeaguesClicked() {
     this.setState({leaguesDrawerOpen: !this.state.leaguesDrawerOpen});
-  }
-
-  onCloseCreateDialog() {
-    this.setState({leagueDialogOpen: false});
   }
 
   onNewLeague(league) {
@@ -127,7 +105,7 @@ class MainAppBar extends React.Component {
           <Divider />
           {leaguesDrawerItems}
           <Divider />
-          <MenuItem primaryText="Settings..." onClick={() => this.onSettingsClicked()}}/>
+          <MenuItem primaryText="Settings..." onClick={() => this.onSettingsClicked()}/>
         </Drawer>
       </div>
     );
@@ -154,16 +132,6 @@ class MainAppBar extends React.Component {
       color={'white'}
     /></IconButton>
 
-  );
-
-  let editSettingsDialog = ( this.state.editSettingsDialogOpen ?
-    <EditSettingDialog
-      socket={this.props.socket}
-      senderId={this.props.viewerId}
-      onClose={this.onDialogClose}
-      settings={{}}
-    />
-    : ""
   );
 
     return (

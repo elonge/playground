@@ -87,7 +87,7 @@ const scoreMore = {
   name: 'Player1 will score more than Player2',
   extraInfoDescription: 'Player1,Player2 (e.g. Durant,Curry)',
   options: ['_OPTION1', '_OPTION2'],
-  nullPrimary: 'Which will score more?',
+  nullPrimary: 'Who will score more?',
   primary: '_VALUE will score more',
   secondary: '_AWAY at _HOME (_STARTTIME)',
   rightAvatar: function(prediction) {

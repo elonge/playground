@@ -16,6 +16,7 @@ import LeagueInfo from './league_info.jsx'
 import ShareUtils from './share_utils.jsx';
 import UserInfo from './user_info.jsx';
 import FakeData from './fake_data.js';
+import EditSettingDialog from './edit_settings.jsx'
 
 
 const addStyle = {
@@ -52,6 +53,8 @@ class App extends Component {
     this.onCurrentLeagueChanged = this.onCurrentLeagueChanged.bind(this);
     this.getCurrentStatePredictions = this.getCurrentStatePredictions.bind(this);
     this.updatePrediction = this.updatePrediction.bind(this);
+    this.onSettingsClicked = this.onSettingsClicked.bind(this);
+    this.onSettingsClose = this.onSettingsClose.bind(this);
     this.state = {
       showPointsMode : false,
       viewedDateIndex: 0,
@@ -66,8 +69,9 @@ class App extends Component {
       dailyStatMode: false,
       leagueDailyWinners: FakeData.leagueDailyWinners,
       allCompetitions: FakeData.allCompetitions,
-      leagueDialogOpen: false,
+      dialogOpen: false,
       currentLeague: FakeData.leagues[0],
+      editSettingsDialogOpen: false,
     };
   }
 
@@ -105,12 +109,20 @@ class App extends Component {
     );
   }
 
+  onSettingsClicked() {
+    this.setState({editSettingsDialogOpen:true, dialogOpen:true})
+  }
+
+  onSettingsClose() {
+    this.setState({editSettingsDialogOpen:false, dialogOpen:false})
+  }
+
   onLeagueDialogClose() {
-    this.setState({leagueDialogOpen:false});
+    this.setState({dialogOpen:false});
   }
 
   onLeagueDialogOpen() {
-    this.setState({leagueDialogOpen:true});
+    this.setState({dialogOpen:true});
   }
 
   onNewQuestion(toShare, questionInfo) {
@@ -151,13 +163,13 @@ class App extends Component {
   }
 
   onNewLeague(newLeague) {
-    this.setState({leagueDialogOpen:false});
+    this.setState({dialogOpen:false});
     this.pushToRemoteWithHandler("league:refetch", {}, this.handleNewLeagues);
   }
 
   onCompetitionsUpdate(league) {
     console.log("competition updated: " + league.id);
-    this.setState({leagueDialogOpen:false, currentLeague:league});
+    this.setState({dialogOpen:false, currentLeague:league});
   }
 
   onInviteNewLeague(newLeague) {
@@ -226,7 +238,7 @@ class App extends Component {
   }
 
   isPrevDisabled() {
-    if (this.state.leagueDialogOpen) {
+    if (this.state.dialogOpen) {
       return true;
     }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
@@ -237,7 +249,7 @@ class App extends Component {
   }
 
   isNextDisabled() {
-    if (this.state.leagueDialogOpen) {
+    if (this.state.dialogOpen) {
       return true;
     }
     if (this.state.showPointsMode && this.state.otherUserPredictionsMode == null) {
@@ -336,7 +348,8 @@ class App extends Component {
       currentLeague,
       leagues,
       leagueDailyWinners,
-      leagueDialogOpen,
+      dialogOpen,
+      editSettingsDialogOpen,
     } = this.state;
 
     let superUser = '';
@@ -350,7 +363,7 @@ class App extends Component {
       let gamePart;
       let topPart;
       if (showPointsMode && otherUserPredictionsMode == null) {
-        gamePart = ( leagueDialogOpen ? "" :
+        gamePart = ( dialogOpen ? "" :
           <UsersLeague
             usersPoints={points}
             currentLeague={currentLeague}
@@ -361,7 +374,7 @@ class App extends Component {
             users={users}
           />
         );
-        topPart = (
+        topPart = (editSettingsDialogOpen ? "" :
           <LeagueInfo
             users={users}
             currentLeague={currentLeague}
@@ -378,7 +391,7 @@ class App extends Component {
           />
         );
       } else {
-        gamePart = (
+        gamePart = ( dialogOpen ? "" :
           <TodayPredictions
             userPredictions={this.getCurrentStatePredictions()}
             updatePrediction={this.updatePrediction}
@@ -393,7 +406,7 @@ class App extends Component {
             leagues={leagues}
           />
         );
-        topPart = (
+        topPart = ( dialogOpen ? "" :
           <UserInfo
             user={otherUserPredictionsMode == null ? me : otherUserPredictionsMode}
             onUserInfoCancel={this.onUserInfoCancel}
@@ -420,13 +433,23 @@ class App extends Component {
         // }
       }
 
+      let editSettingsDialog = ( editSettingsDialogOpen  ?
+        <EditSettingDialog
+          socket={this.props.socket}
+          senderId={this.props.viewerId}
+          onClose={this.onSettingsClose}
+          settings={{}}
+        />
+        : ""
+      );
+
       let appBarTitle = currentLeague.league_name;
       if (otherUserPredictionsMode != null) {
         appBarTitle = otherUserPredictionsMode.name +"'s profile";
       }
       let appBar = (
         <MainAppBar
-          disabled={leagueDialogOpen}
+          disabled={dialogOpen}
           onPrevClick={this.onPrevClick}
           onNextClick={this.onNextClick}
           isPrevDisabled={this.isPrevDisabled}
@@ -443,6 +466,7 @@ class App extends Component {
           onNewQuestion={this.onNewQuestion}
           currentLeague={this.state.currentLeague}
           onCurrentLeagueChanged={this.onCurrentLeagueChanged}
+          onSettingsClicked={this.onSettingsClicked}
         />
       );
 
@@ -469,6 +493,7 @@ class App extends Component {
                 {appBar}
                 {topPart}
                 {gamePart}
+                {editSettingsDialog}
                 {invite}
               </section>
             </MuiThemeProvider>

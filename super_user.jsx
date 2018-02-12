@@ -241,12 +241,12 @@ class SuperUserEditor extends React.Component {
        return;
      });
    } else if (this.state.messageType == 'debug'){
-      this.pushToRemote('superuser:debug1', {
+      this.pushToRemote('superuser:qna1', {
         message:"Debugging!",
         recId: 1482681765133413
       },
       function(channel, response) {
-       alert('Debug message was sent!');
+       alert('Debug message was sent (QNA1)!');
        console.log("---> " + response);
      });
    } else if (this.state.messageType == 'new predictions'){

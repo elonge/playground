@@ -27,7 +27,6 @@ class SuperUserApp extends Component {
   componentWillMount() {
     // Connect to socket.
     socket = io.connect(this.props.socketAddress,
-//      `wss://infinite-caverns-93636.herokuapp.com`,
       {reconnect: true, secure: true}
     );
   }

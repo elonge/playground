@@ -6,6 +6,7 @@ import {red500, red200, lime300, lightGreen200,green300,green500, blue500, indig
 import CancelButton from 'material-ui/svg-icons/navigation/cancel';
 import IconButton from 'material-ui/IconButton';
 import Toggle from 'material-ui/Toggle';
+import {Icon, GIFT_ICONS} from './my_icons.jsx';
 
 const pointColors = [red500, red200, lime300, lightGreen200, green300, green500];
 const pointAvatarStyle = {
@@ -48,17 +49,21 @@ class UserInfo extends React.Component {
     let totalPointsItem = (
       <ListItem
         primaryText={user.moreFields.sum + " total points"}
-        leftAvatar={
-          <Avatar src="media/total_points.png" backgroundColor={'white'} />
-        }
+        leftAvatar=
+          {<Avatar
+            backgroundColor={'rgba(0,0,0,0)'}
+            icon={<Icon icon={GIFT_ICONS['Sum']} height="40px" width="40px" top="0px" left="0px" fill='rgb(76,175,80)'/>}
+          />}
       />
     );
     let successPctItem =  (
       <ListItem
         primaryText={Math.round(user.moreFields.avg * 100) + "% success rate"}
-        leftAvatar={
-          <Avatar src="media/percentage.png" backgroundColor={'white'} />
-        }
+        leftAvatar=
+          {<Avatar
+            backgroundColor={'rgba(0,0,0,0)'}
+            icon={<Icon icon={GIFT_ICONS['Percent']} height="40px" width="40px" top="0px" left="0px" fill='rgb(76,175,80)'/>}
+          />}
       />
     );
 
@@ -71,12 +76,15 @@ class UserInfo extends React.Component {
         {avatars}
       </div>
     );
+    //          <Avatar src="media/last_days.png"  backgroundColor={'white'} />
     let lastDaysItem =  (
       <ListItem
         primaryText={avatarsDiv}
-        leftAvatar={
-          <Avatar src="media/last_days.png"  backgroundColor={'white'} />
-        }
+        leftAvatar=
+          {<Avatar
+            backgroundColor={'rgba(0,0,0,0)'}
+            icon={<Icon icon={GIFT_ICONS['Calendar']} height="40px" width="40px" top="0px" left="0px" fill='rgb(76,175,80)'/>}
+          />}
       />
     );
 

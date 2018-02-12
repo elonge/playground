@@ -198,9 +198,9 @@ let allGames = [];
 
 let year='2018';
 let month='2';
-let day='07';
+let day='12';
 
-getNBAGames(year, month, day, handleNBAGames);
+//getNBAGames(year, month, day, handleNBAGames);
 setTimeout(() => getPLGames(year, month, day, handleSoccerGames), 1000);
 setTimeout(() => getSpanishGames(year, month, day, handleSoccerGames), 2000);
 setTimeout(() => getIsraeliGames(year, month, day, handleSoccerGames), 100);
